@@ -1,11 +1,10 @@
 #include <fstream>
 
-#include "framebuffer.hpp"
+#include "renderer.hpp"
 using namespace sentinel;
 
 int main() {
-    framebuffer fb(800, 600, {1, 0, 0});
+    renderer r(800, 600);
 
-    std::ofstream file("image.ppm");
-    file << fb;
+    r.write("image.ppm");
 }

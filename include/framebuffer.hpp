@@ -65,20 +65,11 @@ namespace sentinel {
         framebuffer(int width, int height) {
             resize(width, height);
         }
-        framebuffer(int width, int height, color_rgb color) {
-            resize(width, height, color);
-        }
 
         void resize(int width, int height) {
             width_ = width;
             height_ = height;
             color_.resize(width * height);
-        }
-
-        void resize(int width, int height, color_rgb color) {
-            width_ = width;
-            height_ = height;
-            color_.resize(width * height, color);
         }
 
         int width() const noexcept {
@@ -113,6 +104,12 @@ namespace sentinel {
 
         iterator end() noexcept {
             return {*this, width_ * height_};
+        }
+
+        void clear(color_rgb color) noexcept {
+            for (auto p : *this) {
+                p.color = color;
+            }
         }
     private:
         int width_ = 0;
