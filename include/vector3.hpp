@@ -8,6 +8,30 @@
 namespace sentinel {
     template <typename T>
     struct vector<T, 3> {
+        friend vector operator+(vector lhs, vector rhs) noexcept {
+            return {lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z}; 
+        }
+
+        friend vector operator-(vector lhs, vector rhs) noexcept {
+            return {lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z};
+        }
+
+        friend vector operator+(vector lhs, T rhs) noexcept {
+            return {lhs.x + rhs, lhs.y + rhs, lhs.z + rhs};
+        }
+
+        friend vector operator-(vector lhs, T rhs) noexcept {
+            return {lhs.x - rhs, lhs.y - rhs, lhs.z - rhs};
+        }
+
+        friend vector operator*(vector lhs, T rhs) noexcept {
+            return {lhs.x * rhs, lhs.y * rhs, lhs.z * rhs}; 
+        } 
+
+        friend vector operator/(vector lhs, T rhs) noexcept {
+            return {lhs.x / rhs, lhs.y / rhs, lhs.z / rhs};
+        }
+
         constexpr vector() = default;
         constexpr vector(T x_, T y_, T z_) 
             : x(x_),
@@ -41,36 +65,6 @@ namespace sentinel {
         T y;
         T z;
     };
-
-    template <typename T>
-    inline constexpr vector<T, 3> operator+(vector<T, 3> lhs, vector<T, 3> rhs) noexcept {
-        return {lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z};
-    }
-
-    template <typename T>
-    inline constexpr vector<T, 3> operator-(vector<T, 3> lhs, vector<T, 3> rhs) noexcept {
-        return {lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z};
-    }
-
-    template <typename T>
-    inline constexpr vector<T, 3> operator+(vector<T, 3> lhs, T rhs) noexcept {
-        return {lhs.x + rhs, lhs.y + rhs, lhs.z + rhs};
-    }
-
-    template <typename T>
-    inline constexpr vector<T, 3> operator-(vector<T, 3> lhs, T rhs) noexcept {
-        return {lhs.x - rhs, lhs.y - rhs, lhs.z - rhs};
-    }
-
-    template <typename T>
-    inline constexpr vector<T, 3> operator*(vector<T, 3> lhs, T rhs) noexcept {
-        return {lhs.x * rhs, lhs.y * rhs, lhs.z * rhs};
-    }
-
-    template <typename T>
-    inline constexpr vector<T, 3> operator/(vector<T, 3> lhs, T rhs) noexcept {
-        return {lhs.x / rhs, lhs.y / rhs, lhs.z / rhs};
-    }
 }
 
 #endif

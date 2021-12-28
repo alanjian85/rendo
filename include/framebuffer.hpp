@@ -18,7 +18,9 @@ namespace sentinel {
     class framebuffer {
     public:
         class iterator {
-            friend bool operator!=(iterator lhs, iterator rhs) noexcept;
+            friend bool operator!=(iterator lhs, iterator rhs) noexcept {
+                return &lhs.fb_ != &rhs.fb_ || lhs.index_ != rhs.index_;
+            }
         public:
             iterator(framebuffer& fb, int index) noexcept
                 : fb_(fb),
@@ -40,7 +42,9 @@ namespace sentinel {
         };
 
         class const_iterator {
-            friend bool operator!=(const_iterator lhs, const_iterator rhs) noexcept;
+            friend bool operator!=(const_iterator lhs, const_iterator rhs) noexcept {
+                return &lhs.fb_ != &rhs.fb_ || lhs.index_ != rhs.index_;
+            }
         public:
             const_iterator(const framebuffer& fb, int index) noexcept
                 : fb_(fb),
@@ -117,14 +121,6 @@ namespace sentinel {
         
         std::vector<color_rgb> color_;
     };
-
-    inline bool operator!=(framebuffer::iterator lhs, framebuffer::iterator rhs) noexcept {
-        return &lhs.fb_ != &rhs.fb_ || lhs.index_ != rhs.index_;
-    }
-
-    inline bool operator!=(framebuffer::const_iterator lhs, framebuffer::const_iterator rhs) noexcept {
-        return &lhs.fb_ != &rhs.fb_ || lhs.index_ != rhs.index_;
-    }
 
     std::ostream& operator<<(std::ostream& lhs, const framebuffer& rhs) noexcept;
 }
