@@ -9,5 +9,6 @@ namespace rayster {
 }
 
 #include "detail/vec2.hpp"
+#include "detail/vec3.hpp"
 
 #endif

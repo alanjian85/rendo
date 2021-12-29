@@ -15,7 +15,8 @@ int main() {
     auto bbox = tri.bbox();
     for (int x = bbox.min.x; x <= bbox.max.x; ++x) {
         for (int y = bbox.min.y; y <= bbox.max.y; ++y) {
-            if (x < 0 || x >= fb.width() || y < 0 || y >= fb.height()) continue;
+            auto bc = tri.barycentric({x, y});
+            if (bc.x < 0 || bc.y < 0 || bc.z < 0) continue;
             fb[{x, y}] = {1, 0, 0};
         }
     }

@@ -15,3 +15,11 @@ aabb clip_triangle::bbox() const noexcept {
     }
     return res;
 }
+
+vec3 clip_triangle::barycentric(ivec2 v) const noexcept {
+    auto u = cross(vec3(c.x - a.x, b.x - a.x, a.x - v.x),
+                   vec3(c.y - a.y, b.y - a.y, a.y - v.y));
+    if (std::abs(u.z) < 1)
+        return {-1, 1, 1};
+    return {1 - (u.x + u.y) / u.z, u.y / u.z, u.x / u.z};
+}

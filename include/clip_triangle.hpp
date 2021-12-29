@@ -15,6 +15,7 @@ namespace rayster {
         ivec2 c;
 
         aabb bbox() const noexcept;
+        vec3 barycentric(ivec2 v) const noexcept;
 
         ivec2& operator[](size_type index) noexcept {
             return index == 0 ? a : index == 1 ? b : c;
