@@ -8,7 +8,7 @@ std::ostream& rayster::operator<<(std::ostream& lhs, const framebuffer& rhs) noe
     lhs << rhs.width() << ' ' << rhs.height() << '\n';
     lhs << "255\n";
 
-    for (auto p : rhs) {
+    for (auto& p : rhs) {
             auto r = static_cast<int>(p.color.r * 255);
             auto g = static_cast<int>(p.color.g * 255);
             auto b = static_cast<int>(p.color.b * 255);

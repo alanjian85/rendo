@@ -8,29 +8,27 @@
 
 namespace rayster {
     struct pixel {
-        color_rgb& color;
-    };
-
-    struct const_pixel {
-        const color_rgb& color;
+        color_rgb color;
     };
 
     class framebuffer {
     public:
+        using size_type = std::vector<pixel>::size_type;
+
         class iterator {
             friend bool operator!=(iterator lhs, iterator rhs) noexcept {
                 return &lhs.fb_ != &rhs.fb_ || lhs.index_ != rhs.index_;
             }
         public:
-            iterator(framebuffer& fb, int index) noexcept
+            iterator(framebuffer& fb, size_type index) noexcept
                 : fb_(fb),
                   index_(index)
             {
             
             }
 
-            pixel operator*() const noexcept {
-                return {fb_.color_[index_]};
+            pixel& operator*() const noexcept {
+                return {fb_.pixels_[index_]};
             }
 
             void operator++() noexcept {
@@ -38,7 +36,7 @@ namespace rayster {
             }
         private:
             framebuffer& fb_;
-            int index_;
+            size_type index_;
         };
 
         class const_iterator {
@@ -46,15 +44,15 @@ namespace rayster {
                 return &lhs.fb_ != &rhs.fb_ || lhs.index_ != rhs.index_;
             }
         public:
-            const_iterator(const framebuffer& fb, int index) noexcept
+            const_iterator(const framebuffer& fb, size_type index) noexcept
                 : fb_(fb),
                   index_(index)
             {
             
             }
 
-            const_pixel operator*() const noexcept {
-                return {fb_.color_[index_]};
+            const pixel& operator*() const noexcept {
+                return {fb_.pixels_[index_]};
             }
 
             void operator++() noexcept {
@@ -62,36 +60,46 @@ namespace rayster {
             }
         private:
             const framebuffer& fb_;
-            int index_;
+            size_type index_;
         };
 
-        framebuffer() noexcept = default;
-        framebuffer(int width, int height) {
-            resize(width, height);
+        framebuffer() noexcept 
+            : width_(),
+              height_()
+        {
+        
+        }
+       
+        framebuffer(size_type width, size_type height)
+            : width_(width),
+              height_(height),
+              pixels_(width * height)
+        {
+
         }
 
-        void resize(int width, int height) {
+        void resize(size_type width, size_type height) {
             width_ = width;
             height_ = height;
-            color_.resize(width * height);
+            pixels_.resize(width * height);
         }
 
-        int width() const noexcept {
+        size_type width() const noexcept {
             return width_;
         }
         
-        int height() const noexcept {
+        size_type height() const noexcept {
             return height_;
         }
 
-        pixel operator()(int x, int y) noexcept {
+        pixel& operator()(int x, int y) noexcept {
             auto index = y * width_ + x;
-            return {color_[index]};
+            return {pixels_[index]};
         }
 
-        const_pixel operator()(int x, int y) const noexcept {
+        const pixel& operator()(int x, int y) const noexcept {
             auto index = y * width_ + x;
-            return {color_[index]};
+            return {pixels_[index]};
         }
 
         const_iterator begin() const noexcept {
@@ -111,15 +119,15 @@ namespace rayster {
         }
 
         void clear(color_rgb color) noexcept {
-            for (auto p : *this) {
+            for (auto& p : *this) {
                 p.color = color;
             }
         }
     private:
-        int width_ = 0;
-        int height_ = 0;
+        size_type width_;
+        size_type height_;
         
-        std::vector<color_rgb> color_;
+        std::vector<pixel> pixels_;
     };
 
     std::ostream& operator<<(std::ostream& lhs, const framebuffer& rhs) noexcept;
