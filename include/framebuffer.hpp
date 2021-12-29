@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "color.hpp"
+#include "vec.hpp"
 
 namespace rayster {
     struct pixel {
@@ -13,109 +14,28 @@ namespace rayster {
 
     class framebuffer {
     public:
-        using size_type = std::vector<pixel>::size_type;
+        using size_type = ivec2;
+        using iterator = std::vector<pixel>::iterator;
+        using const_iterator = std::vector<pixel>::const_iterator;
 
-        class iterator {
-            friend bool operator!=(iterator lhs, iterator rhs) noexcept {
-                return &lhs.fb_ != &rhs.fb_ || lhs.index_ != rhs.index_;
-            }
-        public:
-            iterator(framebuffer& fb, size_type index) noexcept
-                : fb_(fb),
-                  index_(index)
-            {
-            
-            }
-
-            pixel& operator*() const noexcept {
-                return {fb_.pixels_[index_]};
-            }
-
-            void operator++() noexcept {
-                ++index_;
-            }
-        private:
-            framebuffer& fb_;
-            size_type index_;
-        };
-
-        class const_iterator {
-            friend bool operator!=(const_iterator lhs, const_iterator rhs) noexcept {
-                return &lhs.fb_ != &rhs.fb_ || lhs.index_ != rhs.index_;
-            }
-        public:
-            const_iterator(const framebuffer& fb, size_type index) noexcept
-                : fb_(fb),
-                  index_(index)
-            {
-            
-            }
-
-            const pixel& operator*() const noexcept {
-                return {fb_.pixels_[index_]};
-            }
-
-            void operator++() noexcept {
-                ++index_;
-            }
-        private:
-            const framebuffer& fb_;
-            size_type index_;
-        };
-
-        framebuffer() noexcept 
-            : width_(),
-              height_()
-        {
-        
-        }
-       
-        framebuffer(size_type width, size_type height)
-            : width_(width),
-              height_(height),
-              pixels_(width * height)
+        framebuffer() noexcept = default;
+        framebuffer(size_type size)
+            : size_(size),
+              pixels_(size.x * size.y)
         {
 
         }
 
-        void resize(size_type width, size_type height) {
-            width_ = width;
-            height_ = height;
-            pixels_.resize(width * height);
+        size_type size() const noexcept {
+            return size_;
         }
 
-        size_type width() const noexcept {
-            return width_;
+        auto width() const noexcept {
+            return size_.x;
         }
         
-        size_type height() const noexcept {
-            return height_;
-        }
-
-        pixel& operator()(int x, int y) noexcept {
-            auto index = y * width_ + x;
-            return {pixels_[index]};
-        }
-
-        const pixel& operator()(int x, int y) const noexcept {
-            auto index = y * width_ + x;
-            return {pixels_[index]};
-        }
-
-        const_iterator begin() const noexcept {
-            return {*this, 0};
-        }
-
-        iterator begin() noexcept {
-            return {*this, 0};
-        }
-
-        const_iterator end() const noexcept {
-            return {*this, width_ * height_};
-        }
-
-        iterator end() noexcept {
-            return {*this, width_ * height_};
+        auto height() const noexcept {
+            return size_.y;
         }
 
         void clear(color_rgb color) noexcept {
@@ -123,9 +43,42 @@ namespace rayster {
                 p.color = color;
             }
         }
+
+        pixel& operator[](size_type index) noexcept {
+            auto pos = index.y * size_.x + index.x;
+            return {pixels_[pos]};
+        }
+
+        const pixel& operator[](size_type index) const noexcept {
+            auto pos = index.y * size_.x + index.x;
+            return {pixels_[pos]};
+        }
+
+        const_iterator begin() const noexcept {
+            return pixels_.begin();
+        }
+
+        iterator begin() noexcept {
+            return pixels_.begin();
+        }
+
+        const_iterator end() const noexcept {
+            return pixels_.end();
+        }
+
+        iterator end() noexcept {
+            return pixels_.end();
+        }
+
+        const_iterator cbegin() const noexcept {
+            return pixels_.cbegin();
+        }
+
+        const_iterator cend() const noexcept {
+            return pixels_.cend();
+        }
     private:
-        size_type width_;
-        size_type height_; 
+        ivec2 size_;
         std::vector<pixel> pixels_;
     };
 
