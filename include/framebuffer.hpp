@@ -1,12 +1,12 @@
-#ifndef SENTINEL_FRAMEBUFFER_HPP
-#define SENTINEL_FRAMEBUFFER_HPP
+#ifndef RAYSTER_FRAMEBUFFER_HPP
+#define RAYSTER_FRAMEBUFFER_HPP
 
 #include <iostream>
 #include <vector>
 
 #include "color.hpp"
 
-namespace sentinel {
+namespace rayster {
     struct pixel {
         color_rgb& color;
     };

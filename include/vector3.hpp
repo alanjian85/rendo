@@ -1,10 +1,10 @@
-#ifndef SENTINEL_DETAIL_VECTOR3_HPP
-#define SENTINEL_DETAIL_VECTOR3_HPP
+#ifndef RAYSTER_VECTOR3_HPP
+#define RAYSTER_VECTOR3_HPP
 
 #include <cstdlib>
 #include <cmath>
 
-namespace sentinel {
+namespace rayster {
     struct vector3 { 
         constexpr vector3() 
             : x(), y(), z() 

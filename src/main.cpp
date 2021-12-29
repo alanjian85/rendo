@@ -1,7 +1,7 @@
 #include <fstream>
 
 #include "renderer.hpp"
-using namespace sentinel;
+using namespace rayster;
 
 int main() {
     renderer r(800, 600);

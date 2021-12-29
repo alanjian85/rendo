@@ -1,9 +1,9 @@
 #include "framebuffer.hpp"
-using namespace sentinel;
+using namespace rayster;
 
 #include <algorithm>
 
-std::ostream& sentinel::operator<<(std::ostream& lhs, const framebuffer& rhs) noexcept {
+std::ostream& rayster::operator<<(std::ostream& lhs, const framebuffer& rhs) noexcept {
     lhs << "P3\n";
     lhs << rhs.width() << ' ' << rhs.height() << '\n';
     lhs << "255\n";

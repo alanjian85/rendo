@@ -1,7 +1,7 @@
-#ifndef SENTINEL_COLOR_HPP
-#define SENTINEL_COLOR_HPP
+#ifndef RAYSTER_COLOR_HPP
+#define RAYSTER_COLOR_HPP
 
-namespace sentinel {
+namespace rayster {
     struct color_rgb {
         double r;
         double g;

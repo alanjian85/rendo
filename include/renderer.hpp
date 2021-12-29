@@ -1,12 +1,12 @@
-#ifndef SENTINEL_RENDERER_HPP
-#define SENTINEL_RENDERER_HPP
+#ifndef RAYSTER_RENDERER_HPP
+#define RAYSTER_RENDERER_HPP
 
 #include <fstream>
 #include <string>
 
 #include "framebuffer.hpp"
 
-namespace sentinel {
+namespace rayster {
     class renderer {
     public:
         renderer(int width, int height) 
