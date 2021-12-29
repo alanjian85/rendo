@@ -7,10 +7,10 @@ aabb clip_triangle::bbox() const noexcept {
     aabb res;
     res.min = ivec2::max();
     res.max = ivec2::min();
-    for (auto v : *this) {
-        for (ivec2::size_type i = 0; i < 2; ++i) {
-            res.min[i] = std::min(res.min[i], v[i]);
-            res.max[i] = std::max(res.max[i], v[i]);
+    for (size_type i = 0; i < 3; ++i) {
+        for (ivec2::size_type j = 0; j < 2; ++j) {
+            res.min[j] = std::min(res.min[j], (*this)[i][j]);
+            res.max[j] = std::max(res.max[j], (*this)[i][j]);
         }
     }
     return res;
