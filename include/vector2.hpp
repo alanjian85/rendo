@@ -1,5 +1,5 @@
-#ifndef RAYSTER_vector2_HPP
-#define RAYSTER_vector2_HPP
+#ifndef RAYSTER_VECTOR2_HPP
+#define RAYSTER_VECTOR2_HPP
 
 #include <cstdlib>
 #include <cmath>

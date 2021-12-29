@@ -5,12 +5,12 @@ using namespace rayster;
 
 aabb triangle::bbox() const noexcept {
     aabb res;
-    res.max = vector2::min();
-    res.min = vector2::max();
+    res.max = ivector2::min();
+    res.min = ivector2::max();
     for (auto i = 0; i < 3; ++i) {
         for (auto j = 0; j < 2; ++j) {
-            res.max[j] = std::max(res.max[j], (*this)[i][j]);
-            res.min[j] = std::min(res.min[j], (*this)[i][j]);
+            res.max[j] = std::max(res.max[j], static_cast<int>((*this)[i][j]));
+            res.min[j] = std::min(res.min[j], static_cast<int>((*this)[i][j]));
         }
     }
     return res;

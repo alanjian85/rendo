@@ -25,10 +25,9 @@ int main() {
     }
 
     auto bbox = tri.bbox();
-    auto view_bbox = view.bbox();
-    for (auto x = std::floor(bbox.min.x); x <= bbox.max.x; ++x) {
-        for (auto y = std::floor(bbox.min.y); y <= bbox.max.y; ++y) {
-            if (view_bbox.inbound({x, y})) {
+    for (auto x = bbox.min.x; x <= bbox.max.x; ++x) {
+        for (auto y = bbox.min.y; y <= bbox.max.y; ++y) {
+            if (view.inbound({x, y})) {
                 fb(x, y) = {1, 0, 0};
             }
         }
