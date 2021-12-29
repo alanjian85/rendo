@@ -19,7 +19,7 @@ namespace rayster {
             return index == 0 ? a : index == 1 ? b : c;
         }
 
-        aabb bounding_box() const noexcept;
+        aabb bbox() const noexcept;
     };
 }
 

@@ -3,7 +3,7 @@ using namespace rayster;
 
 #include <cmath>
 
-aabb triangle::bounding_box() const noexcept {
+aabb triangle::bbox() const noexcept {
     aabb res;
     res.max = vector2::min();
     res.min = vector2::max();
