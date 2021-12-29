@@ -18,11 +18,11 @@ namespace rayster {
         }
 
         constexpr double& operator[](std::size_t index) noexcept {
-            return index == 0 ? x : index == 1 ? y : z;
+            return index == 0 ? x : index == 1 ? y : index == 2 ? z : w;
         }
 
         constexpr const double& operator[](std::size_t index) const noexcept {
-            return index == 0 ? x : index == 1 ? y : z; 
+            return index == 0 ? x : index == 1 ? y : index == 2 ? z : w;
         }
 
         constexpr vector4 operator-() const noexcept {
@@ -41,7 +41,7 @@ namespace rayster {
             x -= rhs.x;
             y -= rhs.y;
             z -= rhs.z;
-            z -= rhs.w;
+            w -= rhs.w;
             return *this;
         }
 
@@ -78,7 +78,7 @@ namespace rayster {
         }
 
         constexpr double length_squared() const noexcept {
-            return x * x + y * y + z * z;
+            return x * x + y * y + z * z + w * w;
         }
 
         constexpr double length() const noexcept {

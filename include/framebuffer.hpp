@@ -125,8 +125,7 @@ namespace rayster {
         }
     private:
         size_type width_;
-        size_type height_;
-        
+        size_type height_; 
         std::vector<pixel> pixels_;
     };
 
