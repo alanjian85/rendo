@@ -6,30 +6,31 @@
 
 namespace rayster {
     struct vector4 { 
-        constexpr vector4() 
+        vector4() 
             : x(), y(), z(), w()
         {
         
         }
-        constexpr vector4(double x_, double y_, double z_, double w_) 
+        
+        vector4(double x_, double y_, double z_, double w_) 
             : x(x_), y(y_), z(z_), w(w_)
         {
             
         }
 
-        constexpr double& operator[](std::size_t index) noexcept {
+        double& operator[](std::size_t index) noexcept {
             return index == 0 ? x : index == 1 ? y : index == 2 ? z : w;
         }
 
-        constexpr const double& operator[](std::size_t index) const noexcept {
+        const double& operator[](std::size_t index) const noexcept {
             return index == 0 ? x : index == 1 ? y : index == 2 ? z : w;
         }
 
-        constexpr vector4 operator-() const noexcept {
+        vector4 operator-() const noexcept {
             return {-x, -y, -z, -w};
         }
 
-        constexpr vector4& operator+=(vector4 rhs) noexcept {
+        vector4& operator+=(vector4 rhs) noexcept {
             x += rhs.x;
             y += rhs.y;
             z += rhs.z;
@@ -37,7 +38,7 @@ namespace rayster {
             return *this;
         }
 
-        constexpr vector4& operator-=(vector4 rhs) noexcept {
+        vector4& operator-=(vector4 rhs) noexcept {
             x -= rhs.x;
             y -= rhs.y;
             z -= rhs.z;
@@ -45,7 +46,7 @@ namespace rayster {
             return *this;
         }
 
-        constexpr vector4& operator+=(double rhs) noexcept {
+        vector4& operator+=(double rhs) noexcept {
             x += rhs;
             y += rhs;
             z += rhs;
@@ -53,7 +54,7 @@ namespace rayster {
             return *this;
         }
 
-        constexpr vector4& operator-=(double rhs) noexcept {
+        vector4& operator-=(double rhs) noexcept {
             x -= rhs;
             y -= rhs;
             z -= rhs;
@@ -61,7 +62,7 @@ namespace rayster {
             return *this;
         }
 
-        constexpr vector4& operator*=(double rhs) noexcept {
+        vector4& operator*=(double rhs) noexcept {
             x *= rhs;
             y *= rhs;
             z *= rhs;
@@ -69,7 +70,7 @@ namespace rayster {
             return *this;
         }
 
-        constexpr vector4& operator/=(double rhs) noexcept {
+        vector4& operator/=(double rhs) noexcept {
             x /= rhs;
             y /= rhs;
             z /= rhs;
@@ -77,15 +78,15 @@ namespace rayster {
             return *this;
         }
 
-        constexpr double length_squared() const noexcept {
+        double length_squared() const noexcept {
             return x * x + y * y + z * z + w * w;
         }
 
-        constexpr double length() const noexcept {
+        double length() const noexcept {
             return std::sqrt(length_squared());
         }
 
-        constexpr vector4 normalize() const noexcept {
+        vector4 normalize() const noexcept {
             auto len = length();
             if (len == 0)
                 return {0, 0, 0, 0};
@@ -99,27 +100,27 @@ namespace rayster {
         double w;
     };
 
-    constexpr inline vector4 operator+(vector4 lhs, vector4 rhs) noexcept {
+    inline vector4 operator+(vector4 lhs, vector4 rhs) noexcept {
         return {lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z, lhs.w + rhs.w};
     }
 
-    constexpr inline vector4 operator-(vector4 lhs, vector4 rhs) noexcept {
+    inline vector4 operator-(vector4 lhs, vector4 rhs) noexcept {
         return {lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z, lhs.w - rhs.w};
     }
 
-    constexpr inline vector4 operator+(vector4 lhs, double rhs) noexcept {
+    inline vector4 operator+(vector4 lhs, double rhs) noexcept {
         return {lhs.x + rhs, lhs.y + rhs, lhs.z + rhs, lhs.w + rhs};
     }
 
-    constexpr inline vector4 operator-(vector4 lhs, double rhs) noexcept {
+    inline vector4 operator-(vector4 lhs, double rhs) noexcept {
         return {lhs.x - rhs, lhs.y - rhs, lhs.z - rhs, lhs.w - rhs};
     }
 
-    constexpr inline vector4 operator*(vector4 lhs, double rhs) noexcept {
+    inline vector4 operator*(vector4 lhs, double rhs) noexcept {
         return {lhs.x * rhs, lhs.y * rhs, lhs.z * rhs, lhs.w * rhs};
     }
 
-    constexpr inline vector4 operator/(vector4 lhs, double rhs) noexcept {
+    inline vector4 operator/(vector4 lhs, double rhs) noexcept {
         return {lhs.x / rhs, lhs.y / rhs, lhs.z / rhs, lhs.w / rhs};
     }
 }

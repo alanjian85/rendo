@@ -3,77 +3,93 @@
 
 #include <cstdlib>
 #include <cmath>
+#include <limits>
 
 namespace rayster {
     struct vector2 { 
-        constexpr vector2() 
+        inline static vector2 max() {
+            return {
+                std::numeric_limits<double>::max(),
+                std::numeric_limits<double>::max()
+            };
+        }
+
+        inline static vector2 min() {
+            return {
+                std::numeric_limits<double>::min(),
+                std::numeric_limits<double>::min()
+            };
+        }
+        
+        vector2() 
             : x(), y() 
         {
         
         }
-        constexpr vector2(double x_, double y_) 
+        
+        vector2(double x_, double y_) 
             : x(x_), y(y_)
         {
             
         }
 
-        constexpr double& operator[](std::size_t index) noexcept {
+        double& operator[](std::size_t index) noexcept {
             return index == 0 ? x : y;
         }
 
-        constexpr const double& operator[](std::size_t index) const noexcept {
+        const double& operator[](std::size_t index) const noexcept {
             return index == 0 ? x : y; 
         }
 
-        constexpr vector2 operator-() const noexcept {
+        vector2 operator-() const noexcept {
             return {-x, -y};
         }
 
-        constexpr vector2& operator+=(vector2 rhs) noexcept {
+        vector2& operator+=(vector2 rhs) noexcept {
             x += rhs.x;
             y += rhs.y;
             return *this;
         }
 
-        constexpr vector2& operator-=(vector2 rhs) noexcept {
+        vector2& operator-=(vector2 rhs) noexcept {
             x -= rhs.x;
             y -= rhs.y;
             return *this;
         }
 
-        constexpr vector2& operator+=(double rhs) noexcept {
+        vector2& operator+=(double rhs) noexcept {
             x += rhs;
             y += rhs;
             return *this;
         }
 
-        constexpr vector2& operator-=(double rhs) noexcept {
+        vector2& operator-=(double rhs) noexcept {
             x -= rhs;
             y -= rhs;
             return *this;
         }
 
-        constexpr vector2& operator*=(double rhs) noexcept {
+        vector2& operator*=(double rhs) noexcept {
             x *= rhs;
             y *= rhs;
             return *this;
         }
 
-        constexpr vector2& operator/=(double rhs) noexcept {
+        vector2& operator/=(double rhs) noexcept {
             x /= rhs;
             y /= rhs;
             return *this;
         }
 
-        constexpr double length_squared() const noexcept {
+        double length_squared() const noexcept {
             return x * x + y * y;
         }
 
-        constexpr double length() const noexcept {
+        double length() const noexcept {
             return std::sqrt(length_squared());
         }
 
-        constexpr vector2 normalize() const noexcept {
+        vector2 normalize() const noexcept {
             auto len = length();
             if (len == 0)
                 return {0, 0};
@@ -85,27 +101,27 @@ namespace rayster {
         double y;
     };
 
-    constexpr inline vector2 operator+(vector2 lhs, vector2 rhs) noexcept {
+    inline vector2 operator+(vector2 lhs, vector2 rhs) noexcept {
         return {lhs.x + rhs.x, lhs.y + rhs.y};
     }
 
-    constexpr inline vector2 operator-(vector2 lhs, vector2 rhs) noexcept {
+    inline vector2 operator-(vector2 lhs, vector2 rhs) noexcept {
         return {lhs.x - rhs.x, lhs.y - rhs.y};
     }
 
-    constexpr inline vector2 operator+(vector2 lhs, double rhs) noexcept {
+    inline vector2 operator+(vector2 lhs, double rhs) noexcept {
         return {lhs.x + rhs, lhs.y + rhs};
     }
 
-    constexpr inline vector2 operator-(vector2 lhs, double rhs) noexcept {
+    inline vector2 operator-(vector2 lhs, double rhs) noexcept {
         return {lhs.x - rhs, lhs.y - rhs};
     }
 
-    constexpr inline vector2 operator*(vector2 lhs, double rhs) noexcept {
+    inline vector2 operator*(vector2 lhs, double rhs) noexcept {
         return {lhs.x * rhs, lhs.y * rhs};
     }
 
-    constexpr inline vector2 operator/(vector2 lhs, double rhs) noexcept {
+    inline vector2 operator/(vector2 lhs, double rhs) noexcept {
         return {lhs.x / rhs, lhs.y / rhs};
     }
 }
