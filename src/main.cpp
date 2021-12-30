@@ -17,7 +17,7 @@ int main() {
         for (int y = bbox.min.y; y <= bbox.max.y; ++y) {
             auto bc = tri.barycentric({x, y});
             if (bc.x < 0 || bc.y < 0 || bc.z < 0) continue;
-            fb[{x, y}] = {1, 0, 0};
+            fb(x, y) = {1, 0, 0};
         }
     }
 
