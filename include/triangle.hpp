@@ -5,21 +5,21 @@
 
 #include "aabb2.hpp"
 #include "vector2.hpp"
-#include "vector3.hpp"
+#include "vertex.hpp"
 
 namespace rayster {
     struct triangle {
         using size_type = std::size_t;
 
-        vector3 a;
-        vector3 b;
-        vector3 c;
+        vertex a;
+        vertex b;
+        vertex c;
 
-        vector3& operator[](size_type index) noexcept {
+        vertex& operator[](size_type index) noexcept {
             return index == 0 ? a : index == 1 ? b : c;
         }
 
-        vector3 operator[](size_type index) const noexcept {
+        vertex operator[](size_type index) const noexcept {
             return index == 0 ? a : index == 1 ? b : c;
         }
 

@@ -5,6 +5,7 @@
 #include <string>
 
 #include "framebuffer.hpp"
+#include "shader.hpp"
 #include "triangle.hpp"
 #include "viewport.hpp"
 
@@ -27,7 +28,7 @@ namespace rayster {
             file << fb_;
         }
 
-        void draw_triangle(const triangle& tri) noexcept;
+        void draw_triangle(const triangle& tri, shader& s) noexcept;
     private:
         framebuffer fb_;
         viewport view_;
