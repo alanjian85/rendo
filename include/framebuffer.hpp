@@ -14,22 +14,22 @@ namespace rayster {
 
     class framebuffer {
     public:
-        using size_type = std::size_t;
+        using size_type = std::vector<pixel>::size_type;
 
-        framebuffer() noexcept = default;
+        framebuffer() noexcept : width_() {}
         framebuffer(size_type width, size_type height)
-            : height_(height),
+            : width_(width),
               pixels_(width * height)
         {
 
         }
 
         size_type width() const noexcept {
-            return static_cast<size_type>(pixels_.size() / height_);
+            return width_;
         }
         
         size_type height() const noexcept {
-            return height_;
+            return pixels_.size() / width_;
         }
 
         void clear(color_rgb color) noexcept {
@@ -39,16 +39,16 @@ namespace rayster {
         }
 
         pixel& operator()(size_type x, size_type y) noexcept {
-            auto index = y * height_ + x;
+            auto index = y * width_ + x;
             return {pixels_[index]};
         }
 
         const pixel& operator()(size_type x, size_type y) const noexcept {
-            auto index = y * height_ + x;
+            auto index = y * width_ + x;
             return {pixels_[index]};
         }
     private:
-        size_type height_;
+        size_type width_;
         std::vector<pixel> pixels_;
     };
 

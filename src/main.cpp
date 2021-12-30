@@ -9,8 +9,8 @@ int main() {
 
     triangle tri;
     tri.a = {  0,   0, 0};
-    tri.b = {400, 600, 0};
-    tri.c = {800,   0, 0};
+    tri.b = {200, 300, 0};
+    tri.c = {400,   0, 0};
 
     auto bbox = tri.bounding_box();
     for (auto x = bbox.min.x; x <= bbox.max.x; ++x) {
