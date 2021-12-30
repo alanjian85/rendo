@@ -1,11 +1,11 @@
 #ifndef RAYSTER_FRAMEBUFFER_HPP
 #define RAYSTER_FRAMEBUFFER_HPP
 
+#include <cstdlib>
 #include <iostream>
 #include <vector>
 
 #include "color.hpp"
-#include "vec.hpp"
 
 namespace rayster {
     struct pixel {
@@ -14,18 +14,18 @@ namespace rayster {
 
     class framebuffer {
     public:
-        using size_type = int;
+        using size_type = std::size_t;
 
         framebuffer() noexcept = default;
         framebuffer(size_type width, size_type height)
-            : width_(width), height_(height),
+            : height_(height),
               pixels_(width * height)
         {
 
         }
 
         size_type width() const noexcept {
-            return width_;
+            return static_cast<size_type>(pixels_.size() / height_);
         }
         
         size_type height() const noexcept {
@@ -48,7 +48,6 @@ namespace rayster {
             return {pixels_[index]};
         }
     private:
-        size_type width_;
         size_type height_;
         std::vector<pixel> pixels_;
     };
