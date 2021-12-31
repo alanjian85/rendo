@@ -10,6 +10,7 @@ public:
     basic_shader() {
         std::ifstream tex_file("res/textures/texture.ppm");
         tex_file >> texture_;
+        sampler_.wrap(wrapping::repeat_mirrored);
     }
     
     virtual vertex vert(const vertex& vert) override {
@@ -26,15 +27,16 @@ private:
 
 int main() {
     renderer render;
+    render.clear({0.2, 0.3, 0.3});
 
     std::vector<triangle> triangles(2);
-    triangles[0].a = {{-0.5,   0.5, 0}, {0, 2}};
+    triangles[0].a = {{-0.5,   0.5, 0}, {0, 3}};
     triangles[0].b = {{-0.5, -0.75, 0}, {0, 0}};
-    triangles[0].c = {{ 0.5,  0.75, 0}, {2, 2}};
+    triangles[0].c = {{ 0.5,  0.75, 0}, {3, 3}};
 
     triangles[1].a = {{-0.5, -0.75, 0}, {0, 0}};
-    triangles[1].b = {{ 0.5,  0.75, 0}, {2, 2}};
-    triangles[1].c = {{ 0.5, -0.5, 0}, {2, 0}};
+    triangles[1].b = {{ 0.5,  0.75, 0}, {3, 3}};
+    triangles[1].c = {{ 0.5, -0.5,  0}, {3, 0}};
 
     basic_shader s;
     for (auto& tri : triangles) {

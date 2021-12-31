@@ -6,7 +6,10 @@
 
 namespace rayster {
     enum class wrapping {
-        repeat
+        repeat,
+        repeat_mirrored,
+        clamp_to_edge,
+        clamp_to_border
     };
 
     class sampler {
@@ -21,13 +24,22 @@ namespace rayster {
             return wrap_;
         }
 
-        void set_wrap(wrapping wrap) noexcept {
+        void wrap(wrapping wrap) noexcept {
             wrap_ = wrap;
+        }
+
+        void set_border(color_rgb border) noexcept {
+            border_ = border;
+        }
+
+        color_rgb border() const noexcept {
+            return border_;
         }
 
         color_rgb operator()(const texture& tex, vector2 v) const noexcept;
     private:
         wrapping wrap_;
+        color_rgb border_;
     };
 }
 
