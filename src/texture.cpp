@@ -57,4 +57,6 @@ std::istream& rayster::operator>>(std::istream& lhs, texture& rhs) {
             }
         } while (y > 0);
     }
+
+    return lhs;
 }

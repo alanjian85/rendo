@@ -19,6 +19,10 @@ namespace rayster {
     inline color_rgb operator*(double lhs, color_rgb rhs) noexcept {
         return rhs * lhs;
     }
+
+    inline color_rgb operator*(color_rgb lhs, color_rgb rhs) noexcept {
+        return {lhs.r * rhs.r, lhs.g * rhs.g, lhs.b * rhs.b};
+    }
 }
 
 #endif

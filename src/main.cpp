@@ -18,7 +18,7 @@ public:
     }
 
     virtual color_rgb frag(const vertex_data& data) override {
-        return sampler_(texture_, data.uv);
+        return sampler_(texture_, data.uv) * color_rgb{data.uv.x, data.uv.y, 0.25};
     }
 private:
     texture texture_;
@@ -30,13 +30,13 @@ int main() {
     render.clear({0.2, 0.3, 0.3});
 
     std::vector<triangle> triangles(2);
-    triangles[0].a = {{-0.5,   0.5, 0}, {0, 3}};
+    triangles[0].a = {{-0.5,   0.5, 0}, {0, 1}};
     triangles[0].b = {{-0.5, -0.75, 0}, {0, 0}};
-    triangles[0].c = {{ 0.5,  0.75, 0}, {3, 3}};
+    triangles[0].c = {{ 0.5,  0.75, 0}, {1, 1}};
 
     triangles[1].a = {{-0.5, -0.75, 0}, {0, 0}};
-    triangles[1].b = {{ 0.5,  0.75, 0}, {3, 3}};
-    triangles[1].c = {{ 0.5, -0.5,  0}, {3, 0}};
+    triangles[1].b = {{ 0.5,  0.75, 0}, {1, 1}};
+    triangles[1].c = {{ 0.5, -0.5,  0}, {1, 0}};
 
     basic_shader s;
     for (auto& tri : triangles) {
