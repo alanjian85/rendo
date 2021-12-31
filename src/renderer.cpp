@@ -1,7 +1,12 @@
 #include "renderer.hpp"
 using namespace rayster;
 
-void renderer::draw_triangle(const triangle& tri, shader& s) noexcept {
+void renderer::draw_triangle(triangle tri, shader& s) noexcept {
+    auto trans = view_.trans();
+    tri.a.pos = trans * tri.a.pos;
+    tri.b.pos = trans * tri.b.pos;
+    tri.c.pos = trans * tri.c.pos;
+
     auto bbox = tri.bounding_box();
     for (auto x = bbox.min.x; x <= bbox.max.x; ++x) {
         for (auto y = bbox.min.y; y <= bbox.max.y; ++y) {

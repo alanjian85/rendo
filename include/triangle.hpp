@@ -5,6 +5,7 @@
 
 #include "aabb2.hpp"
 #include "vector2.hpp"
+#include "vector3.hpp"
 #include "vertex.hpp"
 
 namespace rayster {
@@ -19,7 +20,7 @@ namespace rayster {
             return index == 0 ? a : index == 1 ? b : c;
         }
 
-        vertex operator[](size_type index) const noexcept {
+        const vertex& operator[](size_type index) const noexcept {
             return index == 0 ? a : index == 1 ? b : c;
         }
 

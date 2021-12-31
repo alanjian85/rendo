@@ -13,9 +13,9 @@ int main() {
 
     basic_shader s;
     triangle tri;
-    tri.a = {{  0,   0, 0}, {1, 0, 0}};
-    tri.b = {{400, 600, 0}, {0, 1, 0}};
-    tri.c = {{800,   0, 0}, {0, 0, 1}};
+    tri.a = {{-0.5, -0.5, 0}, {1, 0, 0}};
+    tri.b = {{   0,  0.5, 0}, {0, 1, 0}};
+    tri.c = {{ 0.5, -0.5, 0}, {0, 0, 1}};
     render.draw_triangle(tri, s);
 
     render.write("image.ppm");

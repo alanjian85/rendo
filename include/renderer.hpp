@@ -28,7 +28,11 @@ namespace rayster {
             file << fb_;
         }
 
-        void draw_triangle(const triangle& tri, shader& s) noexcept;
+        const viewport& view() const noexcept {
+            return view_;
+        }
+
+        void draw_triangle(triangle tri, shader& s) noexcept;
     private:
         framebuffer fb_;
         viewport view_;
