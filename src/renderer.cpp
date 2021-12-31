@@ -2,9 +2,9 @@
 using namespace rayster;
 
 void renderer::draw_triangle(triangle tri, shader& s) noexcept {
-    tri.a = s.vert(tri.a, view_);
-    tri.b = s.vert(tri.b, view_);
-    tri.c = s.vert(tri.c, view_);
+    tri.a = s.vert(tri.a);
+    tri.b = s.vert(tri.b);
+    tri.c = s.vert(tri.c);
 
     auto ndc = view_.trans();
     tri.a.pos = ndc * tri.a.pos;

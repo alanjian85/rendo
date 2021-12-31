@@ -11,7 +11,7 @@ namespace rayster {
     public:
         virtual ~shader() = default;
 
-        virtual vertex vert(const vertex& vert, const viewport& view) = 0;
+        virtual vertex vert(const vertex& vert) = 0;
         virtual color_rgb frag(const vertex_data& data) = 0;
     };
 }
