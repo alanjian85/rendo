@@ -2,10 +2,14 @@
 using namespace rayster;
 
 void renderer::draw_triangle(triangle tri, shader& s) noexcept {
-    auto trans = view_.trans();
-    tri.a.pos = trans * tri.a.pos;
-    tri.b.pos = trans * tri.b.pos;
-    tri.c.pos = trans * tri.c.pos;
+    tri.a = s.vert(tri.a, view_);
+    tri.b = s.vert(tri.b, view_);
+    tri.c = s.vert(tri.c, view_);
+
+    auto ndc = view_.trans();
+    tri.a.pos = ndc * tri.a.pos;
+    tri.b.pos = ndc * tri.b.pos;
+    tri.c.pos = ndc * tri.c.pos;
 
     auto bbox = tri.bounding_box();
     for (auto x = bbox.min.x; x <= bbox.max.x; ++x) {
@@ -15,7 +19,7 @@ void renderer::draw_triangle(triangle tri, shader& s) noexcept {
                 if (bc.x < 0 || bc.y < 0 || bc.z < 0) continue;
             
                 auto data = bc.x * tri.a.data + bc.y * tri.b.data + bc.z * tri.c.data;
-                fb_(x, y).color = s.fragment(data);
+                fb_(x, y).color = s.frag(data);
             }
         }
     }

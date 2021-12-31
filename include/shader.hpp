@@ -2,14 +2,17 @@
 #define RAYSTER_SHADER_HPP
 
 #include "color.hpp"
+#include "vertex.hpp"
 #include "vertex_data.hpp"
+#include "viewport.hpp"
 
 namespace rayster {
     class shader {
     public:
         virtual ~shader() = default;
 
-        virtual color_rgb fragment(const vertex_data& data) = 0;
+        virtual vertex vert(const vertex& vert, const viewport& view) = 0;
+        virtual color_rgb frag(const vertex_data& data) = 0;
     };
 }
 

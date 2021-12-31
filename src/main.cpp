@@ -3,7 +3,11 @@ using namespace rayster;
 
 class basic_shader : public shader {
 public:
-    virtual color_rgb fragment(const vertex_data& data) override {
+    virtual vertex vert(const vertex& vert, const viewport& view) override {
+        return vert;
+    }
+
+    virtual color_rgb frag(const vertex_data& data) override {
         return data.color;
     }
 };
