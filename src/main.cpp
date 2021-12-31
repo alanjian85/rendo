@@ -8,7 +8,7 @@ using namespace rayster;
 class basic_shader : public shader {
 public:
     basic_shader() {
-        std::ifstream tex_file("texture.ppm");
+        std::ifstream tex_file("res/textures/texture.ppm");
         tex_file >> texture_;
     }
     
@@ -28,13 +28,13 @@ int main() {
     renderer render;
 
     std::vector<triangle> triangles(2);
-    triangles[0].a = {{-0.5,  0.5, 0}, {0, 1}};
-    triangles[0].b = {{-0.5, -0.5, 0}, {0, 0}};
-    triangles[0].c = {{ 0.5,  0.5, 0}, {1, 1}};
+    triangles[0].a = {{-0.5,   0.5, 0}, {0, 2}};
+    triangles[0].b = {{-0.5, -0.75, 0}, {0, 0}};
+    triangles[0].c = {{ 0.5,  0.75, 0}, {2, 2}};
 
-    triangles[1].a = {{-0.5, -0.5, 0}, {0, 0}};
-    triangles[1].b = {{ 0.5,  0.5, 0}, {1, 1}};
-    triangles[1].c = {{ 0.5, -0.5, 0}, {1, 0}};
+    triangles[1].a = {{-0.5, -0.75, 0}, {0, 0}};
+    triangles[1].b = {{ 0.5,  0.75, 0}, {2, 2}};
+    triangles[1].c = {{ 0.5, -0.5, 0}, {2, 0}};
 
     basic_shader s;
     for (auto& tri : triangles) {

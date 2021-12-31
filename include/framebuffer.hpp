@@ -29,6 +29,8 @@ namespace rayster {
         }
         
         size_type height() const noexcept {
+            if (width_ == 0)
+                return 0;
             return pixels_.size() / width_;
         }
 
