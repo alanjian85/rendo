@@ -27,7 +27,7 @@ private:
 
 int main() {
     renderer render;
-    render.clear({0.2, 0.3, 0.3, 1.0});
+    render.clear({0.2, 0.3, 0.3});
 
     std::vector<triangle> triangles(2);
     triangles[0].a = {{-0.5,   0.5, 0}, {0, 1}};

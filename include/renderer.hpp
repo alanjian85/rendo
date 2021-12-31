@@ -17,6 +17,8 @@ namespace rayster {
         {
             view_.min = {0, 0};
             view_.max = {800, 600};
+            view_.near = 0;
+            view_.far = 1;
         }
 
         void clear(color_rgba color) noexcept {
