@@ -10,8 +10,8 @@ vector3 triangle::barycentric(vector2 p) const noexcept {
     );
     if (t.z == 0)
         return {-1, 1, 1};
-    auto u = t.x / t.z;
-    auto v = t.y / t.z;
+    auto u = t.y / t.z;
+    auto v = t.x / t.z;
     return {1 - u - v, u, v};
 }
 

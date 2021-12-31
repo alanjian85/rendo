@@ -2,21 +2,22 @@
 #define RAYSTER_VERTEX_DATA_HPP
 
 #include "color.hpp"
+#include "vector2.hpp"
 
 namespace rayster {
     struct vertex_data {
-        color_rgb color;
+        vector2 uv;
     };
 
     inline vertex_data operator+(const vertex_data& lhs, const vertex_data& rhs) noexcept {
         return {
-            lhs.color + rhs.color
+            lhs.uv + rhs.uv
         };
     }
 
     inline vertex_data operator*(const vertex_data& lhs, double rhs) noexcept {
         return {
-            lhs.color * rhs  
+            lhs.uv * rhs  
         };
     }
 
