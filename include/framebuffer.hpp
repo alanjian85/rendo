@@ -9,7 +9,7 @@
 
 namespace rayster {
     struct pixel {
-        color_rgb color;
+        color_rgba color;
     };
 
     class framebuffer {
@@ -34,7 +34,7 @@ namespace rayster {
             return pixels_.size() / width_;
         }
 
-        void clear(color_rgb color) noexcept {
+        void clear(color_rgba color) noexcept {
             for (auto& p : pixels_) {
                 p.color = color;
             }

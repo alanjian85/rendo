@@ -28,18 +28,18 @@ namespace rayster {
             wrap_ = wrap;
         }
 
-        void set_border(color_rgb border) noexcept {
+        void set_border(color_rgba border) noexcept {
             border_ = border;
         }
 
-        color_rgb border() const noexcept {
+        color_rgba border() const noexcept {
             return border_;
         }
 
-        color_rgb operator()(const texture& tex, vector2 v) const noexcept;
+        color_rgba operator()(const texture& tex, vector2 v) const noexcept;
     private:
         wrapping wrap_;
-        color_rgb border_;
+        color_rgba border_;
     };
 }
 

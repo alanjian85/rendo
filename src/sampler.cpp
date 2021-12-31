@@ -4,7 +4,7 @@ using namespace rayster;
 #include <algorithm>
 #include <cmath>
 
-color_rgb sampler::operator()(const texture& tex, vector2 v) const noexcept {
+color_rgba sampler::operator()(const texture& tex, vector2 v) const noexcept {
     switch (wrap_) {
     case wrapping::repeat:
         if (v.x < 0 || v.x > 1)

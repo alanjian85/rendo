@@ -12,7 +12,7 @@ namespace rayster {
         virtual ~shader() = default;
 
         virtual vertex vert(const vertex& vert) = 0;
-        virtual color_rgb frag(const vertex_data& data) = 0;
+        virtual color_rgba frag(const vertex_data& data) = 0;
     };
 }
 

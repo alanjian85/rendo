@@ -2,26 +2,27 @@
 #define RAYSTER_COLOR_HPP
 
 namespace rayster {
-    struct color_rgb {
+    struct color_rgba {
         double r;
         double g;
         double b;
+        double a;
     };
 
-    inline color_rgb operator+(color_rgb lhs, color_rgb rhs) noexcept {
-        return {lhs.r + rhs.r, lhs.g + rhs.g, lhs.b + rhs.b};
+    inline color_rgba operator+(color_rgba lhs, color_rgba rhs) noexcept {
+        return {lhs.r + rhs.r, lhs.g + rhs.g, lhs.b + rhs.b, lhs.a + rhs.a};
     }
 
-    inline color_rgb operator*(color_rgb lhs, double rhs) noexcept {
-        return {lhs.r * rhs, lhs.g * rhs, lhs.b * rhs};
+    inline color_rgba operator*(color_rgba lhs, double rhs) noexcept {
+        return {lhs.r * rhs, lhs.g * rhs, lhs.b * rhs, lhs.a * rhs};
     }
 
-    inline color_rgb operator*(double lhs, color_rgb rhs) noexcept {
+    inline color_rgba operator*(double lhs, color_rgba rhs) noexcept {
         return rhs * lhs;
     }
 
-    inline color_rgb operator*(color_rgb lhs, color_rgb rhs) noexcept {
-        return {lhs.r * rhs.r, lhs.g * rhs.g, lhs.b * rhs.b};
+    inline color_rgba operator*(color_rgba lhs, color_rgba rhs) noexcept {
+        return {lhs.r * rhs.r, lhs.g * rhs.g, lhs.b * rhs.b, lhs.a * rhs.a};
     }
 }
 

@@ -18,9 +18,9 @@ std::istream& rayster::operator>>(std::istream& lhs, texture& rhs) {
                 lhs >> c;
 
                 if (c == '0')
-                    rhs(x, y) = {0, 0, 0};
+                    rhs(x, y) = {0, 0, 0, 1};
                 else if (c == '1')
-                    rhs(x, y) = {1, 1, 1};
+                    rhs(x, y) = {1, 1, 1, 1};
             }
         } while (y > 0);
     } else if (format == "P2") {
@@ -35,7 +35,7 @@ std::istream& rayster::operator>>(std::istream& lhs, texture& rhs) {
                 lhs >> color;
 
                 auto t = static_cast<double>(color) / max_value;
-                rhs(x, y) = {t, t, t};
+                rhs(x, y) = {t, t, t, 1};
             }
         } while (y > 0);
     } else if (format == "P3"){
@@ -52,7 +52,8 @@ std::istream& rayster::operator>>(std::istream& lhs, texture& rhs) {
                 rhs(x, y) = {
                     static_cast<double>(r) / max_value,
                     static_cast<double>(g) / max_value,
-                    static_cast<double>(b) / max_value
+                    static_cast<double>(b) / max_value,
+                    1
                 };
             }
         } while (y > 0);

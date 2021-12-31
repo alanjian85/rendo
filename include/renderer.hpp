@@ -19,7 +19,7 @@ namespace rayster {
             view_.max = {800, 600};
         }
 
-        void clear(color_rgb color) noexcept {
+        void clear(color_rgba color) noexcept {
             fb_.clear(color);
         }
 

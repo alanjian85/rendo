@@ -17,8 +17,8 @@ public:
         return vert;
     }
 
-    virtual color_rgb frag(const vertex_data& data) override {
-        return sampler_(texture_, data.uv) * color_rgb{data.uv.x, data.uv.y, 0.25};
+    virtual color_rgba frag(const vertex_data& data) override {
+        return sampler_(texture_, data.uv) * color_rgba{data.uv.x, data.uv.y, 0.25, 1};
     }
 private:
     texture texture_;
@@ -27,7 +27,7 @@ private:
 
 int main() {
     renderer render;
-    render.clear({0.2, 0.3, 0.3});
+    render.clear({0.2, 0.3, 0.3, 1.0});
 
     std::vector<triangle> triangles(2);
     triangles[0].a = {{-0.5,   0.5, 0}, {0, 1}};
@@ -43,5 +43,5 @@ int main() {
         render.draw_triangle(tri, s);
     }
 
-    render.write("image.ppm");
+    render.write("image.pam");
 }
