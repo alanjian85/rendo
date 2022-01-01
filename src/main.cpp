@@ -3,18 +3,22 @@
 #include "renderer.hpp"
 #include "sampler.hpp"
 #include "texture.hpp"
+#include "utility.hpp"
+#include "persp.hpp"
 using namespace rayster;
 
 class basic_shader : public shader {
 public:
-    basic_shader() {
+    basic_shader()
+        : persp_(rad(45), 800.0 / 600.0, 0.1, 100.0)
+    {
         std::ifstream tex_file("res/textures/texture.ppm");
         tex_file >> texture_;
         sampler_.wrap(wrapping::repeat_mirrored);
     }
     
     virtual vertex vert(const vertex& vert) override {
-        return vert;
+        return {persp_ * vert.pos, vert.data};
     }
 
     virtual color_rgba frag(const vertex_data& data) override {
@@ -23,6 +27,7 @@ public:
 private:
     texture texture_;
     sampler sampler_;
+    persp persp_;
 };
 
 int main() {
@@ -30,13 +35,13 @@ int main() {
     render.clear({0.2, 0.3, 0.3});
 
     std::vector<triangle> triangles(2);
-    triangles[0].a = {{-0.5,   0.5, 0}, {0, 1}};
-    triangles[0].b = {{-0.5, -0.75, 0}, {0, 0}};
-    triangles[0].c = {{ 0.5,  0.75, 0}, {1, 1}};
+    triangles[0].a = {{-0.5,   0.5, 5}, {0, 1}};
+    triangles[0].b = {{-0.5, -0.75, 5}, {0, 0}};
+    triangles[0].c = {{ 0.5,  0.75, 5}, {1, 1}};
 
-    triangles[1].a = {{-0.5, -0.75, 0}, {0, 0}};
-    triangles[1].b = {{ 0.5,  0.75, 0}, {1, 1}};
-    triangles[1].c = {{ 0.5, -0.5,  0}, {1, 0}};
+    triangles[1].a = {{-0.5, -0.75, 5}, {0, 0}};
+    triangles[1].b = {{ 0.5,  0.75, 5}, {1, 1}};
+    triangles[1].c = {{ 0.5, -0.5,  5}, {1, 0}};
 
     basic_shader s;
     for (auto& tri : triangles) {

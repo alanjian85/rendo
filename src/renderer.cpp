@@ -6,7 +6,7 @@ void renderer::draw_triangle(triangle tri, shader& s) noexcept {
     tri.b = s.vert(tri.b);
     tri.c = s.vert(tri.c);
 
-    auto ndc = view_.trans();
+    auto ndc = view_.transform();
     tri.a.pos = ndc * tri.a.pos;
     tri.b.pos = ndc * tri.b.pos;
     tri.c.pos = ndc * tri.c.pos;
