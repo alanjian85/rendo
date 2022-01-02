@@ -29,6 +29,14 @@ namespace rayster {
         return {lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z};
     }
 
+    inline vector3 operator*(vector3 lhs, double rhs) noexcept {
+        return {lhs.x * rhs, lhs.y * rhs, lhs.z * rhs};
+    }
+
+    inline vector3 operator*(double lhs, vector3 rhs) noexcept {
+        return rhs * lhs;
+    }
+
     inline double dot(vector3 lhs, vector3 rhs) noexcept {
         return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
     }

@@ -30,6 +30,15 @@ namespace rayster {
         const double& operator()(size_type i, size_type j) const noexcept {
             return entries_[j][i];
         }
+
+        matrix4 transpose() const noexcept {
+            matrix4 res;
+            res.entries_[0][0] = entries_[0][0]; res.entries_[0][1] = entries_[1][0]; res.entries_[0][2] = entries_[2][0]; res.entries_[0][3] = entries_[3][0];
+            res.entries_[1][0] = entries_[0][1]; res.entries_[1][1] = entries_[1][1]; res.entries_[1][2] = entries_[2][1]; res.entries_[1][3] = entries_[3][1];
+            res.entries_[2][0] = entries_[0][2]; res.entries_[2][1] = entries_[1][2]; res.entries_[2][2] = entries_[2][2]; res.entries_[2][3] = entries_[3][2];
+            res.entries_[3][0] = entries_[0][3]; res.entries_[3][1] = entries_[1][3]; res.entries_[3][2] = entries_[2][3]; res.entries_[3][3] = entries_[3][3];
+            return res;
+        }
     private:
         double entries_[4][4];
     };

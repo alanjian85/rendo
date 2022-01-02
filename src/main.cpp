@@ -2,6 +2,7 @@
 
 #include "lookat.hpp"
 #include "renderer.hpp"
+#include "rotate.hpp"
 #include "sampler.hpp"
 #include "texture.hpp"
 #include "utility.hpp"
@@ -12,7 +13,8 @@ class basic_shader : public shader {
 public:
     basic_shader()
         : persp_(rad(45), 800.0 / 600.0, 0.1, 100.0),
-          lookat_({0, 0, 3}, {0, 0, 0}, {0, 1, 0})
+          lookat_({0, 0, 3}, {0, 0, 0}, {0, 1, 0}),
+          rotate_(rad(45), {1, 1, 1})
     {
         std::ifstream tex_file("res/textures/texture.ppm");
         tex_file >> texture_;
@@ -20,7 +22,7 @@ public:
     }
     
     virtual vertex vert(const vertex& vert) override {
-        return {persp_ * lookat_ * vert.pos, vert.data};
+        return {persp_ * lookat_ * rotate_ * vert.pos, vert.data};
     }
 
     virtual color_rgba frag(const vertex_data& data) override {
@@ -31,6 +33,7 @@ private:
     sampler sampler_;
     persp persp_;
     lookat lookat_;
+    rotate rotate_;
 };
 
 int main() {
