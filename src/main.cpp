@@ -1,5 +1,6 @@
 #include <fstream>
 
+#include "lookat.hpp"
 #include "renderer.hpp"
 #include "sampler.hpp"
 #include "texture.hpp"
@@ -10,7 +11,8 @@ using namespace rayster;
 class basic_shader : public shader {
 public:
     basic_shader()
-        : persp_(rad(45), 800.0 / 600.0, 0.1, 100.0)
+        : persp_(rad(45), 800.0 / 600.0, 0.1, 100.0),
+          lookat_({0, 0, 3}, {0, 0, 0}, {0, 1, 0})
     {
         std::ifstream tex_file("res/textures/texture.ppm");
         tex_file >> texture_;
@@ -18,7 +20,7 @@ public:
     }
     
     virtual vertex vert(const vertex& vert) override {
-        return {persp_ * vert.pos, vert.data};
+        return {persp_ * lookat_ * vert.pos, vert.data};
     }
 
     virtual color_rgba frag(const vertex_data& data) override {
@@ -28,6 +30,7 @@ private:
     texture texture_;
     sampler sampler_;
     persp persp_;
+    lookat lookat_;
 };
 
 int main() {
