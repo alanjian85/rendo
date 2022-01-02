@@ -35,7 +35,7 @@ int main() {
     render.clear({0.2, 0.3, 0.3});
 
     std::vector<triangle> triangles(2);
-    triangles[0].a = {{-0.5,   0.5, 5}, {0, 1}};
+    triangles[0].a = {{-0.5,  0.5,  5}, {0, 1}};
     triangles[0].b = {{-0.5, -0.75, 5}, {0, 0}};
     triangles[0].c = {{ 0.5,  0.75, 5}, {1, 1}};
 
