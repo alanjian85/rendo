@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 
+#include "cube.hpp"
 #include "framebuffer.hpp"
 #include "shader.hpp"
 #include "triangle.hpp"
@@ -35,6 +36,12 @@ namespace rayster {
         }
 
         void draw_triangle(triangle tri, shader& s) noexcept;
+        
+        void draw_cube(const cube& c, shader& s) noexcept {
+            for (auto& tri : c) {
+                draw_triangle(tri, s);
+            }
+        }
     private:
         framebuffer fb_;
         viewport view_;

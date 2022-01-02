@@ -34,19 +34,10 @@ int main() {
     renderer render;
     render.clear({0.2, 0.3, 0.3});
 
-    std::vector<triangle> triangles(2);
-    triangles[0].a = {{-0.5,  0.5,  5}, {0, 1}};
-    triangles[0].b = {{-0.5, -0.75, 5}, {0, 0}};
-    triangles[0].c = {{ 0.5,  0.75, 5}, {1, 1}};
-
-    triangles[1].a = {{-0.5, -0.75, 5}, {0, 0}};
-    triangles[1].b = {{ 0.5,  0.75, 5}, {1, 1}};
-    triangles[1].c = {{ 0.5, -0.5,  5}, {1, 0}};
+    cube c(1);
 
     basic_shader s;
-    for (auto& tri : triangles) {
-        render.draw_triangle(tri, s);
-    }
+    render.draw_cube(c, s);
 
     render.write("image.pam");
 }
