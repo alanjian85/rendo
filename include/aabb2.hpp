@@ -1,6 +1,8 @@
 #ifndef RAYSTER_AABB2_HPP
 #define RAYSTER_AABB2_HPP
 
+#include <cmath>
+
 #include "vector2.hpp"
 
 namespace rayster {
@@ -12,6 +14,13 @@ namespace rayster {
             return v.x >= min.x && v.y >= min.y && v.x <= max.x && v.y <= max.y;
         }
     };
+
+    inline aabb2 intersection(aabb2 lhs, aabb2 rhs) noexcept {
+        return {
+            {std::max(lhs.min.x, rhs.min.x), std::max(lhs.min.y, rhs.min.y)},
+            {std::min(lhs.max.x, rhs.max.x), std::min(lhs.max.y, rhs.max.y)}
+        };
+    }
 }
 
 #endif
