@@ -37,8 +37,8 @@ private:
 };
 
 int main() {
-  renderer render;
-    render.clear({0.2, 0.3, 0.3, 1.0});
+    renderer render;
+    render.clear({0.627, 0.906, 0.898, 1.0});
 
     cube c(1);
 
