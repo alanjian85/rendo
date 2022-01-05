@@ -6,7 +6,6 @@
 
 namespace rayster {
     class rotate : public matrix4 {
-        rotate(matrix4 m) noexcept : matrix4(m) {}
     public:
         rotate(double angle, vector3 v) noexcept;
     };
