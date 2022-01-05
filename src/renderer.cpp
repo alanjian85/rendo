@@ -18,8 +18,12 @@ void renderer::draw_triangle(triangle tri, shader& s) noexcept {
             auto bc = tri.barycentric({x, y});
             if (bc.x < 0 || bc.y < 0 || bc.z < 0) continue;
             
+            auto z = bc.x * tri.a.pos.z + bc.y * tri.b.pos.z + bc.z * tri.c.pos.z;
             auto data = bc.x * tri.a.data + bc.y * tri.b.data + bc.z * tri.c.data;
-            fb_(x, y).color = s.frag(data);
+            if (fb_.depth_test(x, y, z)) {
+                fb_(x, y).color = s.frag(data);
+                fb_(x, y).depth = z;
+            }
         }
     }
 }

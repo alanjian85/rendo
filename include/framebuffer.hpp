@@ -10,6 +10,7 @@
 namespace rayster {
     struct pixel {
         color_rgba color;
+        double depth;
     };
 
     class framebuffer {
@@ -37,6 +38,7 @@ namespace rayster {
         void clear(color_rgba color) noexcept {
             for (auto& p : pixels_) {
                 p.color = color;
+                p.depth = 1;
             }
         }
 
@@ -48,6 +50,10 @@ namespace rayster {
         const pixel& operator()(size_type x, size_type y) const noexcept {
             auto index = y * width_ + x;
             return {pixels_[index]};
+        }
+
+        bool depth_test(size_type x, size_type y, double z) const noexcept {
+            return z < (*this)(x, y).depth;
         }
     private:
         size_type width_;
