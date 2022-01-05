@@ -57,6 +57,39 @@ std::istream& rayster::operator>>(std::istream& lhs, texture& rhs) {
                 };
             }
         } while (y > 0);
+    } else if (format == "P5") {
+        int max_value;
+        lhs >> max_value;
+        
+        auto y = height;
+        do {
+            --y;
+            for (texture::size_type x = 0; x < width; ++x) {
+                auto color = static_cast<unsigned char>(lhs.get());
+
+                auto t = static_cast<double>(color) / max_value;
+                rhs(x, y) = {t, t, t, 1};
+            }
+        } while (y > 0);
+    } else if (format == "P6") {
+        int max_value;
+        lhs >> max_value;
+
+        auto y = height;
+        do {
+            --y;
+            for (texture::size_type x = 0; x < width; ++x) {
+                unsigned char r, g, b;
+                r =  lhs.get(); g = lhs.get(); b = lhs.get();
+
+                rhs(x, y) = {
+                    static_cast<double>(r) / max_value,
+                    static_cast<double>(g) / max_value,
+                    static_cast<double>(b) / max_value,
+                    1
+                };
+            }
+        } while (y > 0);
     }
 
     return lhs;

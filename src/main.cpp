@@ -16,7 +16,7 @@ public:
           lookat_({0, 0, 3}, {0, 0, 0}, {0, 1, 0}),
           rotate_(rad(45), {1, 1, 1})
     {
-        std::ifstream tex_file("res/textures/texture.ppm");
+        std::ifstream tex_file("res/textures/texture.ppm", std::ios::binary);
         tex_file >> texture_;
         sampler_.wrap(wrapping::repeat_mirrored);
     }
@@ -26,7 +26,7 @@ public:
     }
 
     virtual color_rgba frag(const vertex_data& data) override {
-        return sampler_(texture_, data.uv) * color_rgba{data.uv.x, data.uv.y, 0.25, 1};
+        return sampler_(texture_, data.uv);
     }
 private:
     texture texture_;

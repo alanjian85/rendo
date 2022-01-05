@@ -11,8 +11,6 @@ void renderer::draw_triangle(triangle tri, shader& s) noexcept {
     tri.b.pos = ndc * tri.b.pos;
     tri.c.pos = ndc * tri.c.pos;
 
-    std::cout << tri.a.pos.z << ' ' << tri.b.pos.z << ' ' << tri.c.pos.z << '\n';
-
     auto bbox = tri.bounding_box();
     bbox = intersection(bbox, view_.bounding_box());
     for (auto x = bbox.min.x; x <= bbox.max.x; ++x) {
