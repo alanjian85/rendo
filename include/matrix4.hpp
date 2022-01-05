@@ -11,7 +11,15 @@ namespace rayster {
     public:
         using size_type = std::size_t;
     
-        matrix4() = default;
+        matrix4()
+            : matrix4(0, 0, 0, 0,
+                      0, 0, 0, 0,
+                      0, 0, 0, 0,
+                      0, 0, 0, 0) 
+        {
+
+        }
+        
         matrix4(double e00, double e01, double e02, double e03,
                 double e10, double e11, double e12, double e13,
                 double e20, double e21, double e22, double e23,

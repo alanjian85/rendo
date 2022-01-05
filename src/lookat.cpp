@@ -18,4 +18,5 @@ lookat::lookat(vector3 eye, vector3 center, vector3 up) noexcept {
 	(*this)(0, 3) = -dot(s, eye);
 	(*this)(1, 3) = -dot(u, eye);
 	(*this)(2, 3) = -dot(f, eye);
+	(*this)(3, 3) = 1;
 }
