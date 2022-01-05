@@ -75,6 +75,8 @@ std::istream& rayster::operator>>(std::istream& lhs, texture& rhs) {
         int max_value;
         lhs >> max_value;
 
+        lhs.ignore(1);
+
         auto y = height;
         do {
             --y;
