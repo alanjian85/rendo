@@ -7,6 +7,14 @@ namespace rayster {
         double y;
         double z;
         double w;
+    
+        vector4& operator*=(double rhs) noexcept {
+            x *= rhs;
+            y *= rhs;
+            z *= rhs;
+            w *= rhs;
+            return *this;
+        }
     };
 }
 
