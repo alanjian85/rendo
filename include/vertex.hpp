@@ -1,12 +1,12 @@
 #ifndef RAYSTER_VERTEX_HPP
 #define RAYSTER_VERTEX_HPP
 
+#include "vector4.hpp"
 #include "vertex_data.hpp"
-#include "position3.hpp"
 
 namespace rayster {
     struct vertex {
-        position3 pos;
+        vector4 pos;
         vertex_data data;
     };
 }

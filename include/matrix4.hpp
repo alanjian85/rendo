@@ -5,6 +5,7 @@
 
 #include "position3.hpp"
 #include "vector3.hpp"
+#include "vector4.hpp"
 
 namespace rayster {
     class matrix4 {
@@ -52,6 +53,7 @@ namespace rayster {
     };
 
     matrix4 operator*(matrix4 lhs, matrix4 rhs) noexcept;
+    vector4 operator*(matrix4 lhs, vector4 rhs) noexcept;
     vector3 operator*(matrix4 lhs, vector3 rhs) noexcept;
     position3 operator*(matrix4 lhs, position3 rhs) noexcept;
 }

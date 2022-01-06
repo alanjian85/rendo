@@ -8,8 +8,8 @@ namespace rayster {
     struct vertex_data {
         vector2 uv;
 
-        vertex_data& operator/=(double rhs) noexcept {
-            uv /= rhs;
+        vertex_data& operator*=(double rhs) noexcept {
+            uv *= rhs;
             return *this;
         }
     };

@@ -6,9 +6,9 @@ namespace rayster {
         double x;
         double y;
 
-        vector2& operator/=(double rhs) noexcept {
-            x /= rhs;
-            y /= rhs;
+        vector2& operator*=(double rhs) noexcept {
+            x *= rhs;
+            y *= rhs;
             return *this;
         }
 
