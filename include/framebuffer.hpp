@@ -59,8 +59,6 @@ namespace rayster {
         size_type width_;
         std::vector<pixel> pixels_;
     };
-
-    std::ostream& operator<<(std::ostream& lhs, const framebuffer& rhs) noexcept;
 }
 
 #endif

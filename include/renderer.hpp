@@ -5,7 +5,7 @@
 #include <string>
 
 #include "cube.hpp"
-#include "framebuffer.hpp"
+#include "ppm_framebuffer.hpp"
 #include "shader.hpp"
 #include "triangle.hpp"
 #include "viewport.hpp"
@@ -43,7 +43,7 @@ namespace rayster {
             }
         }
     private:
-        framebuffer fb_;
+        ppm_framebuffer fb_;
         viewport view_;
     };
 }
