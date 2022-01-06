@@ -18,7 +18,6 @@ public:
     {
         std::ifstream tex_file("res/textures/texture.ppm", std::ios::binary);
         tex_file >> texture_;
-        sampler_.wrap(wrapping::repeat_mirrored);
     }
     
     virtual vertex vert(const vertex& vert) override {

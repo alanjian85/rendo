@@ -6,6 +6,12 @@ namespace rayster {
         double x;
         double y;
 
+        vector2& operator/=(double rhs) noexcept {
+            x /= rhs;
+            y /= rhs;
+            return *this;
+        }
+
         static vector2 min() noexcept;
         static vector2 max() noexcept;
     };

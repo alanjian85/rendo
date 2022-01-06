@@ -7,6 +7,11 @@
 namespace rayster {
     struct vertex_data {
         vector2 uv;
+
+        vertex_data& operator/=(double rhs) noexcept {
+            uv /= rhs;
+            return *this;
+        }
     };
 
     inline vertex_data operator+(const vertex_data& lhs, const vertex_data& rhs) noexcept {
