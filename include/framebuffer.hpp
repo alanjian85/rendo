@@ -17,6 +17,8 @@ namespace rayster {
     public:
         using size_type = std::vector<pixel>::size_type;
 
+        virtual ~framebuffer() = default;
+
         framebuffer() noexcept : width_() {}
         framebuffer(size_type width, size_type height)
             : width_(width),
