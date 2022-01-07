@@ -3,7 +3,7 @@
 #include "lookat.hpp"
 #include "renderer.hpp"
 #include "rotate.hpp"
-#include "sampler.hpp"
+#include "sampler2.hpp"
 #include "texture.hpp"
 #include "utility.hpp"
 #include "persp.hpp"
@@ -18,6 +18,7 @@ public:
     {
         std::ifstream tex_file("res/textures/texture.ppm", std::ios::binary);
         tex_file >> texture_;
+        sampler_.bind_texture(texture_);
     }
     
     virtual vertex vert(const vertex& vert) override {
@@ -25,11 +26,11 @@ public:
     }
 
     virtual color_rgba frag(const vertex_data& data) override {
-        return sampler_(texture_, data.uv);
+        return sampler_(data.uv);
     }
 private:
     texture texture_;
-    sampler sampler_;
+    sampler2 sampler_;
     persp persp_;
     lookat lookat_;
     rotate rotate_;

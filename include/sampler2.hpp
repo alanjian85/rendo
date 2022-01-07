@@ -1,5 +1,5 @@
-#ifndef RAYSTER_SAMPLER_HPP
-#define RAYSTER_SAMPLER_HPP
+#ifndef RAYSTER_SAMPLER2_HPP
+#define RAYSTER_SAMPLER2_HPP
 
 #include "texture.hpp"
 #include "vector2.hpp"
@@ -12,9 +12,9 @@ namespace rayster {
         clamp_to_border
     };
 
-    class sampler {
+    class sampler2 {
     public:
-        sampler() noexcept 
+        sampler2() noexcept 
             : wrap_(wrapping::repeat) 
         {
 
@@ -36,10 +36,15 @@ namespace rayster {
             return border_;
         }
 
-        color_rgba operator()(const texture& tex, vector2 v) const noexcept;
+        void bind_texture(const texture& tex) noexcept {
+            tex_ = &tex;
+        }
+
+        color_rgba operator()(vector2 uv) const noexcept;
     private:
         wrapping wrap_;
         color_rgba border_;
+        const texture* tex_;
     };
 }
 
