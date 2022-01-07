@@ -44,5 +44,5 @@ int main() {
     basic_shader s;
     render.draw_cube(c, s);
 
-    render.write("image.ppm");
+    render.fb().write("image.ppm");
 }

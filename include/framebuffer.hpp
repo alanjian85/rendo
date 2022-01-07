@@ -2,7 +2,7 @@
 #define RAYSTER_FRAMEBUFFER_HPP
 
 #include <cstdlib>
-#include <iostream>
+#include <string>
 #include <vector>
 
 #include "color.hpp"
@@ -57,6 +57,8 @@ namespace rayster {
         bool depth_test(size_type x, size_type y, double z) const noexcept {
             return z < (*this)(x, y).depth;
         }
+
+        virtual void write(const std::string& path) const = 0;
     private:
         size_type width_;
         std::vector<pixel> pixels_;

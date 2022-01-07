@@ -26,9 +26,8 @@ namespace rayster {
             fb_.clear(color);
         }
 
-        void write(const std::string& path) {
-            std::ofstream file(path);
-            file << fb_;
+        const framebuffer& fb() const noexcept {
+            return fb_;
         }
 
         const viewport& view() const noexcept {
