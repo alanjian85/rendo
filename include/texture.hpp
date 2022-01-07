@@ -1,7 +1,6 @@
 #ifndef RAYSTER_TEXTURE_HPP
 #define RAYSTER_TEXTURE_HPP
 
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -11,6 +10,8 @@ namespace rayster {
     class texture {
     public:
         using size_type = std::vector<color_rgba>::size_type;
+
+        void load(const std::string& path);
 
         void resize(size_type width, size_type height) {
             width_ = width;
@@ -40,8 +41,6 @@ namespace rayster {
         size_type width_;
         std::vector<color_rgba> pixels_;
     };
-
-    std::istream& operator>>(std::istream& lhs, texture& rhs);
 }
 
 #endif

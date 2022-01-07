@@ -16,8 +16,7 @@ public:
           lookat_({0, 0, 3}, {0, 0, 0}, {0, 1, 0}),
           rotate_(rad(45), {1, 1, 1})
     {
-        std::ifstream tex_file("res/textures/texture.ppm", std::ios::binary);
-        tex_file >> texture_;
+        texture_.load("res/textures/texture.ppm");
         sampler_.bind_texture(texture_);
     }
     
