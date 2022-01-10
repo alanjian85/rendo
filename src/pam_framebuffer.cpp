@@ -15,9 +15,8 @@ void pam_framebuffer::write(const std::string& path) const {
     file << "ENDHDR\n";
 
     auto y = height();
-    do {
-        --y;
-        for (auto x = 0; x < width(); ++x) {
+    for (size_type y = 0; y < height(); ++y) {
+        for (size_type x = 0; x < width(); ++x) {
             auto r = static_cast<int>((*this)(x, y).color.r * 255);
             auto g = static_cast<int>((*this)(x, y).color.g * 255);
             auto b = static_cast<int>((*this)(x, y).color.b * 255);
@@ -30,5 +29,5 @@ void pam_framebuffer::write(const std::string& path) const {
 
             file.put(r); file.put(g); file.put(b); file.put(a);
         }
-    } while (y > 0);
+    }
 }
