@@ -5,10 +5,9 @@
 #include <memory>
 #include <string>
 
-#include "cube.hpp"
 #include "framebuffer.hpp"
+#include "geometry.hpp"
 #include "shader.hpp"
-#include "triangle.hpp"
 #include "viewport.hpp"
 
 namespace rayster {

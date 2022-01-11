@@ -3,7 +3,6 @@
 
 #include "color.hpp"
 #include "vertex.hpp"
-#include "vertex_data.hpp"
 #include "viewport.hpp"
 
 namespace rayster {

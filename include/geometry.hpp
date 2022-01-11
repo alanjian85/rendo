@@ -1,11 +1,34 @@
-#ifndef RAYSTER_CUBE_HPP
-#define RAYSTER_CUBE_HPP
+#ifndef RAYSTER_GEOMETRY_HPP
+#define RAYSTER_GEOMETRY_HPP
 
 #include <array>
+#include <cstdlib>
 
-#include "triangle.hpp"
+#include "aabb.hpp"
+#include "vector.hpp"
+#include "vector.hpp"
+#include "vertex.hpp"
 
 namespace rayster {
+    struct triangle {
+        using size_type = std::size_t;
+
+        vertex a;
+        vertex b;
+        vertex c;
+
+        vertex& operator[](size_type index) noexcept {
+            return index == 0 ? a : index == 1 ? b : c;
+        }
+
+        const vertex& operator[](size_type index) const noexcept {
+            return index == 0 ? a : index == 1 ? b : c;
+        }
+
+        vector3 barycentric(vector2 p) const noexcept;
+        aabb2 bounding_box() const noexcept;
+    };
+
     class cube {
     public:
         using iterator = std::array<triangle, 12>::iterator;
