@@ -12,7 +12,7 @@ namespace rayster {
 
     class rotate : public matrix4 {
     public:
-        rotate(double angle, unit_vector3 v) noexcept;
+        rotate(double angle, vector3 v) noexcept;
     };
 
     class lookat : public matrix4 {

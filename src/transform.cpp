@@ -23,7 +23,9 @@ lookat::lookat(vector3 eye, vector3 center, vector3 up) noexcept {
 	(*this)(3, 3) = 1;
 }
 
-rotate::rotate(double angle, unit_vector3 v) noexcept {
+rotate::rotate(double angle, vector3 v) noexcept {
+	v = v.normalize();
+
     auto c = std::cos(angle);
 	auto s = std::sin(angle);
 
