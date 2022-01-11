@@ -1,7 +1,7 @@
 #ifndef RAYSTER_VERTEX_HPP
 #define RAYSTER_VERTEX_HPP
 
-#include "vector4.hpp"
+#include "vector.hpp"
 #include "vertex_data.hpp"
 
 namespace rayster {

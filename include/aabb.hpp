@@ -1,9 +1,9 @@
-#ifndef RAYSTER_AABB2_HPP
-#define RAYSTER_AABB2_HPP
+#ifndef RAYSTER_AABB_HPP
+#define RAYSTER_AABB_HPP
 
 #include <cmath>
 
-#include "vector2.hpp"
+#include "vector.hpp"
 
 namespace rayster {
     struct aabb2 {

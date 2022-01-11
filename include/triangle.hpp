@@ -3,9 +3,9 @@
 
 #include <cstdlib>
 
-#include "aabb2.hpp"
-#include "vector2.hpp"
-#include "vector3.hpp"
+#include "aabb.hpp"
+#include "vector.hpp"
+#include "vector.hpp"
 #include "vertex.hpp"
 
 namespace rayster {

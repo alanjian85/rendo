@@ -3,8 +3,8 @@
 
 #include <cstdlib>
 
-#include "vector3.hpp"
-#include "vector4.hpp"
+#include "vector.hpp"
+#include "vector.hpp"
 
 namespace rayster {
     class matrix4 {

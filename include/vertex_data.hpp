@@ -2,7 +2,7 @@
 #define RAYSTER_VERTEX_DATA_HPP
 
 #include "color.hpp"
-#include "vector2.hpp"
+#include "vector.hpp"
 
 namespace rayster {
     struct vertex_data {

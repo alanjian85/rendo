@@ -1,9 +1,9 @@
 #ifndef RAYSTER_VIEWPORT_HPP
 #define RAYSTER_VIEWPORT_HPP
 
-#include "aabb2.hpp"
+#include "aabb.hpp"
 #include "matrix4.hpp"
-#include "vector2.hpp"
+#include "vector.hpp"
 
 namespace rayster {
     struct viewport {

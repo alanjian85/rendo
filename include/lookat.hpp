@@ -2,7 +2,7 @@
 #define RAYSTER_LOOKAT_HPP
 
 #include "matrix4.hpp"
-#include "vector3.hpp"
+#include "vector.hpp"
 
 namespace rayster {
     class lookat : public matrix4 {

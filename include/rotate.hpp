@@ -2,7 +2,7 @@
 #define RAYSTER_ROTATE_HPP
 
 #include "matrix4.hpp"
-#include "unit_vector3.hpp"
+#include "vector.hpp"
 
 namespace rayster {
     class rotate : public matrix4 {
