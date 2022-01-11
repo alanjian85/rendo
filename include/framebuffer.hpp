@@ -63,6 +63,20 @@ namespace rayster {
         size_type width_;
         std::vector<pixel> pixels_;
     };
+
+    class ppm_framebuffer : public framebuffer {
+    public:
+        using framebuffer::framebuffer;
+
+        virtual void write(const std::string& path) const override;
+    };
+
+    class pam_framebuffer : public framebuffer {
+    public:
+        using framebuffer::framebuffer;
+    
+        virtual void write(const std::string& path) const override;
+    };
 }
 
 #endif

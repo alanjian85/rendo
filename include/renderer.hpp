@@ -2,10 +2,11 @@
 #define RAYSTER_RENDERER_HPP
 
 #include <fstream>
+#include <memory>
 #include <string>
 
 #include "cube.hpp"
-#include "ppm_framebuffer.hpp"
+#include "framebuffer.hpp"
 #include "shader.hpp"
 #include "triangle.hpp"
 #include "viewport.hpp"
@@ -14,8 +15,8 @@ namespace rayster {
     class renderer {
     public:
         renderer()
-            : fb_(1024, 1024)
         {
+            fb_ = std::make_unique<ppm_framebuffer>(1024, 1024);
             view_.min = {0, 0};
             view_.max = {1024, 1024};
             view_.near = 0;
@@ -23,11 +24,11 @@ namespace rayster {
         }
 
         void clear(color_rgba color) noexcept {
-            fb_.clear(color);
+            fb_->clear(color);
         }
 
         const framebuffer& fb() const noexcept {
-            return fb_;
+            return *fb_;
         }
 
         const viewport& view() const noexcept {
@@ -42,7 +43,7 @@ namespace rayster {
             }
         }
     private:
-        ppm_framebuffer fb_;
+        std::unique_ptr<framebuffer> fb_;
         viewport view_;
     };
 }

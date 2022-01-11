@@ -33,9 +33,9 @@ void renderer::draw_triangle(triangle tri, shader& s) noexcept {
             auto w = 1 / (bc.x * iaw + bc.y * ibw + bc.z * icw);
             auto z = bc.x * tri.a.pos.z + bc.y * tri.b.pos.z + bc.z * tri.c.pos.z;
             auto data = (bc.x * tri.a.data + bc.y * tri.b.data + bc.z * tri.c.data) * w;
-            if (fb_.depth_test(x, y, z)) {
-                fb_(x, y).color = s.frag(data);
-                fb_(x, y).depth = z;
+            if (fb_->depth_test(x, y, z)) {
+                (*fb_)(x, y).color = s.frag(data);
+                (*fb_)(x, y).depth = z;
             }
         }
     }
