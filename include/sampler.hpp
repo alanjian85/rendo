@@ -1,5 +1,5 @@
-#ifndef RAYSTER_SAMPLER2_HPP
-#define RAYSTER_SAMPLER2_HPP
+#ifndef RAYSTER_SAMPLER_HPP
+#define RAYSTER_SAMPLER_HPP
 
 #include "texture.hpp"
 #include "vector.hpp"

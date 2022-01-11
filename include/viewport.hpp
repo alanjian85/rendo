@@ -2,7 +2,7 @@
 #define RAYSTER_VIEWPORT_HPP
 
 #include "aabb.hpp"
-#include "matrix4.hpp"
+#include "matrix.hpp"
 #include "vector.hpp"
 
 namespace rayster {

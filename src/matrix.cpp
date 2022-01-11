@@ -1,4 +1,4 @@
-#include "matrix4.hpp"
+#include "matrix.hpp"
 using namespace rayster;
 
 matrix4 rayster::operator*(matrix4 lhs, matrix4 rhs) noexcept {

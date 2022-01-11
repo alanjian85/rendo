@@ -1,12 +1,10 @@
 #include <fstream>
 
-#include "lookat.hpp"
 #include "renderer.hpp"
-#include "rotate.hpp"
-#include "sampler2.hpp"
+#include "sampler.hpp"
 #include "texture.hpp"
+#include "transform.hpp"
 #include "utility.hpp"
-#include "persp.hpp"
 using namespace rayster;
 
 class basic_shader : public shader {

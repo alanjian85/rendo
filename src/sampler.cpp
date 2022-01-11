@@ -1,4 +1,4 @@
-#include "sampler2.hpp"
+#include "sampler.hpp"
 using namespace rayster;
 
 #include <algorithm>

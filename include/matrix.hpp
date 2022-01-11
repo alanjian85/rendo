@@ -1,5 +1,5 @@
-#ifndef RAYSTER_MATRIX4_HPP
-#define RAYSTER_MATRIX4_HPP
+#ifndef RAYSTER_MATRIX_HPP
+#define RAYSTER_MATRIX_HPP
 
 #include <cstdlib>
 
