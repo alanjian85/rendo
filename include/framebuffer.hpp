@@ -37,6 +37,13 @@ namespace rayster {
             return pixels_.size() / width_;
         }
 
+        double aspect() const noexcept {
+            auto h = height();
+            if (h == 0)
+                return 0;
+            return width_ / height();
+        }
+
         void clear(color_rgba color) noexcept {
             for (auto& p : pixels_) {
                 p.color = color;

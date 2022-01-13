@@ -8,8 +8,8 @@ using namespace rayster;
 
 class basic_shader : public shader {
 public:
-    basic_shader()
-        : persp_(rad(45), 800.0 / 600.0, 0.1, 100.0),
+    basic_shader(const framebuffer& fb)
+        : persp_(rad(45), fb.aspect(), 0.1, 100.0),
           lookat_({0, 0, 3}, {0, 0, 0}, {0, 1, 0}),
           rotate_(rad(45), {1, 1, 1})
     {
@@ -38,7 +38,7 @@ int main() {
 
     cube c(1);
 
-    basic_shader s;
+    basic_shader s(render.fb());
     render.draw_cube(c, s);
 
     render.fb().write("image.ppm");
