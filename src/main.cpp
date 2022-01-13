@@ -1,7 +1,6 @@
 #include <fstream>
 
 #include "renderer.hpp"
-#include "sampler.hpp"
 #include "texture.hpp"
 #include "transform.hpp"
 #include "utility.hpp"
