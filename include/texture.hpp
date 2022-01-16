@@ -50,15 +50,19 @@ namespace rayster {
         clamp_to_border
     };
 
-    class basic_sampler {
+    class sampler2 {
     public:
-        basic_sampler() noexcept
-            : wrap_(wrapping::repeat)
+        sampler2() noexcept
+            : wrap_(wrapping::repeat),
+              border_{0, 0, 0, 0},
+              tex_(nullptr)
         {
 
         }
 
-        virtual ~basic_sampler() noexcept = default;
+        void bind_texture(const texture& tex) noexcept {
+            tex_ = &tex;
+        }
 
         wrapping wrap() const noexcept {
             return wrap_;
@@ -75,27 +79,29 @@ namespace rayster {
         color_rgba border() const noexcept {
             return border_;
         }
-    private:
-        wrapping wrap_;
-        color_rgba border_;
-    };
-
-    class sampler2 : public basic_sampler {
-    public:
-        using basic_sampler::basic_sampler;
-
-        void bind_texture(const texture& tex) noexcept {
-            tex_ = &tex;
-        }
 
         color_rgba operator()(vector2 uv) const noexcept;
     private:
+        wrapping wrap_;
+        color_rgba border_;
         const texture* tex_;
     };
 
-    class sampler_cube : public basic_sampler {
+    class sampler_cube {
     public:
-        using basic_sampler::basic_sampler;
+        sampler_cube() noexcept
+            : wrap_s_(wrapping::repeat),
+              wrap_t_(wrapping::repeat),
+              wrap_r_(wrapping::repeat),
+              right_(nullptr),
+              left_(nullptr),
+              top_(nullptr),
+              bottom_(nullptr),
+              back_(nullptr),
+              front_(nullptr)
+        {
+            
+        }
 
         void bind_right(const texture& right) noexcept {
             right_ = &right;
@@ -121,8 +127,45 @@ namespace rayster {
             front_ = &front;
         }
 
+        wrapping wrap_s() const noexcept {
+            return wrap_s_;
+        }
+
+        void set_wrap_s(wrapping wrap) noexcept {
+            wrap_s_ = wrap;
+        }
+
+        wrapping wrap_t() const noexcept {
+            return wrap_t_;
+        }
+
+        void set_wrap_t(wrapping wrap) noexcept {
+            wrap_t_ = wrap;
+        }
+
+        wrapping wrap_r() const noexcept {
+            return wrap_r_;
+        }
+
+        void set_wrap_r(wrapping wrap) noexcept {
+            wrap_r_ = wrap;
+        }
+
+        void set_border(color_rgba border) noexcept {
+            border_ = border;
+        }
+
+        color_rgba border() const noexcept {
+            return border_;
+        }
+
         color_rgba operator()(vector3 uvw) const noexcept;
     private:
+        wrapping wrap_s_;
+        wrapping wrap_t_;
+        wrapping wrap_r_;
+        color_rgba border_;
+
         const texture* right_;
         const texture* left_;
         const texture* top_;
