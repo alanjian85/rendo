@@ -50,19 +50,21 @@ namespace rayster {
         clamp_to_border
     };
 
-    class sampler2 {
+    class basic_sampler {
     public:
-        sampler2() noexcept 
-            : wrap_(wrapping::repeat) 
+        basic_sampler() noexcept
+            : wrap_(wrapping::repeat)
         {
 
         }
+
+        virtual ~basic_sampler() noexcept = default;
 
         wrapping wrap() const noexcept {
             return wrap_;
         }
 
-        void wrap(wrapping wrap) noexcept {
+        void set_wrap(wrapping wrap) noexcept {
             wrap_ = wrap;
         }
 
@@ -73,6 +75,14 @@ namespace rayster {
         color_rgba border() const noexcept {
             return border_;
         }
+    private:
+        wrapping wrap_;
+        color_rgba border_;
+    };
+
+    class sampler2 : public basic_sampler {
+    public:
+        using basic_sampler::basic_sampler;
 
         void bind_texture(const texture& tex) noexcept {
             tex_ = &tex;
@@ -80,9 +90,45 @@ namespace rayster {
 
         color_rgba operator()(vector2 uv) const noexcept;
     private:
-        wrapping wrap_;
-        color_rgba border_;
         const texture* tex_;
+    };
+
+    class sampler_cube : public basic_sampler {
+    public:
+        using basic_sampler::basic_sampler;
+
+        void bind_right(const texture& right) noexcept {
+            right_ = &right;
+        }
+
+        void bind_left(const texture& left) noexcept {
+            left_ = &left;
+        }
+
+        void bind_top(const texture& top) noexcept {
+            top_ = &top;
+        }
+
+        void bind_bottom(const texture& bottom) noexcept {
+            bottom_ = &bottom;
+        }
+
+        void bind_back(const texture& back) noexcept {
+            back_ = &back;
+        }
+
+        void bind_front(const texture& front) noexcept {
+            front_ = &front;
+        }
+
+        color_rgba operator()(vector3 uvw) const noexcept;
+    private:
+        const texture* right_;
+        const texture* left_;
+        const texture* top_;
+        const texture* bottom_;
+        const texture* back_;
+        const texture* front_;
     };
 }
 
