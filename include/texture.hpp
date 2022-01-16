@@ -19,22 +19,22 @@ namespace rayster {
             pixels_.resize(width * height);
         }
 
-        size_type width() const noexcept {
+        size_type width() const {
             return width_;
         }
 
-        size_type height() const noexcept {
+        size_type height() const {
             if (width_ == 0)
                 return 0;
             return pixels_.size() / width_;
         }
 
-        color_rgba& operator()(size_type x, size_type y) noexcept {
+        color_rgba& operator()(size_type x, size_type y) {
             auto index = y * width_ + x;
             return pixels_[index];
         }
 
-        const color_rgba& operator()(size_type x, size_type y) const noexcept {
+        const color_rgba& operator()(size_type x, size_type y) const {
             auto index = y * width_ + x;
             return pixels_[index];
         }
@@ -52,7 +52,7 @@ namespace rayster {
 
     class sampler2 {
     public:
-        sampler2() noexcept
+        sampler2()
             : wrap_(wrapping::repeat),
               border_{0, 0, 0, 0},
               tex_(nullptr)
@@ -60,27 +60,27 @@ namespace rayster {
 
         }
 
-        void bind_texture(const texture& tex) noexcept {
+        void bind_texture(const texture& tex) {
             tex_ = &tex;
         }
 
-        wrapping wrap() const noexcept {
+        wrapping wrap() const {
             return wrap_;
         }
 
-        void set_wrap(wrapping wrap) noexcept {
+        void set_wrap(wrapping wrap) {
             wrap_ = wrap;
         }
 
-        void set_border(color_rgba border) noexcept {
+        void set_border(color_rgba border) {
             border_ = border;
         }
 
-        color_rgba border() const noexcept {
+        color_rgba border() const {
             return border_;
         }
 
-        color_rgba operator()(vector2 uv) const noexcept;
+        color_rgba operator()(vector2 uv) const;
     private:
         wrapping wrap_;
         color_rgba border_;
@@ -100,66 +100,66 @@ namespace rayster {
               back_(nullptr),
               front_(nullptr)
         {
-            
+
         }
 
-        void bind_right(const texture& right) noexcept {
+        void bind_right(const texture& right) {
             right_ = &right;
         }
 
-        void bind_left(const texture& left) noexcept {
+        void bind_left(const texture& left) {
             left_ = &left;
         }
 
-        void bind_top(const texture& top) noexcept {
+        void bind_top(const texture& top) {
             top_ = &top;
         }
 
-        void bind_bottom(const texture& bottom) noexcept {
+        void bind_bottom(const texture& bottom) {
             bottom_ = &bottom;
         }
 
-        void bind_back(const texture& back) noexcept {
+        void bind_back(const texture& back) {
             back_ = &back;
         }
 
-        void bind_front(const texture& front) noexcept {
+        void bind_front(const texture& front) {
             front_ = &front;
         }
 
-        wrapping wrap_s() const noexcept {
+        wrapping wrap_s() const {
             return wrap_s_;
         }
 
-        void set_wrap_s(wrapping wrap) noexcept {
+        void set_wrap_s(wrapping wrap) {
             wrap_s_ = wrap;
         }
 
-        wrapping wrap_t() const noexcept {
+        wrapping wrap_t() const {
             return wrap_t_;
         }
 
-        void set_wrap_t(wrapping wrap) noexcept {
+        void set_wrap_t(wrapping wrap) {
             wrap_t_ = wrap;
         }
 
-        wrapping wrap_r() const noexcept {
+        wrapping wrap_r() const {
             return wrap_r_;
         }
 
-        void set_wrap_r(wrapping wrap) noexcept {
+        void set_wrap_r(wrapping wrap) {
             wrap_r_ = wrap;
         }
 
-        void set_border(color_rgba border) noexcept {
+        void set_border(color_rgba border) {
             border_ = border;
         }
 
-        color_rgba border() const noexcept {
+        color_rgba border() const {
             return border_;
         }
 
-        color_rgba operator()(vector3 uvw) const noexcept;
+        color_rgba operator()(vector3 uvw) const;
     private:
         wrapping wrap_s_;
         wrapping wrap_t_;

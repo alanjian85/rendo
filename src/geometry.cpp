@@ -3,7 +3,7 @@ using namespace rayster;
 
 #include <cmath>
 
-vector3 triangle::barycentric(vector2 p) const noexcept {
+vector3 triangle::barycentric(vector2 p) const {
     auto t = cross(
         {c.pos.x - a.pos.x, b.pos.x - a.pos.x, a.pos.x - p.x},
         {c.pos.y - a.pos.y, b.pos.y - a.pos.y, a.pos.y - p.y}
@@ -15,7 +15,7 @@ vector3 triangle::barycentric(vector2 p) const noexcept {
     return {1 - u - v, u, v};
 }
 
-aabb2 triangle::bounding_box() const noexcept {
+aabb2 triangle::bounding_box() const {
     aabb2 bbox;
     bbox.min = vector2::min();
     for (auto i = 0; i < 3; ++i) {
@@ -28,7 +28,7 @@ aabb2 triangle::bounding_box() const noexcept {
     return bbox;
 }
 
-cube::cube(double size) noexcept {
+cube::cube(double size) {
     auto t = size / 2;
     triangles_[0] =  {{-t,  t,  t, 1, 0, 1}, {-t, -t,  t, 1, 0, 0}, { t,  t,  t, 1, 1, 1}};
     triangles_[1] =  {{-t, -t,  t, 1, 0, 0}, { t,  t,  t, 1, 1, 1}, { t, -t,  t, 1, 1, 0}};

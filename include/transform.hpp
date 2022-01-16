@@ -7,17 +7,17 @@
 namespace rayster {
     struct persp : public matrix4 {
     public:
-        persp(double fov, double aspect, double near, double far) noexcept;
+        persp(double fov, double aspect, double near, double far);
     };
 
     class rotate : public matrix4 {
     public:
-        rotate(double angle, vector3 v) noexcept;
+        rotate(double angle, vector3 v);
     };
 
     class lookat : public matrix4 {
     public:
-        lookat(vector3 eye, vector3 center, vector3 up) noexcept;
+        lookat(vector3 eye, vector3 center, vector3 up);
     };
 }
 

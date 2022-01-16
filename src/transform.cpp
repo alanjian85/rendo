@@ -3,7 +3,7 @@ using namespace rayster;
 
 #include <cmath>
 
-lookat::lookat(vector3 eye, vector3 center, vector3 up) noexcept {
+lookat::lookat(vector3 eye, vector3 center, vector3 up) {
     auto f = (center - eye).normalize();
     auto s = cross(up, f).normalize();
     auto u = cross(f, s);
@@ -23,7 +23,7 @@ lookat::lookat(vector3 eye, vector3 center, vector3 up) noexcept {
 	(*this)(3, 3) = 1;
 }
 
-rotate::rotate(double angle, vector3 v) noexcept {
+rotate::rotate(double angle, vector3 v) {
 	v = v.normalize();
 
     auto c = std::cos(angle);
@@ -41,7 +41,7 @@ rotate::rotate(double angle, vector3 v) noexcept {
 	(*this)(3, 3) = 1;
 }
 
-persp::persp(double fov, double aspect, double near, double far) noexcept {
+persp::persp(double fov, double aspect, double near, double far) {
     auto t = std::tan(fov / 2);
 
     (*this)(0, 0) = 1 / (aspect * t);

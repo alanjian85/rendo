@@ -9,20 +9,20 @@ namespace rayster {
         double x;
         double y;
 
-        vector2& operator*=(double rhs) noexcept {
+        vector2& operator*=(double rhs) {
             x *= rhs;
             y *= rhs;
             return *this;
         }
 
-        static vector2 min() noexcept {
+        static vector2 min() {
             return {
                 std::numeric_limits<double>::min(),
                 std::numeric_limits<double>::min()
             };
         }
 
-        static vector2 max() noexcept {
+        static vector2 max() {
             return {
                 std::numeric_limits<double>::max(),
                 std::numeric_limits<double>::max()
@@ -30,15 +30,15 @@ namespace rayster {
         }
     };
 
-    inline vector2 operator+(vector2 lhs, vector2 rhs) noexcept {
+    inline vector2 operator+(vector2 lhs, vector2 rhs) {
         return {lhs.x + rhs.x, lhs.y + rhs.y};
     }
 
-    inline vector2 operator*(vector2 lhs, double rhs) noexcept {
+    inline vector2 operator*(vector2 lhs, double rhs) {
         return {lhs.x * rhs, lhs.y * rhs};
     }
 
-    inline vector2 operator*(double lhs, vector2 rhs) noexcept {
+    inline vector2 operator*(double lhs, vector2 rhs) {
         return rhs * lhs;
     }
 
@@ -47,15 +47,15 @@ namespace rayster {
         double y;
         double z;
 
-        auto length_squared() const noexcept {
+        auto length_squared() const {
             return x * x + y * y + z * z;
         }
 
-        auto length() const noexcept {
+        auto length() const {
             return std::sqrt(length_squared());
         }
 
-        vector3 normalize() const noexcept {
+        vector3 normalize() const {
             auto len = length();
             if (len == 0)
                 return {0, 0, 0};
@@ -63,23 +63,23 @@ namespace rayster {
         }
     };
 
-    inline vector3 operator-(vector3 lhs, vector3 rhs) noexcept {
+    inline vector3 operator-(vector3 lhs, vector3 rhs) {
         return {lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z};
     }
 
-    inline vector3 operator*(vector3 lhs, double rhs) noexcept {
+    inline vector3 operator*(vector3 lhs, double rhs) {
         return {lhs.x * rhs, lhs.y * rhs, lhs.z * rhs};
     }
 
-    inline vector3 operator*(double lhs, vector3 rhs) noexcept {
+    inline vector3 operator*(double lhs, vector3 rhs) {
         return rhs * lhs;
     }
 
-    inline double dot(vector3 lhs, vector3 rhs) noexcept {
+    inline double dot(vector3 lhs, vector3 rhs) {
         return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
     }
 
-    inline vector3 cross(vector3 lhs, vector3 rhs) noexcept {
+    inline vector3 cross(vector3 lhs, vector3 rhs) {
         return {
             lhs.y * rhs.z - lhs.z * rhs.y,
             lhs.z * rhs.x - lhs.x * rhs.z,
@@ -93,7 +93,7 @@ namespace rayster {
         double z;
         double w;
     
-        vector4& operator*=(double rhs) noexcept {
+        vector4& operator*=(double rhs) {
             x *= rhs;
             y *= rhs;
             z *= rhs;

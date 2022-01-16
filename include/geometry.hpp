@@ -17,16 +17,16 @@ namespace rayster {
         vertex b;
         vertex c;
 
-        vertex& operator[](size_type index) noexcept {
+        vertex& operator[](size_type index) {
             return index == 0 ? a : index == 1 ? b : c;
         }
 
-        const vertex& operator[](size_type index) const noexcept {
+        const vertex& operator[](size_type index) const {
             return index == 0 ? a : index == 1 ? b : c;
         }
 
-        vector3 barycentric(vector2 p) const noexcept;
-        aabb2 bounding_box() const noexcept;
+        vector3 barycentric(vector2 p) const;
+        aabb2 bounding_box() const;
     };
 
     class cube {
@@ -34,21 +34,21 @@ namespace rayster {
         using iterator = std::array<triangle, 12>::iterator;
         using const_iterator = std::array<triangle, 12>::const_iterator;
         
-        cube(double size) noexcept;
+        cube(double size);
 
-        iterator begin() noexcept {
+        iterator begin() {
             return triangles_.begin();
         }
 
-        iterator end() noexcept {
+        iterator end() {
             return triangles_.end();
         }
 
-        const_iterator begin() const noexcept {
+        const_iterator begin() const {
             return triangles_.begin();
         }
         
-        const_iterator end() const noexcept {
+        const_iterator end() const {
             return triangles_.end();
         }
     private:

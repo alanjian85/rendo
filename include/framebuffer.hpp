@@ -17,9 +17,9 @@ namespace rayster {
     public:
         using size_type = std::vector<pixel>::size_type;
 
-        virtual ~framebuffer() = default;
+        virtual ~framebuffer() noexcept = default;
 
-        framebuffer() noexcept : width_() {}
+        framebuffer() : width_() {}
         framebuffer(size_type width, size_type height)
             : width_(width),
               pixels_(width * height)
@@ -27,41 +27,41 @@ namespace rayster {
 
         }
 
-        size_type width() const noexcept {
+        size_type width() const {
             return width_;
         }
         
-        size_type height() const noexcept {
+        size_type height() const {
             if (width_ == 0)
                 return 0;
             return pixels_.size() / width_;
         }
 
-        double aspect() const noexcept {
+        double aspect() const {
             auto h = height();
             if (h == 0)
                 return 0;
             return width_ / height();
         }
 
-        void clear(color_rgba color) noexcept {
+        void clear(color_rgba color) {
             for (auto& p : pixels_) {
                 p.color = color;
                 p.depth = 1;
             }
         }
 
-        pixel& operator()(size_type x, size_type y) noexcept {
+        pixel& operator()(size_type x, size_type y) {
             auto index = y * width_ + x;
             return {pixels_[index]};
         }
 
-        const pixel& operator()(size_type x, size_type y) const noexcept {
+        const pixel& operator()(size_type x, size_type y) const {
             auto index = y * width_ + x;
             return {pixels_[index]};
         }
 
-        bool depth_test(size_type x, size_type y, double z) const noexcept {
+        bool depth_test(size_type x, size_type y, double z) const {
             return z < (*this)(x, y).depth;
         }
 

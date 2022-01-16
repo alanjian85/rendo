@@ -1,7 +1,7 @@
 #include "renderer.hpp"
 using namespace rayster;
 
-void renderer::draw_triangle(triangle tri, shader& s) noexcept {
+void renderer::draw_triangle(triangle tri, shader& s) {
     tri.a = s.vert(tri.a);
     tri.b = s.vert(tri.b);
     tri.c = s.vert(tri.c);

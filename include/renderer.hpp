@@ -22,21 +22,21 @@ namespace rayster {
             view_.far = 1;
         }
 
-        void clear(color_rgba color) noexcept {
+        void clear(color_rgba color) {
             fb_->clear(color);
         }
 
-        const framebuffer& fb() const noexcept {
+        const framebuffer& fb() const {
             return *fb_;
         }
 
-        const viewport& view() const noexcept {
+        const viewport& view() const {
             return view_;
         }
 
-        void draw_triangle(triangle tri, shader& s) noexcept;
+        void draw_triangle(triangle tri, shader& s);
         
-        void draw_cube(const cube& c, shader& s) noexcept {
+        void draw_cube(const cube& c, shader& s) {
             for (auto& tri : c) {
                 draw_triangle(tri, s);
             }

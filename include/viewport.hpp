@@ -12,7 +12,7 @@ namespace rayster {
         double near;
         double far;
         
-        matrix4 transform() const noexcept {
+        matrix4 transform() const {
             auto u = (max.x - min.x) / 2;
             auto v = (min.y - max.y) / 2;
             auto w = (far - near) / 2;
@@ -24,7 +24,7 @@ namespace rayster {
             };
         }
 
-        aabb2 bounding_box() const noexcept {
+        aabb2 bounding_box() const {
             return {
                 min,
                 {max.x - 1, max.y - 1}

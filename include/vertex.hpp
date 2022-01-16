@@ -7,25 +7,25 @@ namespace rayster {
     struct vertex_data {
         vector2 uv;
 
-        vertex_data& operator*=(double rhs) noexcept {
+        vertex_data& operator*=(double rhs) {
             uv *= rhs;
             return *this;
         }
     };
 
-    inline vertex_data operator+(const vertex_data& lhs, const vertex_data& rhs) noexcept {
+    inline vertex_data operator+(const vertex_data& lhs, const vertex_data& rhs) {
         return {
             lhs.uv + rhs.uv
         };
     }
 
-    inline vertex_data operator*(const vertex_data& lhs, double rhs) noexcept {
+    inline vertex_data operator*(const vertex_data& lhs, double rhs) {
         return {
             lhs.uv * rhs  
         };
     }
 
-    inline vertex_data operator*(double lhs, const vertex_data& rhs) noexcept {
+    inline vertex_data operator*(double lhs, const vertex_data& rhs) {
         return rhs * lhs;
     }
 

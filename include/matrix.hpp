@@ -31,15 +31,15 @@ namespace rayster {
             entries_[3][0] = e03; entries_[3][1] = e13; entries_[3][2] = e23; entries_[3][3] = e33;
         }
 
-        double& operator()(size_type i, size_type j) noexcept {
+        double& operator()(size_type i, size_type j) {
             return entries_[j][i];
         }
 
-        const double& operator()(size_type i, size_type j) const noexcept {
+        const double& operator()(size_type i, size_type j) const {
             return entries_[j][i];
         }
 
-        matrix4 transpose() const noexcept {
+        matrix4 transpose() const {
             matrix4 res;
             res.entries_[0][0] = entries_[0][0]; res.entries_[0][1] = entries_[1][0]; res.entries_[0][2] = entries_[2][0]; res.entries_[0][3] = entries_[3][0];
             res.entries_[1][0] = entries_[0][1]; res.entries_[1][1] = entries_[1][1]; res.entries_[1][2] = entries_[2][1]; res.entries_[1][3] = entries_[3][1];
@@ -51,9 +51,9 @@ namespace rayster {
         double entries_[4][4];
     };
 
-    matrix4 operator*(matrix4 lhs, matrix4 rhs) noexcept;
-    vector4 operator*(matrix4 lhs, vector4 rhs) noexcept;
-    vector3 operator*(matrix4 lhs, vector3 rhs) noexcept;
+    matrix4 operator*(matrix4 lhs, matrix4 rhs);
+    vector4 operator*(matrix4 lhs, vector4 rhs);
+    vector3 operator*(matrix4 lhs, vector3 rhs);
 }
 
 #endif

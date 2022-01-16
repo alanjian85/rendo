@@ -101,7 +101,7 @@ void texture::load(const std::string& path) {
     }
 }
 
-color_rgba sampler2::operator()(vector2 uv) const noexcept {
+color_rgba sampler2::operator()(vector2 uv) const {
     switch (wrap()) {
     case wrapping::repeat:
         if (uv.x < 0 || uv.x > 1)

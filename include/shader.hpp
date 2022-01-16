@@ -8,7 +8,7 @@
 namespace rayster {
     class shader {
     public:
-        virtual ~shader() = default;
+        virtual ~shader() noexcept = default;
 
         virtual vertex vert(const vertex& vert) = 0;
         virtual color_rgba frag(const vertex_data& data) = 0;

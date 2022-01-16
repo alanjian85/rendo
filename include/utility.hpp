@@ -3,7 +3,7 @@
 namespace rayster {
     constexpr auto pi = 3.14159;
 
-    constexpr auto inline rad(double deg) noexcept {
+    constexpr auto rad(double deg) {
         return deg * pi / 180;
     }
 }

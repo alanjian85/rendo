@@ -10,12 +10,12 @@ namespace rayster {
         vector2 min;
         vector2 max;
 
-        bool inbound(vector2 v) const noexcept {
+        bool inbound(vector2 v) const {
             return v.x >= min.x && v.y >= min.y && v.x <= max.x && v.y <= max.y;
         }
     };
 
-    inline aabb2 intersection(aabb2 lhs, aabb2 rhs) noexcept {
+    inline aabb2 intersection(aabb2 lhs, aabb2 rhs) {
         return {
             {std::max(lhs.min.x, rhs.min.x), std::max(lhs.min.y, rhs.min.y)},
             {std::min(lhs.max.x, rhs.max.x), std::min(lhs.max.y, rhs.max.y)}
