@@ -185,5 +185,5 @@ color_rgba sampler_cube::operator()(vector3 uvw) const {
         sampler.set_wrap(wrap_r_);
     }
     
-    return sampler({u, v});
+    return sampler({u, 1 - v});
 }
