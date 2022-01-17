@@ -5,8 +5,8 @@ using namespace rayster;
 
 lookat::lookat(vector3 eye, vector3 center, vector3 up) {
     auto f = (center - eye).normalize();
-    auto s = cross(up, f).normalize();
-    auto u = cross(f, s);
+    auto s = cross(f, up).normalize();
+    auto u = cross(s, f);
 
     (*this)(0, 0) = s.x;
 	(*this)(0, 1) = s.y;
@@ -14,12 +14,12 @@ lookat::lookat(vector3 eye, vector3 center, vector3 up) {
 	(*this)(1, 0) = u.x;
 	(*this)(1, 1) = u.y;
 	(*this)(1, 2) = u.z;
-	(*this)(2, 0) = f.x;
-	(*this)(2, 1) = f.y;
-	(*this)(2, 2) = f.z;
+	(*this)(2, 0) = -f.x;
+	(*this)(2, 1) = -f.y;
+	(*this)(2, 2) = -f.z;
 	(*this)(0, 3) = -dot(s, eye);
 	(*this)(1, 3) = -dot(u, eye);
-	(*this)(2, 3) = -dot(f, eye);
+	(*this)(2, 3) =  dot(f, eye);
 	(*this)(3, 3) = 1;
 }
 
@@ -46,7 +46,7 @@ persp::persp(double fov, double aspect, double near, double far) {
 
     (*this)(0, 0) = 1 / (aspect * t);
     (*this)(1, 1) = 1 / t;
-    (*this)(2, 2) = (far + near) / (far - near);
+    (*this)(2, 2) = -(far + near) / (far - near);
     (*this)(2, 3) = -(2 * far * near) / (far - near);
-    (*this)(3, 2) = 1;
+    (*this)(3, 2) = -1;
 }

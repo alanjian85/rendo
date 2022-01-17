@@ -12,7 +12,7 @@ public:
     basic_shader(const framebuffer& fb)
         : persp_(rad(45), fb.aspect(), 0.1, 100.0),
           lookat_({0, 0, 3}, {0, 0, 0}, {0, 1, 0}),
-          rotate_(rad(45), {1, 1, 1})
+          rotate_(rad(60), {1, 1, 1})
     {
         skybox_right_.load("res/textures/right.ppm");
         skybox_left_.load("res/textures/left.ppm");
@@ -24,8 +24,8 @@ public:
         sampler_.bind_left(skybox_left_);
         sampler_.bind_top(skybox_top_);
         sampler_.bind_bottom(skybox_bottom_);
-        sampler_.bind_back(skybox_back_);
-        sampler_.bind_front(skybox_front_);
+        sampler_.bind_back(skybox_front_);
+        sampler_.bind_front(skybox_back_);
     }
     
     virtual vertex vert(const vertex& vert) override {
