@@ -47,6 +47,13 @@ namespace rayster {
         double y;
         double z;
 
+        vector3& operator*=(double rhs) {
+            x *= rhs;
+            y *= rhs;
+            z *= rhs;
+            return *this;
+        }
+
         auto length_squared() const {
             return x * x + y * y + z * z;
         }
@@ -62,6 +69,10 @@ namespace rayster {
             return {x / len, y / len, z / len};
         }
     };
+
+    inline vector3 operator+(vector3 lhs, vector3 rhs) {
+        return {lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z};
+    }
 
     inline vector3 operator-(vector3 lhs, vector3 rhs) {
         return {lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z};

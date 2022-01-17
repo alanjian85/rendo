@@ -1,4 +1,5 @@
 #include <fstream>
+#include <iostream>
 
 #include "renderer.hpp"
 #include "texture.hpp"
@@ -28,11 +29,11 @@ public:
     }
     
     virtual vertex vert(const vertex& vert) override {
-        return {persp_ * lookat_ * rotate_ * vert.pos, vert.data};
+        return {persp_ * lookat_ * rotate_ * vert.pos, {vert.pos.x, vert.pos.y, vert.pos.z}};
     }
 
     virtual color_rgba frag(const vertex_data& data) override {
-        return {1, 0, 0, 1};
+        return sampler_(data.pos);
     }
 private:
     texture skybox_right_;

@@ -5,23 +5,23 @@
 
 namespace rayster {
     struct vertex_data {
-        vector2 uv;
+        vector3 pos;
 
         vertex_data& operator*=(double rhs) {
-            uv *= rhs;
+            pos *= rhs;
             return *this;
         }
     };
 
     inline vertex_data operator+(const vertex_data& lhs, const vertex_data& rhs) {
         return {
-            lhs.uv + rhs.uv
+            lhs.pos + rhs.pos
         };
     }
 
     inline vertex_data operator*(const vertex_data& lhs, double rhs) {
         return {
-            lhs.uv * rhs  
+            lhs.pos * rhs
         };
     }
 

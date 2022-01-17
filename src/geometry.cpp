@@ -30,21 +30,21 @@ aabb2 triangle::bounding_box() const {
 
 cube::cube(double size) {
     auto t = size / 2;
-    triangles_[0] =  {{-t,  t,  t, 1, 0, 1}, {-t, -t,  t, 1, 0, 0}, { t,  t,  t, 1, 1, 1}};
-    triangles_[1] =  {{-t, -t,  t, 1, 0, 0}, { t,  t,  t, 1, 1, 1}, { t, -t,  t, 1, 1, 0}};
+    triangles_[0] =  {{-t,  t,  t, 1}, {-t, -t,  t, 1}, { t,  t,  t, 1}};
+    triangles_[1] =  {{-t, -t,  t, 1}, { t,  t,  t, 1}, { t, -t,  t, 1}};
 
-    triangles_[2] =  {{-t,  t, -t, 1, 0, 1}, {-t, -t, -t, 1, 0, 0}, { t,  t, -t, 1, 1, 1}};
-    triangles_[3] =  {{-t, -t, -t, 1, 0, 0}, { t,  t, -t, 1, 1, 1}, { t, -t, -t, 1, 1, 0}};
+    triangles_[2] =  {{-t,  t, -t, 1}, {-t, -t, -t, 1}, { t,  t, -t, 1}};
+    triangles_[3] =  {{-t, -t, -t, 1}, { t,  t, -t, 1}, { t, -t, -t, 1}};
 
-    triangles_[4] =  {{-t,  t, -t, 1, 0, 1}, {-t, -t, -t, 1, 0, 0}, {-t,  t,  t, 1, 1, 1}};
-    triangles_[5] =  {{-t, -t, -t, 1, 0, 0}, {-t,  t,  t, 1, 1, 1}, {-t, -t,  t, 1, 1, 0}};
+    triangles_[4] =  {{-t,  t, -t, 1}, {-t, -t, -t, 1}, {-t,  t,  t, 1}};
+    triangles_[5] =  {{-t, -t, -t, 1}, {-t,  t,  t, 1}, {-t, -t,  t, 1}};
 
-    triangles_[6] =  {{ t,  t, -t, 1, 0, 1}, { t, -t, -t, 1, 0, 0}, { t,  t,  t, 1, 1, 1}};
-    triangles_[7] =  {{ t, -t, -t, 1, 0, 0}, { t,  t,  t, 1, 1, 1}, { t, -t,  t, 1, 1, 0}};
+    triangles_[6] =  {{ t,  t, -t, 1}, { t, -t, -t, 1}, { t,  t,  t, 1}};
+    triangles_[7] =  {{ t, -t, -t, 1}, { t,  t,  t, 1}, { t, -t,  t, 1}};
 
-    triangles_[8] =  {{-t,  t, -t, 1, 0, 1}, {-t,  t,  t, 1, 0, 0}, { t,  t, -t, 1, 1, 1}};
-    triangles_[9] =  {{-t,  t,  t, 1, 0, 0}, { t,  t, -t, 1, 1, 1}, { t,  t,  t, 1, 1, 0}};
+    triangles_[8] =  {{-t,  t, -t, 1}, {-t,  t,  t, 1}, { t,  t, -t, 1}};
+    triangles_[9] =  {{-t,  t,  t, 1}, { t,  t, -t, 1}, { t,  t,  t, 1}};
 
-    triangles_[10] = {{-t, -t, -t, 1, 0, 1}, {-t, -t,  t, 1, 0, 0}, { t, -t, -t, 1, 1, 1}};
-    triangles_[11] = {{-t, -t,  t, 1, 0, 0}, { t, -t, -t, 1, 1, 1}, { t, -t,  t, 1, 1, 0}};
+    triangles_[10] = {{-t, -t, -t, 1}, {-t, -t,  t, 1}, { t, -t, -t, 1}};
+    triangles_[11] = {{-t, -t,  t, 1}, { t, -t, -t, 1}, { t, -t,  t, 1}};
 } 
