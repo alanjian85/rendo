@@ -1,6 +1,7 @@
 #ifndef RAYSTER_MODEL_HPP
 #define RAYSTER_MODEL_HPP
 
+#include <cstdlib>
 #include <string>
 #include <vector>
 
@@ -8,13 +9,16 @@
 
 namespace rayster {
     class model {
-    public:
-        using size_type = std::vector<vertex>::size_type;
-    
+    public:    
         void load(const std::string& path);
     private:
-        std::vector<vertex> vertices_;
-        std::vector<size_Type> indices_;
+        std::vector<vector4> vertices_;
+        std::vector<vector3> tex_coords_;
+        std::vector<vector3> normals_;
+
+        std::vector<std::size_t> face_vertices; 
+        std::vector<std::size_t> face_normals_;
+        std::vector<std::size_t> face_tex_coords_;
     };
 }
 
