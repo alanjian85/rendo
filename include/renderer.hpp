@@ -36,11 +36,13 @@ namespace rayster {
 
         void draw_triangle(triangle tri, shader& s);
         
+/*
         void draw_cube(const cube& c, shader& s) {
             for (auto& tri : c) {
                 draw_triangle(tri, s);
             }
         }
+ */
     private:
         std::unique_ptr<framebuffer> fb_;
         viewport view_;
