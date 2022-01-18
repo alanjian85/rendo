@@ -24,7 +24,7 @@ namespace rayster {
             };
         }
 
-        aabb2 bounding_box() const {
+        aabb2 bbox() const {
             return {
                 min,
                 {max.x - 1, max.y - 1}

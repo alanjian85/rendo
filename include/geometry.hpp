@@ -10,24 +10,8 @@
 #include "vertex.hpp"
 
 namespace rayster {
-    struct triangle {
-        using size_type = std::size_t;
-
-        vertex* a;
-        vertex* b;
-        vertex* c;
-
-        vertex*& operator[](size_type index) {
-            return index == 0 ? a : index == 1 ? b : c;
-        }
-
-        vertex* const& operator[](size_type index) const {
-            return index == 0 ? a : index == 1 ? b : c;
-        }
-
-        vector3 barycentric(vector2 p) const;
-        aabb2 bounding_box() const;
-    };
+    vector3 barycentric(vector2 p);
+    aabb2 triangle_bbox();
 }
 
 #endif
