@@ -7,5 +7,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 file(GLOB_RECURSE RAYSTER_SOURCES
         src/*.cpp)
-    add_executable(rayster ${RAYSTER_SOURCES})
+add_executable(rayster ${RAYSTER_SOURCES})
 target_include_directories(rayster PRIVATE include)
