@@ -5,10 +5,21 @@
 #include <cstdlib>
 
 #include "vector.hpp"
-#include "vector.hpp"
 
 namespace rayster {
-    vector3 barycentric(vector2* t, vector2 p);
+    struct triangle {
+        using size_type = int;
+
+        vector3 a;
+        vector3 b;
+        vector3 c;
+    
+        vector3& operator[](size_type i) {
+
+        }
+
+        vector3 barycentric(vector2 p) const;
+    };
 }
 
 #endif

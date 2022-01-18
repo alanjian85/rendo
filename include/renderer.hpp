@@ -26,7 +26,7 @@ namespace rayster {
             return fb_->aspect();
         }
 
-        void render(vector4 a, vector4 b, vector4 c, shader& s);
+        void render(triangle t, shader& s);
 
         void render(const model& m, shader& s);
     private:

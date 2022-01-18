@@ -6,8 +6,18 @@
 
 namespace rayster {
     struct vector2 {
+        using size_type = int;
+
         double x;
         double y;
+
+        double& operator[](size_type i) {
+            return i == 0 ? x : y;
+        }
+
+        const double& operator[](size_type i) const {
+            return i == 0 ? x : y;
+        }
 
         vector2& operator*=(double rhs) {
             x *= rhs;
@@ -43,9 +53,19 @@ namespace rayster {
     }
 
     struct vector3 {
+        using size_type = int;
+
         double x;
         double y;
         double z;
+
+        double& operator[](size_type i) {
+            return i == 0 ? x : i == 1 ? y : z;
+        }
+
+        const double& operator[](size_type i) const {
+            return i == 0 ? x : i == 1 ? y : z;
+        }
 
         vector3& operator*=(double rhs) {
             x *= rhs;
