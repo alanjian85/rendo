@@ -134,7 +134,7 @@ color_rgba sampler2::operator()(vector2 uv) const {
     }
 
     auto x = static_cast<texture::size_type>(uv.x * (tex_->width() - 1));
-    auto y = static_cast<texture::size_type>(uv.y * (tex_->height() - 1));
+    auto y = static_cast<texture::size_type>((1 - uv.y) * (tex_->height() - 1));
     return (*tex_)(x, y);
 }
 
@@ -185,5 +185,5 @@ color_rgba sampler_cube::operator()(vector3 uvw) const {
         sampler.set_wrap(wrap_r_);
     }
     
-    return sampler({u, 1 - v});
+    return sampler({u, v});
 }
