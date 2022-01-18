@@ -4,14 +4,11 @@
 #include <array>
 #include <cstdlib>
 
-#include "aabb.hpp"
 #include "vector.hpp"
 #include "vector.hpp"
-#include "vertex.hpp"
 
 namespace rayster {
-    vector3 barycentric(vector2 p);
-    aabb2 triangle_bbox();
+    vector3 barycentric(vector2* t, vector2 p);
 }
 
 #endif

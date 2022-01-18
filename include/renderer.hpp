@@ -8,7 +8,7 @@
 #include "framebuffer.hpp"
 #include "geometry.hpp"
 #include "shader.hpp"
-#include "viewport.hpp"
+#include "model.hpp"
 
 namespace rayster {
     class renderer {
@@ -16,36 +16,21 @@ namespace rayster {
         renderer()
         {
             fb_ = std::make_unique<ppm_framebuffer>(1024, 1024);
-            view_.min = {0, 0};
-            view_.max = {1024, 1024};
-            view_.near = 0;
-            view_.far = 1;
         }
 
         void clear(color_rgba color) {
             fb_->clear(color);
         }
 
-        const framebuffer& fb() const {
-            return *fb_;
+        double aspect() const {
+            return fb_->aspect();
         }
 
-        const viewport& view() const {
-            return view_;
-        }
+        void render(vector4 a, vector4 b, vector4 c, shader& s);
 
-        void draw_triangle(triangle tri, shader& s);
-        
-/*
-        void draw_cube(const cube& c, shader& s) {
-            for (auto& tri : c) {
-                draw_triangle(tri, s);
-            }
-        }
- */
+        void render(const model& m, shader& s);
     private:
         std::unique_ptr<framebuffer> fb_;
-        viewport view_;
     };
 }
 

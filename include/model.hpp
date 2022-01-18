@@ -5,12 +5,20 @@
 #include <string>
 #include <vector>
 
-#include "vertex.hpp"
+#include "vector.hpp"
 
 namespace rayster {
     class model {
-    public:    
+    public:
         void load(const std::string& path);
+
+        auto num_faces() const {
+            return face_vertices.size() / 3;
+        }
+
+        vector4 get_vertex(int face, int n) const {
+            return vertices_[face_vertices[face * 3 + n]];
+        }
     private:
         std::vector<vector4> vertices_;
         std::vector<vector3> tex_coords_;
