@@ -5,13 +5,13 @@ using namespace rayster;
 #include <numeric>
 
 void renderer::render_triangle(triangle t, shader& s) {
-    auto iaw = 1 / t.a.w;
-    auto ibw = 1 / t.b.w;
-    auto icw = 1 / t.c.w;
+    auto iaw = 1 / t[0].w;
+    auto ibw = 1 / t[1].w;
+    auto icw = 1 / t[2].w;
 
-    t.a *= iaw;
-    t.b *= ibw;
-    t.c *= icw;
+    t[0] *= iaw;
+    t[1] *= ibw;
+    t[2] *= icw;
 
     vector2 min = {
         static_cast<double>(fb_->width() - 1), 
@@ -30,16 +30,17 @@ void renderer::render_triangle(triangle t, shader& s) {
 
     for (auto x = min.x; x <= max.x; ++x) {
         for (auto y = min.y; y <= max.y; ++y) {
-            auto bar = t.barycentric({x, y});
-            if (bar.x < 0 || bar.y < 0 || bar.z < 0)
+            auto bc_screen = t.barycentric({x, y});
+            if (bc_screen.x < 0 || bc_screen.y < 0 || bc_screen.z < 0)
                 continue;
 
-            auto w = 1 / (bar.x * iaw + bar.y * ibw + bar.z * icw);
-            auto z = bar.x * t.a.z + bar.y * t.b.z + bar.z * t.c.z;
-            bar *= w;
+            auto bc_clip = vector3{bc_screen.x * iaw, bc_screen.y * ibw, bc_screen.z * icw};
+            bc_clip /= bc_clip.x + bc_clip.y + bc_clip.z;
+
+            auto z = bc_clip.x * t[0].z + bc_clip.y * t[1].z + bc_clip.z * t[2].z;
 
             if (fb_->depth_test(x, y, z)) {
-                (*fb_)(x, y).color = s.frag(bar * w);
+                (*fb_)(x, y).color = s.frag(bc_clip);
                 (*fb_)(x, y).depth = z;
             }
         }

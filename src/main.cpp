@@ -10,9 +10,13 @@ using namespace rayster;
 class hello_shader : public shader {
 public:
     hello_shader() {
-        tri_.a = {-0.5, -0.5, 0.0, 1.0};
-        tri_.b = { 0.0,  0.5, 0.0, 2.0};
-        tri_.c = { 0.5, -0.5, 0.0, 1.0};
+        tri_[0] = {-0.5, -0.5, 0.0, 1.0};
+        tri_[1] = { 0.0,  0.5, 0.0, 2.0};
+        tri_[2] = { 0.5, -0.5, 0.0, 1.0};
+
+        colors_[0] = {1.0, 0.0, 0.0, 1.0};
+        colors_[1] = {0.0, 1.0, 0.0, 1.0};
+        colors_[2] = {0.0, 0.0, 1.0, 1.0};
     }
 
     virtual vector4 vert(int n) override {
@@ -20,10 +24,11 @@ public:
     }
 
     virtual color_rgba frag(vector3 bar) override {
-        return {bar.x, bar.y, bar.z, 1};
+        return frag_lerp(colors_, bar);
     }
 private:
     triangle tri_;
+    color_rgba colors_[3];
 };
 
 int main() {

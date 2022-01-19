@@ -60,6 +60,13 @@ namespace rayster {
             return *this;
         }
 
+        vector3& operator/=(double rhs) {
+            x /= rhs;
+            y /= rhs;
+            z /= rhs;
+            return *this;
+        }
+
         auto length_squared() const {
             return x * x + y * y + z * z;
         }
