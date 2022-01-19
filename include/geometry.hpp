@@ -10,12 +10,16 @@ namespace rayster {
     struct triangle {
         using size_type = int;
 
-        vector3 a;
-        vector3 b;
-        vector3 c;
+        vector4 a;
+        vector4 b;
+        vector4 c;
     
-        vector3& operator[](size_type i) {
+        vector4& operator[](size_type i) {
+            return i == 0 ? a : i == 1 ? b : c;
+        }
 
+        const vector4& operator[](size_type i) const {
+            return i == 0 ? a : i == 1 ? b : c;
         }
 
         vector3 barycentric(vector2 p) const;

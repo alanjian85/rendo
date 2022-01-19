@@ -119,11 +119,21 @@ namespace rayster {
     }
     
     struct vector4 {
+        using size_type = int;
+
         double x;
         double y;
         double z;
         double w;
     
+        double& operator[](size_type i) {
+            return i == 0 ? x : i == 1 ? y : i == 2 ? z : w;
+        }
+
+        const double& operator[](size_type i) const {
+            return i == 0 ? x : i == 1 ? y : i == 2 ? z : w;
+        }
+
         vector4& operator*=(double rhs) {
             x *= rhs;
             y *= rhs;
