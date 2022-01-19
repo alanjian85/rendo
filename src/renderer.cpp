@@ -34,8 +34,14 @@ void renderer::render_triangle(triangle t, shader& s) {
             if (bar.x < 0 || bar.y < 0 || bar.z < 0)
                 continue;
 
-            (*fb_)(x, y).color = s.frag(bar);
+            auto w = 1 / (bar.x * iaw + bar.y * ibw + bar.z * icw);
+            auto z = bar.x * t.a.z + bar.y * t.b.z + bar.z * t.c.z;
+            bar *= w;
 
+            if (fb_->depth_test(x, y, z)) {
+                (*fb_)(x, y).color = s.frag(bar * w);
+                (*fb_)(x, y).depth = z;
+            }
         }
     }
 }

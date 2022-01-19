@@ -11,7 +11,7 @@ class hello_shader : public shader {
 public:
     hello_shader() {
         tri_.a = {-0.5, -0.5, 0.0, 1.0};
-        tri_.b = { 0.0,  0.5, 0.0, 1.0};
+        tri_.b = { 0.0,  0.5, 0.0, 2.0};
         tri_.c = { 0.5, -0.5, 0.0, 1.0};
     }
 
