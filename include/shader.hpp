@@ -8,7 +8,7 @@ namespace rayster {
     public:
         virtual ~shader() noexcept = default;
 
-        virtual vector4 vert(int face, int n) = 0;
+        virtual vector4 vert(int n) = 0;
         virtual color_rgba frag(vector3 bar) = 0;
     };
 }

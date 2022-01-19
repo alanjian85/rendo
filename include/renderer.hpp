@@ -22,13 +22,15 @@ namespace rayster {
             fb_->clear(color);
         }
 
+        void write(const std::string& path) {
+            fb_->write(path);
+        }
+
         double aspect() const {
             return fb_->aspect();
         }
 
-        void render(triangle t, shader& s);
-
-        void render(const model& m, shader& s);
+        void render(int n, shader& s);
     private:
         std::unique_ptr<framebuffer> fb_;
     };

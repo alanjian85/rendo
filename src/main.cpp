@@ -7,45 +7,30 @@
 #include "utility.hpp"
 using namespace rayster;
 
-class basic_shader : public shader {
+class hello_shader : public shader {
 public:
-    basic_shader(const framebuffer& fb)
-        : persp_(rad(45), fb.aspect(), 0.1, 100.0),
-          lookat_({0, 0, 3}, {0, 0, 0}, {0, 1, 0}),
-          rotate_(rad(0), {1, 1, 1})
-    {
-        
-    }
-    
-    virtual vertex vert(const vertex& vert) override {
-        return {persp_ * lookat_ * rotate_ * vert.pos, {vert.pos.x, vert.pos.y, vert.pos.z}};
+    hello_shader() {
+        tri_.a = {-0.5, -0.5, 0.0, 1.0};
+        tri_.b = { 0.0,  0.5, 0.0, 1.0};
+        tri_.c = { 0.5, -0.5, 0.0, 1.0};
     }
 
-    virtual color_rgba frag(const vertex_data& data) override {
-        return {1, 0, 0, 1};
+    virtual vector4 vert(int n) override {
+        return tri_[n];
+    }
+
+    virtual color_rgba frag(vector3 bar) override {
+        return {bar.x, bar.y, bar.z, 1};
     }
 private:
-    persp persp_;
-    lookat lookat_;
-    rotate rotate_;
+    triangle tri_;
 };
 
 int main() {
     renderer render;
     render.clear({0.627, 0.906, 0.898, 1.0});
 
-    vertex a, b, c;
-    a.pos = {-1, -1, 0, 1};
-    b.pos = { 0,  1, 0, 1};
-    c.pos = { 1, -1, 0, 1};
+    hello_shader s;
 
-    triangle t;
-    t.a = &a;
-    t.b = &b;
-    t.c = &c;
-
-    basic_shader s(render.fb());
-    render.draw_triangle(t, s);
-
-    render.fb().write("image.ppm");
+    render.write("image.ppm");
 }
