@@ -24,20 +24,6 @@ namespace rayster {
             y *= rhs;
             return *this;
         }
-
-        static vector2 min() {
-            return {
-                std::numeric_limits<double>::min(),
-                std::numeric_limits<double>::min()
-            };
-        }
-
-        static vector2 max() {
-            return {
-                std::numeric_limits<double>::max(),
-                std::numeric_limits<double>::max()
-            };
-        }
     };
 
     inline vector2 operator+(vector2 lhs, vector2 rhs) {

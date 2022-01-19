@@ -31,6 +31,7 @@ int main() {
     render.clear({0.627, 0.906, 0.898, 1.0});
 
     hello_shader s;
+    render.render(3, s);
 
     render.write("image.ppm");
 }

@@ -32,6 +32,8 @@ namespace rayster {
 
         void render(int n, shader& s);
     private:
+        void render_triangle(triangle t, shader& s);
+
         std::unique_ptr<framebuffer> fb_;
     };
 }
