@@ -14,27 +14,28 @@ namespace rayster {
     class renderer {
     public:
         renderer()
+            : fb_(1024, 1024)
         {
-            fb_ = std::make_unique<ppm_framebuffer>(1024, 1024);
+            
         }
 
         void clear(color_rgba color) {
-            fb_->clear(color);
+            fb_.clear(color);
         }
 
         void write(const std::string& path) {
-            fb_->write(path);
+            fb_.write(path);
         }
 
         double aspect() const {
-            return fb_->aspect();
+            return fb_.aspect();
         }
 
         void render(int n, shader& s);
     private:
         void render_triangle(triangle t, shader& s);
 
-        std::unique_ptr<framebuffer> fb_;
+        framebuffer fb_;
     };
 }
 

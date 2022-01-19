@@ -14,13 +14,13 @@ void renderer::render_triangle(triangle t, shader& s) {
     t[2] *= icw;
 
     vector2 min = {
-        static_cast<double>(fb_->width() - 1), 
-        static_cast<double>(fb_->height() - 1)
+        static_cast<double>(fb_.width() - 1), 
+        static_cast<double>(fb_.height() - 1)
     };
     vector2 max = {0, 0};
     for (int i = 0; i < 3; ++i) {
-        t[i].x = (t[i].x + 1) / 2 * (fb_->width() - 1);
-        t[i].y = (1 - t[i].y) / 2 * (fb_->height() - 1);
+        t[i].x = (t[i].x + 1) / 2 * (fb_.width() - 1);
+        t[i].y = (1 - t[i].y) / 2 * (fb_.height() - 1);
 
         for (int j = 0; j < 2; ++j) {
             min[j] = std::min(min[j], t[i][j]);
@@ -39,9 +39,9 @@ void renderer::render_triangle(triangle t, shader& s) {
 
             auto z = bc_clip.x * t[0].z + bc_clip.y * t[1].z + bc_clip.z * t[2].z;
 
-            if (fb_->depth_test(x, y, z)) {
-                (*fb_)(x, y).color = s.frag(bc_clip);
-                (*fb_)(x, y).depth = z;
+            if (fb_.depth_test(x, y, z)) {
+                fb_(x, y).color = s.frag(bc_clip);
+                fb_(x, y).depth = z;
             }
         }
     }

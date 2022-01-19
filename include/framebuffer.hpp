@@ -65,24 +65,10 @@ namespace rayster {
             return z < (*this)(x, y).depth;
         }
 
-        virtual void write(const std::string& path) const = 0;
+        void write(const std::string& path) const;
     private:
         size_type width_;
         std::vector<pixel> pixels_;
-    };
-
-    class ppm_framebuffer : public framebuffer {
-    public:
-        using framebuffer::framebuffer;
-
-        virtual void write(const std::string& path) const override;
-    };
-
-    class pam_framebuffer : public framebuffer {
-    public:
-        using framebuffer::framebuffer;
-    
-        virtual void write(const std::string& path) const override;
     };
 }
 
