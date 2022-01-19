@@ -33,5 +33,5 @@ int main() {
     hello_shader s;
     render.render(3, s);
 
-    render.write("image.ppm");
+    render.write("output/image.ppm");
 }
