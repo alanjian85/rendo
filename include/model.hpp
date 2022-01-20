@@ -12,12 +12,16 @@ namespace rayster {
     public:
         void load(const std::string& path);
 
+        auto num_vertices() const {
+            return face_vertices_.size();
+        }
+
         vector4 get_vertex(int n) const {
             return vertices_[face_vertices_[n]];
         }
 
-        auto num_vertices() const {
-            return face_vertices_.size();
+        vector3 get_tex_coord(int n) const {
+            return tex_coords_[face_tex_coords_[n]];
         }
     private:
         std::vector<vector4> vertices_;

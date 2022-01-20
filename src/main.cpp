@@ -12,18 +12,20 @@ public:
     hello_shader(double aspect, const model& m) 
         : model_(m),
           persp_(rad(45), aspect, 0.1, 100),
-          lookat_({0, 0, 3}, {0, 0, 0}, {0, 1, 0}),
+          lookat_({0, 0, 6}, {0, 0, 0}, {0, 1, 0}),
           rotate_(rad(60), {1, 1, 1})
     {
 
     }
 
     virtual vector4 vert(int n) override {
+        v_tex_coord_[n % 3] = model_.get_tex_coord(n);
         return persp_ * lookat_ * rotate_ * model_.get_vertex(n);
     }
 
     virtual color_rgba frag(vector3 bar) override {
-        return {1, 0, 0, 1};
+        auto tex_coord = frag_lerp(v_tex_coord_, bar);
+        return {tex_coord.x, tex_coord.y, tex_coord.z, 1};
     }
 private:
     const model& model_;
@@ -31,6 +33,8 @@ private:
     persp persp_;
     lookat lookat_;
     rotate rotate_;
+
+    vector3 v_tex_coord_[3];
 };
 
 int main() {
