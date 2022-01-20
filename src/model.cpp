@@ -36,7 +36,7 @@ void model::load(const std::string& path) {
             char delim;
             int v, t, n;
             while (stream >> v >> delim >> t >> delim >> n) {
-                face_vertices.push_back(v - 1);
+                face_vertices_.push_back(v - 1);
                 face_tex_coords_.push_back(t - 1);
                 face_normals_.push_back(n - 1);
             }
