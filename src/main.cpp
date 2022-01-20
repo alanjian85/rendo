@@ -9,14 +9,17 @@ using namespace rayster;
 
 class hello_shader : public shader {
 public:
-    hello_shader(const model& m) 
-        : model_(m)
+    hello_shader(double aspect, const model& m) 
+        : model_(m),
+          persp_(rad(45), aspect, 0.1, 100),
+          lookat_({0, 0, 3}, {0, 0, 0}, {0, 1, 0}),
+          rotate_(rad(60), {1, 1, 1})
     {
 
     }
 
     virtual vector4 vert(int n) override {
-        return model_.get_vertex(n);
+        return persp_ * lookat_ * rotate_ * model_.get_vertex(n);
     }
 
     virtual color_rgba frag(vector3 bar) override {
@@ -24,19 +27,21 @@ public:
     }
 private:
     const model& model_;
+
+    persp persp_;
+    lookat lookat_;
+    rotate rotate_;
 };
 
 int main() {
-    renderer render;
-    render.clear({0.627, 0.906, 0.898, 1.0});
+    renderer r;
+    r.clear({0.627, 0.906, 0.898, 1.0});
 
     model m;
     m.load("res/models/cube.obj");
 
-    std::cout << m.num_vertices() << '\n';
+    hello_shader s(r.aspect(), m);
+    r.render(m.num_vertices(), s);
 
-    hello_shader s(m);
-    render.render(m.num_vertices(), s);
-
-    render.write("output/image.ppm");
+    r.write("output/image.ppm");
 }
