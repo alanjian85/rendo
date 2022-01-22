@@ -2,6 +2,12 @@
 #define RAYSTER_COLOR_HPP
 
 namespace rayster {
+    struct color_rgb {
+        double r;
+        double g;
+        double b;
+    };
+
     struct color_rgba {
         double r;
         double g;

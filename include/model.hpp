@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "material.hpp"
 #include "vector.hpp"
 
 namespace rayster {
@@ -35,6 +36,8 @@ namespace rayster {
         std::vector<std::size_t> face_vertices_; 
         std::vector<std::size_t> face_normals_;
         std::vector<std::size_t> face_tex_coords_;
+    
+        material_library mat_lib_;
     };
 }
 
