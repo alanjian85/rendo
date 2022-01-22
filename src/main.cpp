@@ -12,7 +12,7 @@ public:
     hello_shader(double aspect, const model& m) 
         : model_(m),
           persp_(rad(45), aspect, 0.1, 100),
-          lookat_({0, 1.5, 9}, {0, 1.5, 0}, {0, 1, 0})
+          lookat_({0, 1.75, 9}, {0, 1.75, 0}, {0, 1, 0})
     {
 
     }
@@ -43,7 +43,7 @@ private:
 
 int main() {
     renderer r;
-    r.clear({0.627, 0.906, 0.898, 1.0});
+    r.clear({0.90, 0.88, 0.84, 1.0});
 
     model m;
     m.load("res/models/aqua.obj");

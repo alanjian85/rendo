@@ -42,7 +42,8 @@ void renderer::render_triangle(triangle t, shader& s) {
             auto z = bc_clip.x * t[0].z + bc_clip.y * t[1].z + bc_clip.z * t[2].z;
 
             if (fb_.depth_test(x, y, z)) {
-                fb_(x, y).color = s.frag(bc_clip);
+                auto color = s.frag(bc_clip);
+                fb_(x, y).color = fb_(x, y).color * (1 - color.a) + color * color.a;
                 fb_(x, y).depth = z;
             }
         }

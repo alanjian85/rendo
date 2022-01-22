@@ -1,6 +1,7 @@
 #ifndef RAYSTER_TEXTURE_HPP
 #define RAYSTER_TEXTURE_HPP
 
+#include <filesystem>
 #include <string>
 #include <vector>
 
@@ -12,7 +13,7 @@ namespace rayster {
     public:
         using size_type = std::vector<color_rgba>::size_type;
 
-        void load(const std::string& path);
+        void load(const std::filesystem::path& path);
 
         void resize(size_type width, size_type height) {
             width_ = width;
@@ -39,6 +40,9 @@ namespace rayster {
             return pixels_[index];
         }
     private:
+        void load_ppm(const std::string& path);
+        void load_pam(const std::string& path);
+
         size_type width_;
         std::vector<color_rgba> pixels_;
     };

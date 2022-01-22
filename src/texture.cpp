@@ -5,21 +5,26 @@ using namespace rayster;
 #include <cmath>
 #include <fstream>
 
-void texture::load(const std::string& path) {
+void texture::load(const std::filesystem::path& path) {
+    if (path.extension() == ".ppm")
+        load_ppm(path);
+    else if (path.extension() == ".pam")
+        load_pam(path);
+}
+
+void texture::load_ppm(const std::string& path) {
     std::ifstream file(path);
 
     std::string format;
     std::getline(file, format);
 
-    texture::size_type width, height;
-    file >> width >> height;
-    resize(width, height);
+    texture::size_type height;
+    file >> width_ >> height;
+    pixels_.resize(width_ * height);
 
     if (format == "P1") {
-        auto y = height;
-        do {
-            --y;
-            for (texture::size_type x = 0; x < width; ++x) {
+        for (size_type y = 0; y < height; ++y) {
+            for (size_type x = 0; x < width_; ++x) {
                 char c;
                 file >> c;
 
@@ -28,30 +33,26 @@ void texture::load(const std::string& path) {
                 else if (c == '1')
                     (*this)(x, y) = {1, 1, 1, 1};
             }
-        } while (y > 0);
+        }
     } else if (format == "P2") {
         int max_value;
         file >> max_value;
         
-        auto y = height;
-        do {
-            --y;
-            for (texture::size_type x = 0; x < width; ++x) {
+        for (size_type y = 0; y < height; ++y) {
+            for (size_type x = 0; x < width_; ++x) {
                 int color;
                 file >> color;
 
                 auto t = static_cast<double>(color) / max_value;
                 (*this)(x, y) = {t, t, t, 1};
             }
-        } while (y > 0);
+        }
     } else if (format == "P3"){
         int max_value;
         file >> max_value;
 
-        auto y = height;
-        do {
-            --y;
-            for (texture::size_type x = 0; x < width; ++x) {
+        for (size_type y = 0; y < height; ++y) {
+            for (size_type x = 0; x < width_; ++x) {
                 int r, g, b;
                 file >> r >> g >> b;
 
@@ -62,21 +63,20 @@ void texture::load(const std::string& path) {
                     1
                 };
             }
-        } while (y > 0);
+        }
     } else if (format == "P5") {
         int max_value;
         file >> max_value;
         
         auto y = height;
-        do {
-            --y;
-            for (texture::size_type x = 0; x < width; ++x) {
+        for (size_type y = 0; y < height; ++y) {
+            for (size_type x = 0; x < width_; ++x) {
                 auto color = static_cast<unsigned char>(file.get());
 
                 auto t = static_cast<double>(color) / max_value;
                 (*this)(x, y) = {t, t, t, 1};
             }
-        } while (y > 0);
+        }
     } else if (format == "P6") {
         int max_value;
         file >> max_value;
@@ -84,9 +84,8 @@ void texture::load(const std::string& path) {
         file.ignore(1);
 
         auto y = height;
-        do {
-            --y;
-            for (texture::size_type x = 0; x < width; ++x) {
+        for (size_type y = 0; y < height; ++y) {
+            for (size_type x = 0; x < width_; ++x) {
                 unsigned char r, g, b;
                 r =  file.get(); g = file.get(); b = file.get();
 
@@ -97,7 +96,93 @@ void texture::load(const std::string& path) {
                     1
                 };
             }
-        } while (y > 0);
+        }
+    }
+}
+
+void texture::load_pam(const std::string& path) {
+    std::ifstream file(path);
+
+    size_type height;
+    int max_value, depth;
+
+    for (std::string line; std::getline(file, line);) {
+        std::istringstream stream(line);
+        
+        std::string attrib;
+        stream >> attrib;
+
+        if (attrib == "WIDTH") {
+            stream >> width_;
+        } else if (attrib == "HEIGHT") {
+            stream >> height;
+        } else if (attrib == "DEPTH") {
+            stream >> depth;
+        } else if (attrib == "MAXVAL") {
+            stream >> max_value;
+        } else if (attrib == "ENDHDR") {
+            break;
+        }
+    }
+
+    pixels_.resize(width_ * height);
+    
+    for (size_type y = 0; y < height; ++y) {
+        for (size_type x = 0; x < width_; ++x) {
+            switch (depth) {
+                case 1: {
+                    unsigned char r;
+                    r = file.get();
+
+                    (*this)(x, y) = {
+                        static_cast<double>(r) / max_value,
+                        static_cast<double>(r) / max_value,
+                        static_cast<double>(r) / max_value,
+                        1
+                    };
+
+                    break;
+                }
+                case 2: {
+                    unsigned char r, a;
+                    r = file.get(); a = file.get();
+
+                    (*this)(x, y) = {
+                        static_cast<double>(r) / max_value,
+                        static_cast<double>(r) / max_value,
+                        static_cast<double>(r) / max_value,
+                        static_cast<double>(a) / max_value
+                    };
+
+                    break;
+                }
+                case 3: {
+                    unsigned char r, g, b;
+                    r = file.get(); g = file.get(); b = file.get();
+
+                    (*this)(x, y) = {
+                        static_cast<double>(r) / max_value,
+                        static_cast<double>(g) / max_value,
+                        static_cast<double>(b) / max_value
+                    };
+
+                    break;
+                }
+                case 4: {
+                    unsigned char r, g, b, a;
+                    r = file.get(); g = file.get(); b = file.get(); a = file.get();
+
+                    (*this)(x, y) = {
+                        static_cast<double>(r) / max_value,
+                        static_cast<double>(g) / max_value,
+                        static_cast<double>(b) / max_value,
+                        static_cast<double>(a) / max_value
+                    };
+                    
+                    break;
+                }
+            }
+        }
     }
 }
 
@@ -134,7 +219,7 @@ color_rgba sampler2::operator()(vector3 tex_coord) const {
     }
 
     auto x = static_cast<texture::size_type>(tex_coord.x * (tex_->width() - 1));
-    auto y = static_cast<texture::size_type>(tex_coord.y * (tex_->height() - 1));
+    auto y = static_cast<texture::size_type>((1 - tex_coord.y) * (tex_->height() - 1));
     return (*tex_)(x, y);
 }
 
