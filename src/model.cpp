@@ -35,10 +35,18 @@ void model::load(const std::string& path) {
         } else if (attrib == "f") {
             char delim;
             int v, t, n;
-            while (stream >> v >> delim >> t >> delim >> n) {
+            while (stream >> v) {
                 face_vertices_.push_back(v - 1);
-                face_tex_coords_.push_back(t - 1);
-                face_normals_.push_back(n - 1);
+                
+                if (!tex_coords_.empty()) {
+                    stream >> delim >> t;
+                    face_tex_coords_.push_back(t - 1);
+                }
+
+                if (!normals_.empty()) {
+                    stream >> delim >> n;
+                    face_normals_.push_back(n - 1);
+                }
             }
         }
     }
