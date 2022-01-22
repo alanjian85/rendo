@@ -44,6 +44,9 @@ void model::load(const std::string& path) {
                 }
 
                 if (!normals_.empty()) {
+                    if (tex_coords_.empty())
+                        stream >> delim;
+
                     stream >> delim >> n;
                     face_normals_.push_back(n - 1);
                 }

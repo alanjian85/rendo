@@ -23,6 +23,10 @@ namespace rayster {
         vector3 get_tex_coord(int n) const {
             return tex_coords_[face_tex_coords_[n]];
         }
+
+        vector3 get_normal(int n) const {
+            return normals_[face_normals_[n]];
+        }
     private:
         std::vector<vector4> vertices_;
         std::vector<vector3> tex_coords_;
