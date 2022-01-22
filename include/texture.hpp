@@ -80,7 +80,7 @@ namespace rayster {
             return border_;
         }
 
-        color_rgba operator()(vector3 uv) const;
+        color_rgba operator()(vector3 tex_coord) const;
     private:
         wrapping wrap_;
         color_rgba border_;
@@ -159,7 +159,7 @@ namespace rayster {
             return border_;
         }
 
-        color_rgba operator()(vector3 uvw) const;
+        color_rgba operator()(vector3 tex_coord) const;
     private:
         wrapping wrap_s_;
         wrapping wrap_t_;
