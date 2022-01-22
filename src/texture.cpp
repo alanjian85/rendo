@@ -101,7 +101,7 @@ void texture::load(const std::string& path) {
     }
 }
 
-color_rgba sampler2::operator()(vector2 uv) const {
+color_rgba sampler2::operator()(vector3 uv) const {
     if (!tex_)
         return {0, 0, 0, 0};
 

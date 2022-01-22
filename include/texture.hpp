@@ -80,7 +80,7 @@ namespace rayster {
             return border_;
         }
 
-        color_rgba operator()(vector2 uv) const;
+        color_rgba operator()(vector3 uv) const;
     private:
         wrapping wrap_;
         color_rgba border_;

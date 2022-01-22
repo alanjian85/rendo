@@ -4,7 +4,9 @@ using namespace rayster;
 #include <fstream>
 #include <sstream>
 
-void model::load(const std::string& path) {
+void model::load(const std::filesystem::path& path) {
+    auto dir = path.parent_path();
+
     std::ifstream file(path);
     for (std::string line; std::getline(file, line);) {
         std::istringstream stream(line);
@@ -51,6 +53,16 @@ void model::load(const std::string& path) {
                     face_normals_.push_back(n - 1);
                 }
             }
+        } else if (attrib == "mtllib") {
+            std::string relative_path;
+            stream >> relative_path;
+
+            mtllib_.load(dir / relative_path);
+        } else if (attrib == "usemtl") {
+            std::string mat;
+            stream >> mat;
+
+            materials_.emplace_back(face_vertices_.size() - 1, &mtllib_[mat]);
         }
     }
 }

@@ -39,7 +39,7 @@ void material_library::load(const std::filesystem::path& path) {
             std::string relative_path;
             stream >> relative_path;
 
-            mat->diffuse_map.load(path / relative_path);
+            mat->diffuse_map.load(dir / relative_path);
         }
     }
 }

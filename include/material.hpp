@@ -24,6 +24,10 @@ namespace rayster {
     class material_library {
     public:
         void load(const std::filesystem::path& path);
+
+        const material& operator[](const std::string& mat) const {
+            return materials_.at(mat);
+        }
     private:
         std::map<std::string, material> materials_;
     };

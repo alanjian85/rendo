@@ -19,13 +19,15 @@ public:
 
     virtual vector4 vert(int n) override {
         v_normals[n % 3] = model_.get_normal(n);
+        v_tex_coords[n % 3] = model_.get_tex_coord(n);
+        sampler_.bind_texture(model_.get_mat(n)->diffuse_map);
         return persp_ * lookat_ * model_.get_vertex(n);
     }
 
     virtual color_rgba frag(vector3 bar) override {
         auto normal = frag_lerp(v_normals, bar);
-        auto t = std::max(dot(normal, {1, 1, 1}), 0.0);
-        return {t, t, t, 1};
+        auto tex_coord = frag_lerp(v_tex_coords, bar);
+        return sampler_(tex_coord);
     }
 private:
     const model& model_;
@@ -33,7 +35,10 @@ private:
     persp persp_;
     lookat lookat_;
 
+    vector3 v_tex_coords[3];
     vector3 v_normals[3];
+
+    sampler2 sampler_;
 };
 
 int main() {

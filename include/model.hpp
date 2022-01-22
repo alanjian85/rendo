@@ -2,6 +2,7 @@
 #define RAYSTER_MODEL_HPP
 
 #include <cstdlib>
+#include <filesystem>
 #include <string>
 #include <vector>
 
@@ -11,7 +12,7 @@
 namespace rayster {
     class model {
     public:
-        void load(const std::string& path);
+        void load(const std::filesystem::path& path);
 
         auto num_vertices() const {
             return face_vertices_.size();
@@ -28,6 +29,15 @@ namespace rayster {
         vector3 get_normal(int n) const {
             return normals_[face_normals_[n]];
         }
+
+        const material* get_mat(int n) const {
+            for (auto& mat : materials_) {
+                if (n <= mat.first) {
+                    return mat.second;
+                }
+            }
+            return nullptr;
+        }
     private:
         std::vector<vector4> vertices_;
         std::vector<vector3> tex_coords_;
@@ -37,7 +47,8 @@ namespace rayster {
         std::vector<std::size_t> face_normals_;
         std::vector<std::size_t> face_tex_coords_;
     
-        material_library mat_lib_;
+        material_library mtllib_;
+        std::vector<std::pair<std::size_t, const material*>> materials_;
     };
 }
 
