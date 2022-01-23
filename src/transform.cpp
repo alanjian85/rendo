@@ -41,6 +41,16 @@ rotate::rotate(double angle, vector3 v) {
 	(*this)(3, 3) = 1;
 }
 
+translate::translate(vector3 offset) {
+	(*this)(0, 0) = 1;
+	(*this)(0, 3) = offset.x;
+	(*this)(1, 1) = 1;
+	(*this)(1, 3) = offset.y;
+	(*this)(2, 2) = 1;
+	(*this)(2, 3) = offset.z;
+	(*this)(3, 3) = 1;
+}
+
 persp::persp(double fov, double aspect, double near, double far) {
     auto t = std::tan(fov / 2);
 

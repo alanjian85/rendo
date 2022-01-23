@@ -15,6 +15,11 @@ namespace rayster {
         rotate(double angle, vector3 v);
     };
 
+    class translate : public matrix4 {
+    public:
+        translate(vector3 offset);
+    };
+
     class lookat : public matrix4 {
     public:
         lookat(vector3 eye, vector3 center, vector3 up);

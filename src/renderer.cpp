@@ -4,7 +4,7 @@ using namespace rayster;
 #include <iostream>
 #include <numeric>
 
-void renderer::render_triangle(triangle t, shader& s) {
+void renderer::render_triangle(triangle t, basic_shader& s) {
     auto iaw = 1 / t[0].w;
     auto ibw = 1 / t[1].w;
     auto icw = 1 / t[2].w;
@@ -52,7 +52,7 @@ void renderer::render_triangle(triangle t, shader& s) {
     }
 }
 
-void renderer::render(int n, shader& s) {    
+void renderer::render(int n, basic_shader& s) {    
     for (int i = 0; i < n; i += 3) {
         triangle t;
         t.a = s.vert(i + 0);

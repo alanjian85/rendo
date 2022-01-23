@@ -1,4 +1,5 @@
 #include <iostream>
+#include <optional>
 
 #include "renderer.hpp"
 #include "texture.hpp"
@@ -7,21 +8,20 @@
 #include "utility.hpp"
 using namespace rayster;
 
-class hello_shader : public shader {
+class shader : public basic_shader {
 public:
-    hello_shader(double aspect, const model& m) 
-        : model_(m),
-          persp_(rad(45), aspect, 0.1, 100),
-          lookat_({0, 2.15, 6}, {0, 2.15, 0}, {0, 1, 0})
+    shader(double aspect)        
+        : persp_(rad(45), aspect, 0.1, 100),
+          lookat_({-4, 2.15, 6}, {0, 2.15, 0}, {0, 1, 0})
     {
         sampler_.set_wrap(wrapping::clamp_to_edge);
     }
 
     virtual vector4 vert(int n) override {
-        v_normals[n % 3] = model_.get_normal(n);
-        v_tex_coords[n % 3] = model_.get_tex_coord(n);
-        sampler_.bind_texture(model_.get_mat(n)->diffuse_map);
-        return persp_ * lookat_ * model_.get_vertex(n);
+        v_normals[n % 3] = model_->get_normal(n);
+        v_tex_coords[n % 3] = model_->get_tex_coord(n);
+        sampler_.bind_texture(model_->get_mat(n)->diffuse_map);
+        return persp_ * lookat_ * *translate_ * model_->get_vertex(n);
     }
 
     virtual color_rgba frag(vector3 bar) override {
@@ -30,11 +30,20 @@ public:
         auto color = sampler_(tex_coord);
         return color;
     }
+    
+    void bind_model(const model& m) {
+        model_ = &m;
+    }
+
+    void set_pos(vector3 pos) {
+        translate_.emplace(pos);
+    }
 private:
-    const model& model_;
+    const model* model_;
 
     persp persp_;
     lookat lookat_;
+    std::optional<translate> translate_;
 
     vector3 v_tex_coords[3];
     vector3 v_normals[3];
@@ -46,11 +55,19 @@ int main() {
     renderer r;
     r.clear({0.90, 0.88, 0.84, 1.0});
 
-    model m;
-    m.load("res/models/aqua.obj");
+    shader s(r.aspect());
 
-    hello_shader s(r.aspect(), m);
-    r.render(m.num_vertices(), s);
+    model aqua;
+    aqua.load("res/models/aqua.obj");
+    s.bind_model(aqua);
+    s.set_pos({0, 0, 0});
+    r.render(aqua.num_vertices(), s);
+
+    model rushia;
+    rushia.load("res/models/rushia.obj");
+    s.bind_model(rushia);
+    s.set_pos({2, 0, 0});
+    r.render(rushia.num_vertices(), s);
 
     r.write("output/image.ppm");
 }

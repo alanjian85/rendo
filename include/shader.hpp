@@ -4,9 +4,9 @@
 #include "color.hpp"
 
 namespace rayster {
-    class shader {
+    class basic_shader {
     public:
-        virtual ~shader() noexcept = default;
+        virtual ~basic_shader() noexcept = default;
 
         virtual vector4 vert(int n) = 0;
         virtual color_rgba frag(vector3 bar) = 0;

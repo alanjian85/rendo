@@ -62,7 +62,7 @@ namespace rayster {
         }
 
         bool depth_test(size_type x, size_type y, double z) const {
-            return z < (*this)(x, y).depth;
+            return z > 0 && z < (*this)(x, y).depth;
         }
 
         void write(const std::string& path) const;
