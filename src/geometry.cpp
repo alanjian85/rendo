@@ -5,8 +5,8 @@ using namespace rayster;
 
 vector3 triangle::barycentric(vector2 p) const {
     auto t = cross(
-        {c.x - a.x, b.x - a.x, a.x - p.x},
-        {c.y - a.y, b.y - a.y, a.y - p.y}
+        vector3(c.x - a.x, b.x - a.x, a.x - p.x),
+        vector3(c.y - a.y, b.y - a.y, a.y - p.y)
     );
     if (t.z == 0)
         return {-1, 1, 1};

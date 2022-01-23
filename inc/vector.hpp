@@ -5,62 +5,81 @@
 #include <limits>
 
 namespace rayster {
-    struct vector2 {
+    template <typename T>
+    struct basic_vector2 {
         using size_type = int;
 
-        double x;
-        double y;
+        T x;
+        T y;
 
-        double& operator[](size_type i) {
+        basic_vector2() = default;
+        basic_vector2(T x_, T y_)
+            : x(x_), y(y_)
+        {
+
+        }
+
+        T& operator[](size_type i) {
             return i == 0 ? x : y;
         }
 
-        const double& operator[](size_type i) const {
+        const T& operator[](size_type i) const {
             return i == 0 ? x : y;
         }
 
-        vector2& operator*=(double rhs) {
+        T& operator*=(T rhs) {
             x *= rhs;
             y *= rhs;
             return *this;
         }
+    
+        friend basic_vector2 operator+(basic_vector2 lhs, basic_vector2 rhs) {
+            return {lhs.x + rhs.x, lhs.y + rhs.y};
+        }
+
+        friend basic_vector2 operator*(basic_vector2 lhs, double rhs) {
+            return {lhs.x * rhs, lhs.y * rhs};
+        }
+
+        friend basic_vector2 operator*(double lhs, basic_vector2 rhs) {
+            return rhs * lhs;
+        }
     };
 
-    inline vector2 operator+(vector2 lhs, vector2 rhs) {
-        return {lhs.x + rhs.x, lhs.y + rhs.y};
-    }
+    using vector2 = basic_vector2<double>;
+    using vector2i = basic_vector2<int>;
 
-    inline vector2 operator*(vector2 lhs, double rhs) {
-        return {lhs.x * rhs, lhs.y * rhs};
-    }
-
-    inline vector2 operator*(double lhs, vector2 rhs) {
-        return rhs * lhs;
-    }
-
-    struct vector3 {
+    template <typename T>
+    struct basic_vector3 {
         using size_type = int;
 
-        double x;
-        double y;
-        double z;
+        T x;
+        T y;
+        T z;
 
-        double& operator[](size_type i) {
+        basic_vector3() = default;
+        basic_vector3(T x_, T y_, T z_)
+            : x(x_), y(y_), z(z_)
+        {
+
+        }
+
+        T& operator[](size_type i) {
             return i == 0 ? x : i == 1 ? y : z;
         }
 
-        const double& operator[](size_type i) const {
+        const T& operator[](size_type i) const {
             return i == 0 ? x : i == 1 ? y : z;
         }
 
-        vector3& operator*=(double rhs) {
+        basic_vector3& operator*=(T rhs) {
             x *= rhs;
             y *= rhs;
             z *= rhs;
             return *this;
         }
 
-        vector3& operator/=(double rhs) {
+        basic_vector3& operator/=(T rhs) {
             x /= rhs;
             y /= rhs;
             z /= rhs;
@@ -75,59 +94,69 @@ namespace rayster {
             return std::sqrt(length_squared());
         }
 
-        vector3 normalize() const {
+        basic_vector3 normalize() const {
             auto len = length();
             if (len == 0)
                 return {0, 0, 0};
             return {x / len, y / len, z / len};
         }
+    
+        friend basic_vector3 operator+(basic_vector3 lhs, basic_vector3 rhs) {
+            return {lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z};
+        }
+
+        friend basic_vector3 operator-(basic_vector3 lhs, basic_vector3 rhs) {
+            return {lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z};
+        }
+
+        friend basic_vector3 operator*(basic_vector3 lhs, double rhs) {
+            return {lhs.x * rhs, lhs.y * rhs, lhs.z * rhs};
+        }
+
+        friend basic_vector3 operator*(double lhs, basic_vector3 rhs) {
+            return rhs * lhs;
+        }
+
+        friend double dot(basic_vector3 lhs, basic_vector3 rhs) {
+            return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
+        }
+
+        friend basic_vector3 cross(basic_vector3 lhs, basic_vector3 rhs) {
+            return {
+                lhs.y * rhs.z - lhs.z * rhs.y,
+                lhs.z * rhs.x - lhs.x * rhs.z,
+                lhs.x * rhs.y - lhs.y * rhs.x
+            };
+        }
     };
 
-    inline vector3 operator+(vector3 lhs, vector3 rhs) {
-        return {lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z};
-    }
-
-    inline vector3 operator-(vector3 lhs, vector3 rhs) {
-        return {lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z};
-    }
-
-    inline vector3 operator*(vector3 lhs, double rhs) {
-        return {lhs.x * rhs, lhs.y * rhs, lhs.z * rhs};
-    }
-
-    inline vector3 operator*(double lhs, vector3 rhs) {
-        return rhs * lhs;
-    }
-
-    inline double dot(vector3 lhs, vector3 rhs) {
-        return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
-    }
-
-    inline vector3 cross(vector3 lhs, vector3 rhs) {
-        return {
-            lhs.y * rhs.z - lhs.z * rhs.y,
-            lhs.z * rhs.x - lhs.x * rhs.z,
-            lhs.x * rhs.y - lhs.y * rhs.x
-        };
-    }
+    using vector3 = basic_vector3<double>;
     
-    struct vector4 {
+    template <typename T>
+    struct basic_vector4 {
         using size_type = int;
 
-        double x;
-        double y;
-        double z;
-        double w;
+        T x;
+        T y;
+        T z;
+        T w;
+
+        basic_vector4() = default;
+        basic_vector4(T x_, T y_, T z_, T w_)
+            : x(x_), y(y_), z(z_), w(w_)
+        {
+
+        }
     
-        double& operator[](size_type i) {
+        T& operator[](size_type i) {
             return i == 0 ? x : i == 1 ? y : i == 2 ? z : w;
         }
 
-        const double& operator[](size_type i) const {
+        const T& operator[](size_type i) const {
             return i == 0 ? x : i == 1 ? y : i == 2 ? z : w;
         }
 
-        vector4& operator*=(double rhs) {
+        basic_vector4& operator*=(T rhs) {
             x *= rhs;
             y *= rhs;
             z *= rhs;
@@ -135,6 +164,8 @@ namespace rayster {
             return *this;
         }
     };
+
+    using vector4 = basic_vector4<double>;
 }
 
 #endif

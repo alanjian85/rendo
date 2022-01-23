@@ -18,7 +18,7 @@ void texture::load_ppm(const std::string& path) {
     std::string format;
     std::getline(file, format);
 
-    texture::size_type height;
+    size_type height;
     file >> width_ >> height;
     pixels_.resize(width_ * height);
 
@@ -270,5 +270,5 @@ color_rgba sampler_cube::operator()(vector3 tex_coord) const {
         sampler.set_wrap(wrap_r_);
     }
     
-    return sampler({u, v});
+    return sampler({u, v, 0});
 }

@@ -36,7 +36,7 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
             if (bc_screen.x < 0 || bc_screen.y < 0 || bc_screen.z < 0)
                 continue;
 
-            auto bc_clip = vector3{bc_screen.x * iaw, bc_screen.y * ibw, bc_screen.z * icw};
+            auto bc_clip = vector3(bc_screen.x * iaw, bc_screen.y * ibw, bc_screen.z * icw);
             bc_clip /= bc_clip.x + bc_clip.y + bc_clip.z;
 
             auto z = bc_clip.x * t[0].z + bc_clip.y * t[1].z + bc_clip.z * t[2].z;
