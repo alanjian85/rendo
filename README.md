@@ -9,5 +9,8 @@ This demo doesn't use any third-party libraries for rendering and image processi
 2. Basic linear algebra, geometry and trigonometry
 3. Have dealt with multi-thread programs
 
+## Images
+![Image-1](images/image-1.png)
+
 ## Rendering in One Hour
 Coming soon.
