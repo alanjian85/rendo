@@ -13,7 +13,7 @@ namespace rayster {
     public:
         using size_type = std::vector<color_rgba>::size_type;
 
-        texture() : width_(0), height_(0) {}
+        texture() : width_(), height_() {}
 
         void load(const std::string& path);
 

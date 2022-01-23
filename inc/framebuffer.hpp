@@ -19,9 +19,9 @@ namespace rayster {
 
         virtual ~framebuffer() noexcept = default;
 
-        framebuffer() : width_() {}
+        framebuffer() : width_(), height_() {}
         framebuffer(size_type width, size_type height)
-            : width_(width),
+            : width_(width), height_(height),
               pixels_(width * height)
         {
 
@@ -32,9 +32,7 @@ namespace rayster {
         }
         
         size_type height() const {
-            if (width_ == 0)
-                return 0;
-            return pixels_.size() / width_;
+            return height_;
         }
 
         double aspect() const {
@@ -67,7 +65,7 @@ namespace rayster {
 
         void write(const std::string& path) const;
     private:
-        size_type width_;
+        size_type width_, height_;
         std::vector<pixel> pixels_;
     };
 }

@@ -5,10 +5,14 @@ using namespace rayster;
 #include <fstream>
 
 void framebuffer::write(const std::string& path) const {
-    std::ofstream file(path);
-    file << "P3\n";
-    file << width() << ' ' << height() << '\n';
-    file << "255\n";
+    std::ofstream file(path, std::ios::binary);
+    file << "P7\n"
+         << "WIDTH " << width_ << '\n'
+         << "HEIGHT " << height_ << '\n'
+         << "DEPTH 4\n"
+         << "MAXVAL 255\n"
+         << "TUPLTYPE RGB_ALPHA\n"
+         << "ENDHDR\n";
 
     auto y = height();
     for (size_type y = 0; y < height(); ++y) {
@@ -16,14 +20,14 @@ void framebuffer::write(const std::string& path) const {
             auto r = static_cast<int>((*this)(x, y).color.r * 255);
             auto g = static_cast<int>((*this)(x, y).color.g * 255);
             auto b = static_cast<int>((*this)(x, y).color.b * 255);
+            auto a = static_cast<int>((*this)(x, y).color.a * 255);
 
             r = std::clamp(r, 0, 255);
             g = std::clamp(g, 0, 255);
             b = std::clamp(b, 0, 255);
+            a = std::clamp(a, 0, 255);
 
-            file << r << ' ';
-            file << g << ' ';
-            file << b << ' ';
+            file.put(r); file.put(g); file.put(b); file.put(a);
         }
     }
 }

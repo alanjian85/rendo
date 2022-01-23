@@ -72,5 +72,5 @@ int main() {
     s.set_pos({-2, 0, 0});
     r.render(pekora.num_vertices(), s);
 
-    r.write("out/image.ppm");
+    r.write("out/image.pam");
 }

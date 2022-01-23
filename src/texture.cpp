@@ -6,7 +6,7 @@ using namespace rayster;
 #include <fstream>
 
 void texture::load(const std::string& path) {
-    std::ifstream file(path);
+    std::ifstream file(path, std::ios::binary);
 
     int max_value, depth;
 
