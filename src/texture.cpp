@@ -18,12 +18,11 @@ void texture::load_ppm(const std::string& path) {
     std::string format;
     std::getline(file, format);
 
-    size_type height;
-    file >> width_ >> height;
-    pixels_.resize(width_ * height);
+    file >> width_ >> height_;
+    pixels_.resize(width_ * height_);
 
     if (format == "P1") {
-        for (size_type y = 0; y < height; ++y) {
+        for (size_type y = 0; y < height_; ++y) {
             for (size_type x = 0; x < width_; ++x) {
                 char c;
                 file >> c;
@@ -38,7 +37,7 @@ void texture::load_ppm(const std::string& path) {
         int max_value;
         file >> max_value;
         
-        for (size_type y = 0; y < height; ++y) {
+        for (size_type y = 0; y < height_; ++y) {
             for (size_type x = 0; x < width_; ++x) {
                 int color;
                 file >> color;
@@ -51,7 +50,7 @@ void texture::load_ppm(const std::string& path) {
         int max_value;
         file >> max_value;
 
-        for (size_type y = 0; y < height; ++y) {
+        for (size_type y = 0; y < height_; ++y) {
             for (size_type x = 0; x < width_; ++x) {
                 int r, g, b;
                 file >> r >> g >> b;
@@ -68,8 +67,7 @@ void texture::load_ppm(const std::string& path) {
         int max_value;
         file >> max_value;
         
-        auto y = height;
-        for (size_type y = 0; y < height; ++y) {
+        for (size_type y = 0; y < height_; ++y) {
             for (size_type x = 0; x < width_; ++x) {
                 auto color = static_cast<unsigned char>(file.get());
 
@@ -83,8 +81,7 @@ void texture::load_ppm(const std::string& path) {
 
         file.ignore(1);
 
-        auto y = height;
-        for (size_type y = 0; y < height; ++y) {
+        for (size_type y = 0; y < height_; ++y) {
             for (size_type x = 0; x < width_; ++x) {
                 unsigned char r, g, b;
                 r =  file.get(); g = file.get(); b = file.get();
@@ -103,7 +100,6 @@ void texture::load_ppm(const std::string& path) {
 void texture::load_pam(const std::string& path) {
     std::ifstream file(path);
 
-    size_type height;
     int max_value, depth;
 
     for (std::string line; std::getline(file, line);) {
@@ -115,7 +111,7 @@ void texture::load_pam(const std::string& path) {
         if (attrib == "WIDTH") {
             stream >> width_;
         } else if (attrib == "HEIGHT") {
-            stream >> height;
+            stream >> height_;
         } else if (attrib == "DEPTH") {
             stream >> depth;
         } else if (attrib == "MAXVAL") {
@@ -125,9 +121,9 @@ void texture::load_pam(const std::string& path) {
         }
     }
 
-    pixels_.resize(width_ * height);
+    pixels_.resize(width_ * height_);
     
-    for (size_type y = 0; y < height; ++y) {
+    for (size_type y = 0; y < height_; ++y) {
         for (size_type x = 0; x < width_; ++x) {
             switch (depth) {
                 case 1: {

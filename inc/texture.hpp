@@ -13,21 +13,16 @@ namespace rayster {
     public:
         using size_type = std::vector<color_rgba>::size_type;
 
-        void load(const std::filesystem::path& path);
+        texture() : width_(0), height_(0) {}
 
-        void resize(size_type width, size_type height) {
-            width_ = width;
-            pixels_.resize(width * height);
-        }
+        void load(const std::filesystem::path& path);
 
         size_type width() const {
             return width_;
         }
 
         size_type height() const {
-            if (width_ == 0)
-                return 0;
-            return pixels_.size() / width_;
+            return pixels_.size() / height_;
         }
 
         color_rgba& operator()(size_type x, size_type y) {
@@ -43,7 +38,7 @@ namespace rayster {
         void load_ppm(const std::string& path);
         void load_pam(const std::string& path);
 
-        size_type width_;
+        size_type width_, height_;
         std::vector<color_rgba> pixels_;
     };
 

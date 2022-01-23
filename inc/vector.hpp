@@ -9,8 +9,7 @@ namespace rayster {
     struct basic_vector2 {
         using size_type = int;
 
-        T x;
-        T y;
+        T x, y;
 
         basic_vector2() = default;
         basic_vector2(T x_, T y_)
@@ -53,9 +52,7 @@ namespace rayster {
     struct basic_vector3 {
         using size_type = int;
 
-        T x;
-        T y;
-        T z;
+        T x, y, z;
 
         basic_vector3() = default;
         basic_vector3(T x_, T y_, T z_)
@@ -136,10 +133,7 @@ namespace rayster {
     struct basic_vector4 {
         using size_type = int;
 
-        T x;
-        T y;
-        T z;
-        T w;
+        T x, y, z, w;
 
         basic_vector4() = default;
         basic_vector4(T x_, T y_, T z_, T w_)
