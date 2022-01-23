@@ -15,7 +15,7 @@ namespace rayster {
 
         texture() : width_(0), height_(0) {}
 
-        void load(const std::filesystem::path& path);
+        void load(const std::string& path);
 
         size_type width() const {
             return width_;
@@ -35,9 +35,6 @@ namespace rayster {
             return pixels_[index];
         }
     private:
-        void load_ppm(const std::string& path);
-        void load_pam(const std::string& path);
-
         size_type width_, height_;
         std::vector<color_rgba> pixels_;
     };
