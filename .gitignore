@@ -31,7 +31,7 @@
 *.out
 *.app
 
-output
+out
 build
 .cache
 .vscode
