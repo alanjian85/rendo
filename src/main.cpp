@@ -12,9 +12,9 @@ public:
     hello_shader(double aspect, const model& m) 
         : model_(m),
           persp_(rad(45), aspect, 0.1, 100),
-          lookat_({0, 1.75, 9}, {0, 1.75, 0}, {0, 1, 0})
+          lookat_({0, 2.15, 6}, {0, 2.15, 0}, {0, 1, 0})
     {
-
+        sampler_.set_wrap(wrapping::clamp_to_edge);
     }
 
     virtual vector4 vert(int n) override {
@@ -27,7 +27,8 @@ public:
     virtual color_rgba frag(vector3 bar) override {
         auto normal = frag_lerp(v_normals, bar);
         auto tex_coord = frag_lerp(v_tex_coords, bar);
-        return sampler_(tex_coord);
+        auto color = sampler_(tex_coord);
+        return color;
     }
 private:
     const model& model_;
