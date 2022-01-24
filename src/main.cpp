@@ -57,20 +57,20 @@ int main() {
 
     shader s(r.aspect());
 
-    model aqua("res/models/aqua.obj");
+    model aqua("assets/models/aqua.obj");
     s.bind_model(aqua);
     s.set_pos({0, 0, 0});
     r.render(aqua.num_vertices(), s);
 
-    model rushia("res/models/rushia.obj");
+    model rushia("assets/models/rushia.obj");
     s.bind_model(rushia);
     s.set_pos({2, 0, 0});
     r.render(rushia.num_vertices(), s);
 
-    model pekora("res/models/pekora.obj");
+    model pekora("assets/models/pekora.obj");
     s.bind_model(pekora);
     s.set_pos({-2, 0, 0});
     r.render(pekora.num_vertices(), s);
 
-    r.write("out/image.pam");
+    r.write("image.pam");
 }
