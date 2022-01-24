@@ -3,11 +3,15 @@ using namespace rayster;
 
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 
 void material_library::load(const std::filesystem::path& path) {
     auto dir = path.parent_path();
 
     std::ifstream file(path);
+    if (!file.is_open())
+        throw std::runtime_error("Failed to open material library file " + path.string());
+
     material* mat = nullptr;
     for (std::string line; std::getline(file, line);) {
         std::istringstream stream(line);

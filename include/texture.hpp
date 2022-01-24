@@ -22,7 +22,7 @@ namespace rayster {
         }
 
         size_type height() const {
-            return pixels_.size() / height_;
+            return height_;
         }
 
         color_rgba& operator()(size_type x, size_type y) {

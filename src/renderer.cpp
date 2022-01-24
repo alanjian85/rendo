@@ -1,10 +1,15 @@
 #include "renderer.hpp"
 using namespace rayster;
 
+#include <cassert>
 #include <iostream>
 #include <numeric>
 
 void renderer::render_triangle(triangle t, basic_shader& s) {
+    assert(t[0].w != 0);
+    assert(t[1].w != 0);
+    assert(t[2].w != 0);
+
     auto iaw = 1 / t[0].w;
     auto ibw = 1 / t[1].w;
     auto icw = 1 / t[2].w;
@@ -37,6 +42,7 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
                 continue;
 
             auto bc_clip = vector3(bc_screen.x * iaw, bc_screen.y * ibw, bc_screen.z * icw);
+            assert(bc_clip.x + bc_clip.y + bc_clip.z != 0);
             bc_clip /= bc_clip.x + bc_clip.y + bc_clip.z;
 
             auto z = bc_clip.x * t[0].z + bc_clip.y * t[1].z + bc_clip.z * t[2].z;

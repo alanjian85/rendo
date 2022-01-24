@@ -3,9 +3,13 @@ using namespace rayster;
 
 #include <algorithm>
 #include <fstream>
+#include <stdexcept>
 
 void framebuffer::write(const std::string& path) const {
     std::ofstream file(path, std::ios::binary);
+    if (!file.is_open())
+        throw std::runtime_error("Failed to write framebuffer to path " + path);
+    
     file << "P7\n"
          << "WIDTH " << width_ << '\n'
          << "HEIGHT " << height_ << '\n'

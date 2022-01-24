@@ -4,9 +4,12 @@ using namespace rayster;
 #include <algorithm>
 #include <cmath>
 #include <fstream>
+#include <stdexcept>
 
 void texture::load(const std::string& path) {
     std::ifstream file(path, std::ios::binary);
+    if (!file.is_open())
+        throw std::runtime_error("Failed to open texture file " + path);
 
     int max_value, depth;
 

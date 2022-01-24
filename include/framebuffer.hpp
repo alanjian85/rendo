@@ -1,6 +1,7 @@
 #ifndef RAYSTER_FRAMEBUFFER_HPP
 #define RAYSTER_FRAMEBUFFER_HPP
 
+#include <cassert>
 #include <cstdlib>
 #include <string>
 #include <vector>
@@ -36,10 +37,8 @@ namespace rayster {
         }
 
         double aspect() const {
-            auto h = height();
-            if (h == 0)
-                return 0;
-            return width_ / height();
+            assert(height_ != 0);
+            return width_ / height_;
         }
 
         void clear(color_rgba color) {
