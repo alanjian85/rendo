@@ -5,25 +5,10 @@
 #include "vector.hpp"
 
 namespace rayster {
-    struct persp : public matrix4 {
-    public:
-        persp(double fov, double aspect, double near, double far);
-    };
-
-    class rotate : public matrix4 {
-    public:
-        rotate(double angle, vector3 v);
-    };
-
-    class translate : public matrix4 {
-    public:
-        translate(vector3 offset);
-    };
-
-    class lookat : public matrix4 {
-    public:
-        lookat(vector3 eye, vector3 center, vector3 up);
-    };
+    matrix4 make_lookat(vector3 eye, vector3 center, vector3 up);
+    matrix4 make_persp(double fov, double aspect, double near, double far);
+    matrix4 make_rotate(double angle, vector3 v);
+    matrix4 make_translate(vector3 offset);
 }
 
 #endif

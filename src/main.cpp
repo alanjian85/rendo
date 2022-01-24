@@ -11,8 +11,8 @@ using namespace rayster;
 class shader : public basic_shader {
 public:
     shader(double aspect)        
-        : persp_(rad(45), aspect, 0.1, 100),
-          lookat_({-4, 2.15, 6}, {0, 2.15, 0}, {0, 1, 0})
+        : persp_(make_persp(rad(45), aspect, 0.1, 100)),
+          lookat_(make_lookat({-4, 2.15, 6}, {0, 2.15, 0}, {0, 1, 0}))
     {
         sampler_.set_wrap(wrapping::clamp_to_edge);
     }
@@ -21,7 +21,7 @@ public:
         v_normals[n % 3] = model_->get_normal(n);
         v_tex_coords[n % 3] = model_->get_tex_coord(n);
         sampler_.bind_texture(model_->get_mat(n)->diffuse_map);
-        return persp_ * lookat_ * *translate_ * model_->get_vertex(n);
+        return persp_ * lookat_ * translate_ * model_->get_vertex(n);
     }
 
     virtual color_rgba frag(vector3 bar) override {
@@ -36,14 +36,14 @@ public:
     }
 
     void set_pos(vector3 pos) {
-        translate_.emplace(pos);
+        translate_= make_translate(pos);
     }
 private:
     const model* model_;
 
-    persp persp_;
-    lookat lookat_;
-    std::optional<translate> translate_;
+    matrix4 persp_;
+    matrix4 lookat_;
+    matrix4 translate_;
 
     vector3 v_tex_coords[3];
     vector3 v_normals[3];
