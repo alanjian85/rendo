@@ -1,5 +1,5 @@
-#ifndef RAYSTER_MATERIAL_HPP
-#define RAYSTER_MATERIAL_HPP
+#ifndef BOX_MATERIAL_HPP
+#define BOX_MATERIAL_HPP
 
 #include <string>
 #include <filesystem>
@@ -8,7 +8,7 @@
 #include "color.hpp"
 #include "texture.hpp"
 
-namespace rayster {
+namespace box {
     struct material {
         color_rgb ambient;
         color_rgb diffuse;

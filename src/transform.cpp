@@ -1,10 +1,10 @@
 #include "transform.hpp"
-using namespace rayster;
+using namespace box;
 
 #include <cassert>
 #include <cmath>
 
-matrix4 rayster::make_lookat(vector3 eye, vector3 center, vector3 up) {	
+matrix4 box::make_lookat(vector3 eye, vector3 center, vector3 up) {	
 	auto f = (center - eye).normalize();
     auto s = cross(f, up).normalize();
     auto u = cross(s, f);
@@ -26,7 +26,7 @@ matrix4 rayster::make_lookat(vector3 eye, vector3 center, vector3 up) {
 	return res;
 }
 
-matrix4 rayster::make_persp(double fov, double aspect, double near, double far) {
+matrix4 box::make_persp(double fov, double aspect, double near, double far) {
     auto t = std::tan(fov / 2);
 
 	assert(t != 0);
@@ -42,7 +42,7 @@ matrix4 rayster::make_persp(double fov, double aspect, double near, double far) 
 	return res;
 }
 
-matrix4 rayster::make_rotate(double angle, vector3 v) {
+matrix4 box::make_rotate(double angle, vector3 v) {
 	v = v.normalize();
 
     auto c = std::cos(angle);
@@ -62,7 +62,7 @@ matrix4 rayster::make_rotate(double angle, vector3 v) {
 	return res;
 }
 
-matrix4 rayster::make_translate(vector3 offset) {
+matrix4 box::make_translate(vector3 offset) {
 	matrix4 res;
 	res(0, 0) = 1;
 	res(0, 3) = offset.x;

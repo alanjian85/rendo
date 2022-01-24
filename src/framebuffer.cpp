@@ -1,5 +1,5 @@
 #include "framebuffer.hpp"
-using namespace rayster;
+using namespace box;
 
 #include <algorithm>
 #include <fstream>

@@ -1,5 +1,5 @@
 #include "texture.hpp"
-using namespace rayster;
+using namespace box;
 
 #include <algorithm>
 #include <cmath>

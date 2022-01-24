@@ -1,5 +1,5 @@
-#ifndef RAYSTER_RENDERER_HPP
-#define RAYSTER_RENDERER_HPP
+#ifndef BOX_RENDERER_HPP
+#define BOX_RENDERER_HPP
 
 #include <fstream>
 #include <memory>
@@ -10,7 +10,7 @@
 #include "shader.hpp"
 #include "model.hpp"
 
-namespace rayster {
+namespace box {
     class renderer {
     public:
         renderer()

@@ -1,12 +1,12 @@
-#ifndef RAYSTER_MATRIX_HPP
-#define RAYSTER_MATRIX_HPP
+#ifndef BOX_MATRIX_HPP
+#define BOX_MATRIX_HPP
 
 #include <cstdlib>
 
 #include "vector.hpp"
 #include "vector.hpp"
 
-namespace rayster {
+namespace box {
     class matrix4 {
     public:
         using size_type = std::size_t;

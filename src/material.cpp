@@ -1,5 +1,5 @@
 #include "material.hpp"
-using namespace rayster;
+using namespace box;
 
 #include <fstream>
 #include <sstream>

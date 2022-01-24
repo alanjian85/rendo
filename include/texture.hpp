@@ -1,5 +1,5 @@
-#ifndef RAYSTER_TEXTURE_HPP
-#define RAYSTER_TEXTURE_HPP
+#ifndef BOX_TEXTURE_HPP
+#define BOX_TEXTURE_HPP
 
 #include <filesystem>
 #include <string>
@@ -8,7 +8,7 @@
 #include "color.hpp"
 #include "vector.hpp"
 
-namespace rayster {
+namespace box {
     class texture {
     public:
         texture() : width_(), height_() {}

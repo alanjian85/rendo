@@ -1,5 +1,5 @@
 #include "geometry.hpp"
-using namespace rayster;
+using namespace box;
 
 #include <cmath>
 

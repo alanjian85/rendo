@@ -1,5 +1,5 @@
-#ifndef RAYSTER_FRAMEBUFFER_HPP
-#define RAYSTER_FRAMEBUFFER_HPP
+#ifndef BOX_FRAMEBUFFER_HPP
+#define BOX_FRAMEBUFFER_HPP
 
 #include <cassert>
 #include <cstdlib>
@@ -8,7 +8,7 @@
 
 #include "color.hpp"
 
-namespace rayster {
+namespace box {
     struct pixel {
         color_rgba color;
         double depth;

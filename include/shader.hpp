@@ -1,9 +1,9 @@
-#ifndef RAYSTER_SHADER_HPP
-#define RAYSTER_SHADER_HPP
+#ifndef BOX_SHADER_HPP
+#define BOX_SHADER_HPP
 
 #include "color.hpp"
 
-namespace rayster {
+namespace box {
     class basic_shader {
     public:
         virtual ~basic_shader() noexcept = default;

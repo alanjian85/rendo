@@ -1,5 +1,5 @@
-#ifndef RAYSTER_MODEL_HPP
-#define RAYSTER_MODEL_HPP
+#ifndef BOX_MODEL_HPP
+#define BOX_MODEL_HPP
 
 #include <cstdlib>
 #include <filesystem>
@@ -9,7 +9,7 @@
 #include "material.hpp"
 #include "vector.hpp"
 
-namespace rayster {
+namespace box {
     class model {
     public:
         model() = default;

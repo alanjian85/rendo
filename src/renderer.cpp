@@ -1,5 +1,5 @@
 #include "renderer.hpp"
-using namespace rayster;
+using namespace box;
 
 #include <cassert>
 #include <iostream>

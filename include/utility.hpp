@@ -1,6 +1,6 @@
-#ifndef RAYSTER_UTILITY_HPP
+#ifndef BOX_UTILITY_HPP
 
-namespace rayster {
+namespace box {
     constexpr auto pi = 3.14159;
 
     constexpr auto rad(double deg) {

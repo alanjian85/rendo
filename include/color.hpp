@@ -1,7 +1,7 @@
-#ifndef RAYSTER_COLOR_HPP
-#define RAYSTER_COLOR_HPP
+#ifndef BOX_COLOR_HPP
+#define BOX_COLOR_HPP
 
-namespace rayster {
+namespace box {
     struct color_rgb {
         double r;
         double g;

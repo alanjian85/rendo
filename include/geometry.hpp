@@ -1,12 +1,12 @@
-#ifndef RAYSTER_GEOMETRY_HPP
-#define RAYSTER_GEOMETRY_HPP
+#ifndef BOX_GEOMETRY_HPP
+#define BOX_GEOMETRY_HPP
 
 #include <array>
 #include <cstdlib>
 
 #include "vector.hpp"
 
-namespace rayster {
+namespace box {
     struct triangle {
         using size_type = int;
 

@@ -6,7 +6,7 @@
 #include "transform.hpp"
 #include "model.hpp"
 #include "utility.hpp"
-using namespace rayster;
+using namespace box;
 
 class shader : public basic_shader {
 public:

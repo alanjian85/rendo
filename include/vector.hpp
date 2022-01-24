@@ -1,10 +1,10 @@
-#ifndef RAYSTER_VECTOR_HPP
-#define RAYSTER_VECTOR_HPP
+#ifndef BOX_VECTOR_HPP
+#define BOX_VECTOR_HPP
 
 #include <cmath>
 #include <limits>
 
-namespace rayster {
+namespace box {
     template <typename T>
     struct basic_vector2 {
         using size_type = int;
