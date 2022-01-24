@@ -70,7 +70,8 @@ void texture::load(const std::string& path) {
                     (*this)(x, y) = {
                         static_cast<double>(r) / max_value,
                         static_cast<double>(g) / max_value,
-                        static_cast<double>(b) / max_value
+                        static_cast<double>(b) / max_value,
+                        1
                     };
 
                     break;

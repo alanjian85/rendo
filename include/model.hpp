@@ -37,7 +37,7 @@ namespace rayster {
 
         const material* get_mat(int n) const {
             for (auto& mat : materials_) {
-                if (n <= mat.first) {
+                if (n >= mat.first) {
                     return mat.second;
                 }
             }

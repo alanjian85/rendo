@@ -66,7 +66,7 @@ void model::load(const std::filesystem::path& path) {
             std::string mat;
             stream >> mat;
 
-            materials_.emplace_back(face_vertices_.size() - 1, &mtllib_[mat]);
+            materials_.emplace_back(face_vertices_.size(), &mtllib_[mat]);
         }
     }
 }
