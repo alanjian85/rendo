@@ -11,6 +11,8 @@ This demo doesn't use any third-party libraries for rendering and image processi
 
 ## Images
 ![Image-1](images/image-1.png)
+![Image-2](images/image-2.png)
+![Image-3](images/image-3.png)
 
 ## Rendering in One Hour
 Coming soon.
