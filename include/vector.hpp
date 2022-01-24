@@ -7,8 +7,6 @@
 namespace box {
     template <typename T>
     struct basic_vector2 {
-        using size_type = int;
-
         T x, y;
 
         basic_vector2() = default;
@@ -18,11 +16,11 @@ namespace box {
 
         }
 
-        T& operator[](size_type i) {
+        T& operator[](int i) {
             return i == 0 ? x : y;
         }
 
-        const T& operator[](size_type i) const {
+        const T& operator[](int i) const {
             return i == 0 ? x : y;
         }
 
@@ -50,8 +48,6 @@ namespace box {
 
     template <typename T>
     struct basic_vector3 {
-        using size_type = int;
-
         T x, y, z;
 
         basic_vector3() = default;
@@ -61,11 +57,11 @@ namespace box {
 
         }
 
-        T& operator[](size_type i) {
+        T& operator[](int i) {
             return i == 0 ? x : i == 1 ? y : z;
         }
 
-        const T& operator[](size_type i) const {
+        const T& operator[](int i) const {
             return i == 0 ? x : i == 1 ? y : z;
         }
 
@@ -131,8 +127,6 @@ namespace box {
     
     template <typename T>
     struct basic_vector4 {
-        using size_type = int;
-
         T x, y, z, w;
 
         basic_vector4() = default;
@@ -142,11 +136,11 @@ namespace box {
 
         }
     
-        T& operator[](size_type i) {
+        T& operator[](int i) {
             return i == 0 ? x : i == 1 ? y : i == 2 ? z : w;
         }
 
-        const T& operator[](size_type i) const {
+        const T& operator[](int i) const {
             return i == 0 ? x : i == 1 ? y : i == 2 ? z : w;
         }
 

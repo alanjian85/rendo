@@ -8,9 +8,7 @@
 
 namespace box {
     class matrix4 {
-    public:
-        using size_type = std::size_t;
-    
+    public:    
         matrix4()
             : matrix4(0, 0, 0, 0,
                       0, 0, 0, 0,
@@ -31,12 +29,20 @@ namespace box {
             entries_[3][0] = e03; entries_[3][1] = e13; entries_[3][2] = e23; entries_[3][3] = e33;
         }
 
-        double& operator()(size_type i, size_type j) {
+        double& operator()(int i, int j) {
             return entries_[j][i];
         }
 
-        const double& operator()(size_type i, size_type j) const {
+        const double& operator()(int i, int j) const {
             return entries_[j][i];
+        }
+
+        double* operator[](int i) {
+            return entries_[i];
+        }
+
+        const double* operator[](int i) const {
+            return entries_[i];
         }
 
         matrix4 transpose() const {
@@ -53,7 +59,6 @@ namespace box {
 
     matrix4 operator*(matrix4 lhs, matrix4 rhs);
     vector4 operator*(matrix4 lhs, vector4 rhs);
-    vector3 operator*(matrix4 lhs, vector3 rhs);
 }
 
 #endif
