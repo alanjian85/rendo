@@ -34,8 +34,8 @@ void texture::load(const std::string& path) {
 
     pixels_.resize(width_ * height_);
     
-    for (size_type y = 0; y < height_; ++y) {
-        for (size_type x = 0; x < width_; ++x) {
+    for (int y = 0; y < height_; ++y) {
+        for (int x = 0; x < width_; ++x) {
             switch (depth) {
                 case 1: {
                     unsigned char r;
@@ -125,8 +125,8 @@ color_rgba sampler2::operator()(vector3 tex_coord) const {
         }
     }
 
-    auto x = static_cast<texture::size_type>(tex_coord.x * (tex_->width() - 1));
-    auto y = static_cast<texture::size_type>((1 - tex_coord.y) * (tex_->height() - 1));
+    auto x = static_cast<int>(tex_coord.x * (tex_->width() - 1));
+    auto y = static_cast<int>((1 - tex_coord.y) * (tex_->height() - 1));
     return (*tex_)(x, y);
 }
 

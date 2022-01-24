@@ -22,7 +22,7 @@ namespace rayster {
             return i == 0 ? a : i == 1 ? b : c;
         }
 
-        vector3 barycentric(vector2 p) const;
+        vector3 barycentric(vector2i p) const;
     };
 }
 

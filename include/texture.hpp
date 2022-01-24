@@ -11,31 +11,29 @@
 namespace rayster {
     class texture {
     public:
-        using size_type = std::vector<color_rgba>::size_type;
-
         texture() : width_(), height_() {}
 
         void load(const std::string& path);
 
-        size_type width() const {
+        int width() const {
             return width_;
         }
 
-        size_type height() const {
+        int height() const {
             return height_;
         }
 
-        color_rgba& operator()(size_type x, size_type y) {
+        color_rgba& operator()(int x, int y) {
             auto index = y * width_ + x;
             return pixels_[index];
         }
 
-        const color_rgba& operator()(size_type x, size_type y) const {
+        const color_rgba& operator()(int x, int y) const {
             auto index = y * width_ + x;
             return pixels_[index];
         }
     private:
-        size_type width_, height_;
+        int width_, height_;
         std::vector<color_rgba> pixels_;
     };
 

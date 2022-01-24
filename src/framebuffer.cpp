@@ -19,8 +19,8 @@ void framebuffer::write(const std::string& path) const {
          << "ENDHDR\n";
 
     auto y = height();
-    for (size_type y = 0; y < height(); ++y) {
-        for (size_type x = 0; x < width(); ++x) {
+    for (int y = 0; y < height(); ++y) {
+        for (int x = 0; x < width(); ++x) {
             auto r = static_cast<int>((*this)(x, y).color.r * 255);
             auto g = static_cast<int>((*this)(x, y).color.g * 255);
             auto b = static_cast<int>((*this)(x, y).color.b * 255);

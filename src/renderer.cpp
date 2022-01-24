@@ -18,20 +18,20 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
     t[1] *= ibw;
     t[2] *= icw;
 
-    vector2 clamp = {
-        static_cast<double>(fb_.width() - 1),
-        static_cast<double>(fb_.height() - 1)
+    vector2i clamp = {
+        fb_.width() - 1,
+        fb_.height() - 1
     };
 
-    vector2 min = clamp;
-    vector2 max = {0, 0};
+    vector2i min = clamp;
+    vector2i max = {0, 0};
     for (int i = 0; i < 3; ++i) {
-        t[i].x = static_cast<int>((t[i].x + 1) / 2 * (fb_.width() - 1));
-        t[i].y = static_cast<int>((1 - t[i].y) / 2 * (fb_.height() - 1));
+        t[i].x = (t[i].x + 1) / 2 * (fb_.width() - 1);
+        t[i].y = (1 - t[i].y) / 2 * (fb_.height() - 1);
 
         for (int j = 0; j < 2; ++j) {
-            min[j] = std::max(0.0, std::min(min[j], t[i][j]));
-            max[j] = std::min(clamp[j], std::max(max[j], t[i][j]));
+            min[j] = std::max(0, std::min(min[j], static_cast<int>(t[i][j])));
+            max[j] = std::min(clamp[j], std::max(max[j], static_cast<int>(t[i][j])));
         }
     }
 
