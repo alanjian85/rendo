@@ -10,7 +10,7 @@ This demo doesn't use any third-party libraries for rendering and image processi
 3. Have dealt with multi-thread programs
 
 ## Images
-![Image-1](img/image-1.png)
+![Image-1](images/image-1.png)
 
 ## Rendering in One Hour
 Coming soon.
