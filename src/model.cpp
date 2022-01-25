@@ -19,11 +19,8 @@ void model::load(const std::filesystem::path& path) {
         stream >> attrib;
 
         if (attrib == "v") {
-            vector4 v;
+            vector3 v;
             stream >> v.x >> v.y >> v.z;
-            if (!(stream >> v.w)) {
-                v.w = 1;
-            }
             vertices_.push_back(v);
         } else if (attrib == "vt") {
             vector3 t;

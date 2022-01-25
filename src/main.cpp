@@ -13,8 +13,7 @@ class object_shader : public basic_shader {
 public:
     object_shader(const camera& cam, double aspect) 
         : camera_(cam),
-          aspect_(aspect),
-          rotate_(make_rotate(rad(45), {1, 1, 1}))
+          aspect_(aspect)
     {
         cubemap_.load("assets/textures/skybox/");
         sampler_cube_.bind_cubemap(cubemap_);
@@ -22,10 +21,10 @@ public:
 
     virtual vector4 vert(int n) override {
         auto pos = model_->get_vertex(n);
-        v_pos[n % 3] = {pos.x, pos.y, pos.z};
+        v_pos[n % 3] = pos;
         v_normal[n % 3] = model_->get_normal(n);
         sampler_.bind_texture(model_->get_mat(n)->diffuse_map);
-        return camera_.proj(aspect_) * camera_.view() * rotate_ * pos;
+        return camera_.proj(aspect_) * camera_.view() * vector4(pos, 1);
     }
 
     virtual std::optional<color_rgba> frag(vector3 bar) override {
@@ -46,8 +45,6 @@ private:
     const camera& camera_;
     const model* model_;
 
-    matrix4 rotate_;
-
     vector3 v_pos[3];
     vector3 v_normal[3];
 
@@ -64,7 +61,9 @@ int main() {
         r.set_face_culling(cull_type::back);
 
         camera cam;
+        cam.pos.y = 6;
         cam.pos.z = 6;
+        cam.pitch = -45;
 
         model cube("assets/models/cube.obj");
         object_shader s(cam, r.aspect());

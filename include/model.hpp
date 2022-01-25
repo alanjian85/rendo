@@ -23,7 +23,7 @@ namespace box {
             return face_vertices_.size();
         }
 
-        vector4 get_vertex(int n) const {
+        vector3 get_vertex(int n) const {
             return vertices_[face_vertices_[n]];
         }
 
@@ -44,7 +44,7 @@ namespace box {
             return nullptr;
         }
     private:
-        std::vector<vector4> vertices_;
+        std::vector<vector3> vertices_;
         std::vector<vector3> tex_coords_;
         std::vector<vector3> normals_;
 

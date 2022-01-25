@@ -47,6 +47,9 @@ namespace box {
     using vector2i = basic_vector2<int>;
 
     template <typename T>
+    struct basic_vector4;
+
+    template <typename T>
     struct basic_vector3 {
         T x, y, z;
 
@@ -56,6 +59,7 @@ namespace box {
         {
 
         }
+        explicit basic_vector3(basic_vector4<T> v);
 
         T& operator[](int i) {
             return i == 0 ? x : i == 1 ? y : z;
@@ -143,6 +147,11 @@ namespace box {
         {
 
         }
+        basic_vector4(basic_vector3<T> v, T w_) 
+            : x(v.x), y(v.y), z(v.z), w(w_)
+        {
+
+        }
     
         T& operator[](int i) {
             return i == 0 ? x : i == 1 ? y : i == 2 ? z : w;
@@ -162,6 +171,13 @@ namespace box {
     };
 
     using vector4 = basic_vector4<double>;
+
+    template <typename T>
+    inline basic_vector3<T>::basic_vector3(basic_vector4<T> v) 
+        : x(v.x), y(v.y), z(v.z)
+    {
+
+    }
 }
 
 #endif

@@ -24,8 +24,8 @@ namespace box {
 
         vector3 normal() const {
             return cross(
-                vector3(b.x - a.x, b.y - a.y, b.z - a.z),
-                vector3(c.x - a.x, c.y - a.y, c.z - a.z)
+                vector3(b) - vector3(a),
+                vector3(c) - vector3(a)
             );
         }
 
