@@ -1,4 +1,5 @@
 #ifndef BOX_UTILITY_HPP
+#define BOX_UTILITY_HPP
 
 namespace box {
     constexpr auto pi = 3.14159;

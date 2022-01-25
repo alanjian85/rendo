@@ -1,6 +1,7 @@
 #include <iostream>
 #include <optional>
 
+#include "camera.hpp"
 #include "renderer.hpp"
 #include "texture.hpp"
 #include "transform.hpp"
@@ -10,18 +11,17 @@ using namespace box;
 
 class shader : public basic_shader {
 public:
-    shader(double aspect)        
-        : persp_(make_persp(rad(45), aspect, 0.1, 100)),
-          lookat_(make_lookat({0, 0, 6}, {0, 0, 0}, {0, 1, 0})),
+    shader(double aspect) 
+        : aspect_(aspect),
           rotate_(make_rotate(rad(45), {1, 1, 1}))
     {
-        sampler_.set_wrap(wrapping::clamp_to_edge);
+        camera_.pos.z = 6;
     }
 
     virtual vector4 vert(int n) override {
         v_tex_coords[n % 3] = model_->get_tex_coord(n);
         sampler_.bind_texture(model_->get_mat(n)->diffuse_map);
-        return persp_ * lookat_ * rotate_ * model_->get_vertex(n);
+        return camera_.proj(aspect_) * camera_.view() * rotate_ * model_->get_vertex(n);
     }
 
     virtual color_rgba frag(vector3 bar) override {
@@ -36,8 +36,8 @@ public:
 private:
     const model* model_;
 
-    matrix4 persp_;
-    matrix4 lookat_;
+    double aspect_;
+    camera camera_;
     matrix4 rotate_;
 
     vector3 v_tex_coords[3];
