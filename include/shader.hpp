@@ -1,6 +1,8 @@
 #ifndef BOX_SHADER_HPP
 #define BOX_SHADER_HPP
 
+#include <optional>
+
 #include "color.hpp"
 
 namespace box {
@@ -9,7 +11,7 @@ namespace box {
         virtual ~basic_shader() noexcept = default;
 
         virtual vector4 vert(int n) = 0;
-        virtual color_rgba frag(vector3 bar) = 0;
+        virtual std::optional<color_rgba> frag(vector3 bar) = 0;
     protected:
         template <typename T>
         static T frag_lerp(T t[3], vector3 bar) {

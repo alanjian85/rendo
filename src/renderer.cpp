@@ -49,9 +49,8 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
 
             if (fb_.depth_test(x, y, z)) {
                 auto color = s.frag(bc_clip);
-                if (color.a < 0.1)
-                    continue;
-                fb_(x, y).color = color;
+                if (color.has_value())
+                    fb_(x, y).color = *color;
                 fb_(x, y).depth = z;
             }
         }

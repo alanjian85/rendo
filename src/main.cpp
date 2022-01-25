@@ -24,9 +24,11 @@ public:
         return camera_.proj(aspect_) * camera_.view() * rotate_ * model_->get_vertex(n);
     }
 
-    virtual color_rgba frag(vector3 bar) override {
+    virtual std::optional<color_rgba> frag(vector3 bar) override {
         auto tex_coord = frag_lerp(v_tex_coords, bar);
         auto color = sampler_(tex_coord);
+        if (color.a == 0)
+            return std::nullopt;
         return color;
     }
     
