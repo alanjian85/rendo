@@ -13,9 +13,10 @@ class shader : public basic_shader {
 public:
     shader(double aspect) 
         : aspect_(aspect),
-          rotate_(make_rotate(rad(45), {1, 1, 1}))
+          rotate_(make_rotate(rad(0), {1, 1, 1}))
     {
         camera_.pos.z = 6;
+        camera_.pos.y = 3;
     }
 
     virtual vector4 vert(int n) override {
@@ -27,7 +28,7 @@ public:
     virtual std::optional<color_rgba> frag(vector3 bar) override {
         auto tex_coord = frag_lerp(v_tex_coords, bar);
         auto color = sampler_(tex_coord);
-        if (color.a == 0)
+        if (color.a < 0.1)
             return std::nullopt;
         return color;
     }
@@ -51,11 +52,11 @@ int main() {
     try {
         renderer r;
         r.clear({0.90, 0.88, 0.84, 1.0});
-        r.set_face_culling(cull_type::front);
+        r.set_face_culling(cull_type::back);
 
         shader s(r.aspect());
 
-        model cube("assets/models/cube.obj");
+        model cube("assets/models/aqua.obj");
         s.bind_model(cube);
         r.render(cube.num_vertices(), s);
 
