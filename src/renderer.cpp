@@ -18,6 +18,18 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
     t[1] *= ibw;
     t[2] *= icw;
 
+    auto d = dot(-vector3(t[0].x, t[0].y, t[0].z), t.normal());
+    switch (face_culling_) {
+        case cull_type::front:
+            if (d < 0)
+                return;
+            break;
+        case cull_type::back:
+            if (d >= 0)
+                return;
+            break;
+    }
+
     vector2i clamp = {
         fb_.width() - 1,
         fb_.height() - 1

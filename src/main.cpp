@@ -51,6 +51,7 @@ int main() {
     try {
         renderer r;
         r.clear({0.90, 0.88, 0.84, 1.0});
+        r.set_face_culling(cull_type::front);
 
         shader s(r.aspect());
 

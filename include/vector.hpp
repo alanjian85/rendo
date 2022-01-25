@@ -65,6 +65,10 @@ namespace box {
             return i == 0 ? x : i == 1 ? y : z;
         }
 
+        basic_vector3 operator-() const {
+            return {-x, -y, -z};
+        }
+
         basic_vector3& operator*=(T rhs) {
             x *= rhs;
             y *= rhs;
