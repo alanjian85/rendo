@@ -81,6 +81,24 @@ namespace box {
         const texture* tex_;
     };
 
+    struct cubemap {
+        texture right;
+        texture left;
+        texture top;
+        texture bottom;
+        texture back;
+        texture front;
+
+        void load(const std::filesystem::path& path) {
+            right.load(path / "right.pam");
+            left.load(path / "left.pam");
+            top.load(path / "top.pam");
+            bottom.load(path / "bottom.pam");
+            back.load(path / "back.pam");
+            front.load(path / "front.pam");
+        }
+    };
+
     class sampler_cube {
     public:
         sampler_cube() noexcept
@@ -119,6 +137,15 @@ namespace box {
 
         void bind_front(const texture& front) {
             front_ = &front;
+        }
+
+        void bind_cubemap(const cubemap& c) {
+            right_ = &c.right;
+            left_ = &c.left;
+            top_ = &c.top;
+            bottom_ = &c.bottom;
+            back_ = &c.back;
+            front_ = &c.front;
         }
 
         wrapping wrap_s() const {

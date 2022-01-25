@@ -125,6 +125,10 @@ namespace box {
                 lhs.x * rhs.y - lhs.y * rhs.x
             };
         }
+
+        friend basic_vector3 reflect(basic_vector3 i, basic_vector3 n) {
+            return i - 2 * dot(n, i) * n;
+        }
     };
 
     using vector3 = basic_vector3<double>;
