@@ -22,7 +22,6 @@ matrix4 box::make_lookat(vector3 eye, vector3 center, vector3 up) {
 	res(0, 3) = -dot(s, eye);
 	res(1, 3) = -dot(u, eye);
 	res(2, 3) =  dot(f, eye);
-	res(3, 3) = 1;
 	return res;
 }
 
@@ -58,18 +57,13 @@ matrix4 box::make_rotate(double angle, vector3 v) {
 	res(2, 0) = (1 - c) * v.x * v.z - s * v.y;
 	res(2, 1) = (1 - c) * v.y * v.z + s * v.x;
 	res(2, 2) = c + (1 - c) * v.x * v.x;
-	res(3, 3) = 1;
 	return res;
 }
 
 matrix4 box::make_translate(vector3 offset) {
 	matrix4 res;
-	res(0, 0) = 1;
 	res(0, 3) = offset.x;
-	res(1, 1) = 1;
 	res(1, 3) = offset.y;
-	res(2, 2) = 1;
 	res(2, 3) = offset.z;
-	res(3, 3) = 1;
 	return res;
 }
