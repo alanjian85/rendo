@@ -11,12 +11,12 @@ using namespace box;
 
 class object_shader : public basic_shader {
 public:
-    object_shader(const camera& cam, double aspect) 
+    object_shader(const camera& cam, double aspect, const sampler_cube& sampler_cube) 
         : camera_(cam),
-          aspect_(aspect)
+          aspect_(aspect),
+          sampler_(sampler_cube)
     {
-        cubemap_.load("assets/textures/skybox/");
-        sampler_cube_.bind_cubemap(cubemap_);
+
     }
 
     virtual vector4 vert(int n) override {
@@ -30,7 +30,7 @@ public:
         auto pos = frag_lerp(v_pos, bar);
         auto normal = frag_lerp(v_normal, bar).normalize();
         auto cam_dir = (pos - camera_.pos).normalize();
-        auto color = sampler_cube_(reflect(cam_dir, normal));
+        auto color = sampler_(reflect(cam_dir, normal));
         if (color.a < 0.1)
             return std::nullopt;
         return color;
@@ -44,14 +44,42 @@ private:
     const camera& camera_;
     const model* model_;
 
+    const sampler_cube& sampler_;
+
     matrix4 world_;
     vector3 v_pos[3];
     vector3 v_normal[3];
+};
 
-    sampler2 sampler_;
+class skybox_shader : public basic_shader {
+public:
+    skybox_shader(const camera& cam, double aspect, const sampler_cube& sampler_cube, const model& m) 
+        : camera_(cam),
+          aspect_(aspect),
+          sampler_(sampler_cube),
+          model_(m)
+    {
 
-    cubemap cubemap_;
-    sampler_cube sampler_cube_;
+    }
+
+    virtual vector4 vert(int n) override {
+        auto pos = model_.get_vertex(n);
+        v_pos[n % 3] = pos;
+        return camera_.proj(aspect_) * matrix4(matrix3(camera_.view())) * vector4(pos, 1);
+    }
+
+    virtual std::optional<color_rgba> frag(vector3 bar) override {
+        auto pos = frag_lerp(v_pos, bar);
+        return color_rgba(pos.x / 2 + 0.5, pos.y / 2 + 0.5, pos.z / 2 + 0.5, 1);
+        return sampler_(pos);
+    }
+private:
+    double aspect_;
+    const camera& camera_;
+    const sampler_cube& sampler_;
+    const model& model_;
+
+    vector3 v_pos[3];
 };
 
 int main() {
@@ -62,11 +90,19 @@ int main() {
 
         camera cam;
         cam.pos.z = 3;
+        cam.pos.y = 3;
 
-        model cube("assets/models/african_head.obj");
-        object_shader s(cam, r.aspect());
-        s.bind_model(cube);
-        r.render(cube.num_vertices(), s);
+        cubemap skybox;
+        skybox.load("assets/textures/skybox");
+
+        model head("assets/models/african_head.obj");
+        object_shader os(cam, r.aspect(), skybox.sampler);
+        os.bind_model(head);
+        //r.render(head.num_vertices(), os);
+
+        model cube("assets/models/cube.obj");
+        skybox_shader ss(cam, r.aspect(), skybox.sampler, cube);
+        r.render(cube.num_vertices(), ss);
 
         r.write("image.pam");
     } catch (std::exception& e) {

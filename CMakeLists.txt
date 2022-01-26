@@ -9,7 +9,6 @@ set(BOX_SOURCES
         src/main.cpp
         src/framebuffer.cpp
         src/geometry.cpp
-        src/matrix.cpp
         src/renderer.cpp
         src/texture.cpp
         src/transform.cpp

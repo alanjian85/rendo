@@ -27,8 +27,8 @@ namespace box {
             return vertices_[face_vertices_[n]];
         }
 
-        vector3 get_tex_coord(int n) const {
-            return tex_coords_[face_tex_coords_[n]];
+        vector2 get_uv(int n) const {
+            return uvs_[face_uvs_[n]];
         }
 
         vector3 get_normal(int n) const {
@@ -45,12 +45,12 @@ namespace box {
         }
     private:
         std::vector<vector3> vertices_;
-        std::vector<vector3> tex_coords_;
+        std::vector<vector2> uvs_;
         std::vector<vector3> normals_;
 
         std::vector<std::size_t> face_vertices_; 
         std::vector<std::size_t> face_normals_;
-        std::vector<std::size_t> face_tex_coords_;
+        std::vector<std::size_t> face_uvs_;
     
         material_library mtllib_;
         std::vector<std::pair<std::size_t, const material*>> materials_;

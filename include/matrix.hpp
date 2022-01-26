@@ -7,78 +7,38 @@
 #include "vector.hpp"
 
 namespace box {
-    class matrix4 {
-    public:    
-        matrix4()
-            : matrix4(1, 0, 0, 0,
-                      0, 1, 0, 0,
-                      0, 0, 1, 0,
-                      0, 0, 0, 1) 
-        {
+    template <typename T, std::size_t M, std::size_t N>
+    class matrix;
 
-        }
-        
-        matrix4(double e00, double e01, double e02, double e03,
-                double e10, double e11, double e12, double e13,
-                double e20, double e21, double e22, double e23,
-                double e30, double e31, double e32, double e33)
-        {
-            entries_[0][0] = e00; entries_[0][1] = e10; entries_[0][2] = e20; entries_[0][3] = e30;
-            entries_[1][0] = e01; entries_[1][1] = e11; entries_[1][2] = e21; entries_[1][3] = e31;
-            entries_[2][0] = e02; entries_[2][1] = e12; entries_[2][2] = e22; entries_[2][3] = e32;
-            entries_[3][0] = e03; entries_[3][1] = e13; entries_[3][2] = e23; entries_[3][3] = e33;
-        }
-
-        double& operator()(int i, int j) {
-            return entries_[j][i];
-        }
-
-        const double& operator()(int i, int j) const {
-            return entries_[j][i];
-        }
-
-        double* operator[](int i) {
-            return entries_[i];
-        }
-
-        const double* operator[](int i) const {
-            return entries_[i];
-        }
-    private:
-        double entries_[4][4];
-    };
-
-    matrix4 operator*(matrix4 lhs, matrix4 rhs);
-    vector4 operator*(matrix4 lhs, vector4 rhs);
-
-    class matrix3 {
+    template <typename T>
+    class matrix<T, 3, 3> {
     public:
-        explicit matrix3(matrix4 m) 
-            : matrix3(m[0][0], m[1][0], m[2][0],
-                      m[0][1], m[1][1], m[2][1],
-                      m[0][2], m[1][2], m[2][2])
+        explicit matrix(matrix<T, 4, 4> m)
+            : matrix(m[0][0], m[1][0], m[2][0],
+                     m[0][1], m[1][1], m[2][1],
+                     m[0][2], m[1][2], m[2][2])
         {
 
         }
 
-        matrix3(double e00, double e01, double e02,
-                double e10, double e11, double e12,
-                double e20, double e21, double e22)
+        matrix(T e00, T e01, T e02,
+               T e10, T e11, T e12,
+               T e20, T e21, T e22)
         {
             entries_[0][0] = e00; entries_[0][1] = e10; entries_[0][2] = e20;
             entries_[1][0] = e01; entries_[1][1] = e11; entries_[1][2] = e21;
             entries_[2][0] = e02; entries_[2][1] = e12; entries_[2][2] = e22;
         }
 
-        double* operator[](int i) {
+        T* operator[](int i) {
             return entries_[i];
         }
 
-        const double* operator[](int i) const {
+        const T* operator[](int i) const {
             return entries_[i];
         }
 
-        matrix3 transpose() const {
+        matrix transpose() const {
             return {
                 entries_[0][0], entries_[0][1], entries_[0][2],
                 entries_[1][0], entries_[1][1], entries_[1][2],
@@ -86,12 +46,103 @@ namespace box {
             };
         }
 
-        matrix3 inverse() const;
+        matrix inverse() const {
+            vector<T, 3> a(entries_[0][0], entries_[0][1], entries_[0][2]);
+            vector<T, 3> b(entries_[1][0], entries_[1][1], entries_[1][2]);
+            vector<T, 3> c(entries_[2][0], entries_[2][1], entries_[2][2]);
+
+            auto r0 = cross(b, c);
+            auto r1 = cross(c, a);
+            auto r2 = cross(a, b);
+
+            auto id = 1 / dot(r2, c);
+
+            return {
+                r0.x * id, r0.y * id, r0.z * id,
+                r1.x * id, r1.y * id, r1.z * id,
+                r2.x * id, r2.y * id, r2.z * id
+            };
+        }
+
+        friend vector<T, 3> operator*(matrix lhs, vector<T, 3> rhs) {
+            return {
+                lhs[0][0] * rhs[0] + lhs[1][0] * rhs[1] + lhs[2][0] * rhs[2],
+                lhs[0][1] * rhs[0] + lhs[1][1] * rhs[1] + lhs[2][1] * rhs[2],
+                lhs[0][2] * rhs[0] + lhs[1][2] * rhs[1] + lhs[2][2] * rhs[2]
+            };
+        }
     private:
-        double entries_[3][3];
+        T entries_[3][3];
     };
 
-    vector3 operator*(matrix3 lhs, vector3 rhs);
+    using matrix3 = matrix<double, 3, 3>;
+
+    template <typename T>
+    class matrix<T, 4, 4> {
+    public:    
+        matrix()
+            : matrix(1, 0, 0, 0,
+                     0, 1, 0, 0,
+                     0, 0, 1, 0,
+                     0, 0, 0, 1) 
+        {
+
+        }
+        
+        matrix(T e00, T e01, T e02, T e03,
+               T e10, T e11, T e12, T e13,
+               T e20, T e21, T e22, T e23,
+               T e30, T e31, T e32, T e33)
+        {
+            entries_[0][0] = e00; entries_[0][1] = e10; entries_[0][2] = e20; entries_[0][3] = e30;
+            entries_[1][0] = e01; entries_[1][1] = e11; entries_[1][2] = e21; entries_[1][3] = e31;
+            entries_[2][0] = e02; entries_[2][1] = e12; entries_[2][2] = e22; entries_[2][3] = e32;
+            entries_[3][0] = e03; entries_[3][1] = e13; entries_[3][2] = e23; entries_[3][3] = e33;
+        }
+
+        explicit matrix(matrix<T, 3, 3> m)
+            : matrix(m[0][0], m[1][0], m[2][0], 0,
+                     m[0][1], m[1][1], m[2][1], 0,
+                     m[0][2], m[1][2], m[2][2], 0,
+                     0,       0,       0,       1)
+        {
+
+        };
+
+        T* operator[](int i) {
+            return entries_[i];
+        }
+
+        const T* operator[](int i) const {
+            return entries_[i];
+        }
+
+        friend matrix operator*(matrix lhs, matrix rhs) {
+            matrix res;
+            for (auto i = 0; i < 4; ++i) {
+                for (auto j = 0; j < 4; ++j) {
+                    res[j][i] = 0;
+                    for (auto k = 0; k < 4; ++k) {
+                        res[j][i] += lhs[k][i] * rhs[j][k];
+                    }
+                }
+            }
+            return res;
+        }
+
+        friend vector<T, 4> operator*(matrix lhs, vector<T, 4> rhs) {
+            return {
+                lhs[0][0] * rhs[0] + lhs[1][0] * rhs[1] + lhs[2][0] * rhs[2] + lhs[3][0] * rhs[3],
+                lhs[0][1] * rhs[0] + lhs[1][1] * rhs[1] + lhs[2][1] * rhs[2] + lhs[3][1] * rhs[3],
+                lhs[0][2] * rhs[0] + lhs[1][2] * rhs[1] + lhs[2][2] * rhs[2] + lhs[3][2] * rhs[3],
+                lhs[0][3] * rhs[0] + lhs[1][3] * rhs[1] + lhs[2][3] * rhs[2] + lhs[3][3] * rhs[3]
+            };
+        }
+    private:
+        T entries_[4][4];
+    };
+
+    using matrix4 = matrix<double, 4, 4>;
 }
 
 #endif

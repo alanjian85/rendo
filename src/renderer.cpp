@@ -59,13 +59,13 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
 
             auto z = bc_clip.x * t[0].z + bc_clip.y * t[1].z + bc_clip.z * t[2].z;
 
-            if (fb_.depth_test(x, y, z)) {
+            //if (fb_.depth_test(x, y, z)) {
                 auto color = s.frag(bc_clip);
                 if (color.has_value()) {
                     fb_(x, y).color = *color;
                     fb_(x, y).depth = z;
                 }
-            }
+            //}
         }
     }
 }

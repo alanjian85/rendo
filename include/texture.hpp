@@ -74,29 +74,15 @@ namespace box {
             return border_;
         }
 
-        color_rgba operator()(vector3 tex_coord) const;
+        color_rgba operator()(vector2 uv) const;
+
+        color_rgba operator()(double u, double v) const {
+            return (*this)({u, v});
+        }
     private:
         wrapping wrap_;
         color_rgba border_;
         const texture* tex_;
-    };
-
-    struct cubemap {
-        texture right;
-        texture left;
-        texture top;
-        texture bottom;
-        texture back;
-        texture front;
-
-        void load(const std::filesystem::path& path) {
-            right.load(path / "right.pam");
-            left.load(path / "left.pam");
-            top.load(path / "top.pam");
-            bottom.load(path / "bottom.pam");
-            back.load(path / "back.pam");
-            front.load(path / "front.pam");
-        }
     };
 
     class sampler_cube {
@@ -139,15 +125,6 @@ namespace box {
             front_ = &front;
         }
 
-        void bind_cubemap(const cubemap& c) {
-            right_ = &c.right;
-            left_ = &c.left;
-            top_ = &c.top;
-            bottom_ = &c.bottom;
-            back_ = &c.back;
-            front_ = &c.front;
-        }
-
         wrapping wrap_s() const {
             return wrap_s_;
         }
@@ -180,7 +157,7 @@ namespace box {
             return border_;
         }
 
-        color_rgba operator()(vector3 tex_coord) const;
+        color_rgba operator()(vector3 uvw) const;
     private:
         wrapping wrap_s_;
         wrapping wrap_t_;
@@ -193,6 +170,34 @@ namespace box {
         const texture* bottom_;
         const texture* back_;
         const texture* front_;
+    };
+
+    struct cubemap {
+        sampler_cube sampler;
+        texture right;
+        texture left;
+        texture top;
+        texture bottom;
+        texture back;
+        texture front;
+
+        cubemap() {
+            sampler.bind_right(right);
+            sampler.bind_left(left);
+            sampler.bind_top(top);
+            sampler.bind_bottom(bottom);
+            sampler.bind_back(back);
+            sampler.bind_front(front);
+        }
+
+        void load(const std::filesystem::path& path) {
+            right.load(path / "right.pam");
+            left.load(path / "left.pam");
+            top.load(path / "top.pam");
+            bottom.load(path / "bottom.pam");
+            back.load(path / "back.pam");
+            front.load(path / "front.pam");
+        }
     };
 }
 

@@ -23,14 +23,9 @@ void model::load(const std::filesystem::path& path) {
             stream >> v.x >> v.y >> v.z;
             vertices_.push_back(v);
         } else if (attrib == "vt") {
-            vector3 t;
-            stream >> t.x;
-            if (!(stream >> t.y)) {
-                t.y = 0;
-            } else if (!(stream >> t.z)) {
-                t.z = 0;
-            }
-            tex_coords_.push_back(t);
+            vector2 uv;
+            stream >> uv.x >> uv.y;
+            uvs_.push_back(uv);
         } else if (attrib == "vn") {
             vector3 n;
             stream >> n.x >> n.y >> n.z;
@@ -41,13 +36,13 @@ void model::load(const std::filesystem::path& path) {
             while (stream >> v) {
                 face_vertices_.push_back(v - 1);
                 
-                if (!tex_coords_.empty()) {
+                if (!uvs_.empty()) {
                     stream >> delim >> t;
-                    face_tex_coords_.push_back(t - 1);
+                    face_uvs_.push_back(t - 1);
                 }
 
                 if (!normals_.empty()) {
-                    if (tex_coords_.empty())
+                    if (uvs_.empty())
                         stream >> delim;
 
                     stream >> delim >> n;
