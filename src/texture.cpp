@@ -147,33 +147,33 @@ color_rgba sampler_cube::operator()(vector3 tex_coord) const {
     auto v = 0.0;
 
     if (ax > ay && ax > az) {
-        u = (1 - z / x) / 2;
+        v = (y / ax - 1) / 2;
         if (x > 0) {
             sampler.bind_texture(*right_);
-            v = (1 - y / x) / 2;
+            u = (-z / ax + 1) / 2;
         } else {
             sampler.bind_texture(*left_);
-            v = (1 + y / x) / 2;
+            u = (z / ax + 1) / 2;
         }
         sampler.set_wrap(wrap_s_);
     } else if (ay > ax && ay > az) {
-        v = (1 + z / y) / 2;
+        u = (x / ay + 1) / 2;
         if (y > 0) {
             sampler.bind_texture(*top_);
-            u = (1 + x / y) / 2;
+            v = (-z / ay - 1) / 2;
         } else {
             sampler.bind_texture(*bottom_);
-            u = (1 - x / y) / 2;
+            v = (z / ay - 1) / 2;
         }
         sampler.set_wrap(wrap_t_);
     } else if (az > ax && az > ay) {
-        u = (1 + x / z) / 2;
+        v = (y / az - 1) / 2;
         if (z > 0) {
             sampler.bind_texture(*back_);
-            v = (1 - y / z) / 2;
+            u = (x / az + 1) / 2;
         } else {
             sampler.bind_texture(*front_);
-            v = (1 + y / z) / 2;
+            u = (-x / az + 1) / 2;
         }
         sampler.set_wrap(wrap_r_);
     }

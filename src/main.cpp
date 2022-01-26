@@ -17,21 +17,19 @@ public:
     {
         cubemap_.load("assets/textures/skybox/");
         sampler_cube_.bind_cubemap(cubemap_);
-        world_ = make_rotate(rad(45), {1, 1, 1});
     }
 
     virtual vector4 vert(int n) override {
         auto pos = world_ * vector4(model_->get_vertex(n), 1);
         v_pos[n % 3] = vector3(pos);
         v_normal[n % 3] = matrix3(world_).transpose().inverse() * model_->get_normal(n);
-        sampler_.bind_texture(model_->get_mat(n)->diffuse_map);
         return camera_.proj(aspect_) * camera_.view() * pos;
     }
 
     virtual std::optional<color_rgba> frag(vector3 bar) override {
         auto pos = frag_lerp(v_pos, bar);
         auto normal = frag_lerp(v_normal, bar).normalize();
-        auto cam_dir = (camera_.pos - pos).normalize();
+        auto cam_dir = (pos - camera_.pos).normalize();
         auto color = sampler_cube_(reflect(cam_dir, normal));
         if (color.a < 0.1)
             return std::nullopt;
@@ -63,9 +61,9 @@ int main() {
         r.set_face_culling(cull_type::back);
 
         camera cam;
-        cam.pos.z = 6;
+        cam.pos.z = 3;
 
-        model cube("assets/models/cube.obj");
+        model cube("assets/models/african_head.obj");
         object_shader s(cam, r.aspect());
         s.bind_model(cube);
         r.render(cube.num_vertices(), s);
