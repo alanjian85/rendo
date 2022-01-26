@@ -15,7 +15,7 @@ matrix4 box::make_lookat(vector3 eye, vector3 center, vector3 up) {
 	res[2][0] = s.z;
 	res[0][1] = u.x;
 	res[1][1] = u.y;
-	res[2][1]= u.z;
+	res[2][1] = u.z;
 	res[0][2] = -f.x;
 	res[1][2] = -f.y;
 	res[2][2] = -f.z;
@@ -37,6 +37,7 @@ matrix4 box::make_persp(double fov, double aspect, double near, double far) {
     res[1][1] = 1 / t;
     res[2][2] = -(far + near) / (far - near);
     res[2][3] = -1;
+	res[3][3] = 0;
     res[3][2] = -(2 * far * near) / (far - near);
 	return res;
 }

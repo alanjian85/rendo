@@ -42,7 +42,7 @@ namespace box {
         void clear(color_rgba color) {
             for (auto& p : pixels_) {
                 p.color = color;
-                p.depth = 1;
+                p.depth = std::numeric_limits<double>::max();
             }
         }
 

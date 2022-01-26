@@ -21,13 +21,13 @@ namespace box {
 
         }
 
-        matrix(T e00, T e01, T e02,
-               T e10, T e11, T e12,
-               T e20, T e21, T e22)
+        matrix(T e00, T e10, T e20,
+               T e01, T e11, T e21,
+               T e02, T e12, T e22)
         {
-            entries_[0][0] = e00; entries_[0][1] = e10; entries_[0][2] = e20;
-            entries_[1][0] = e01; entries_[1][1] = e11; entries_[1][2] = e21;
-            entries_[2][0] = e02; entries_[2][1] = e12; entries_[2][2] = e22;
+            entries_[0][0] = e00; entries_[1][0] = e10; entries_[2][0] = e20;
+            entries_[0][1] = e01; entries_[1][1] = e11; entries_[2][1] = e21;
+            entries_[0][2] = e02; entries_[1][2] = e12; entries_[2][2] = e22;
         }
 
         T* operator[](int i) {
@@ -89,15 +89,15 @@ namespace box {
 
         }
         
-        matrix(T e00, T e01, T e02, T e03,
-               T e10, T e11, T e12, T e13,
-               T e20, T e21, T e22, T e23,
-               T e30, T e31, T e32, T e33)
+        matrix(T e00, T e10, T e20, T e30,
+               T e01, T e11, T e21, T e31,
+               T e02, T e12, T e22, T e32,
+               T e03, T e13, T e23, T e33)
         {
-            entries_[0][0] = e00; entries_[0][1] = e10; entries_[0][2] = e20; entries_[0][3] = e30;
-            entries_[1][0] = e01; entries_[1][1] = e11; entries_[1][2] = e21; entries_[1][3] = e31;
-            entries_[2][0] = e02; entries_[2][1] = e12; entries_[2][2] = e22; entries_[2][3] = e32;
-            entries_[3][0] = e03; entries_[3][1] = e13; entries_[3][2] = e23; entries_[3][3] = e33;
+            entries_[0][0] = e00; entries_[1][0] = e10; entries_[2][0] = e20; entries_[3][0] = e30;
+            entries_[0][1] = e01; entries_[1][1] = e11; entries_[2][1] = e21; entries_[3][1] = e31;
+            entries_[0][2] = e02; entries_[1][2] = e12; entries_[2][2] = e22; entries_[3][2] = e32;
+            entries_[0][3] = e03; entries_[1][3] = e13; entries_[2][3] = e23; entries_[3][3] = e33;
         }
 
         explicit matrix(matrix<T, 3, 3> m)
