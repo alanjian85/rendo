@@ -3,16 +3,25 @@
 
 namespace box {
     struct color_rgb {
-        double r;
-        double g;
-        double b;
+        double r, g, b;
+
+        color_rgb() = default;
+        color_rgb(double r_, double g_, double b_)
+            : r(r_), g(g_), b(b_)
+        {
+            
+        }
     };
 
     struct color_rgba {
-        double r;
-        double g;
-        double b;
-        double a;
+        double r, g, b, a;
+
+        color_rgba() = default;
+        color_rgba(double r_, double g_, double b_, double a_)
+            : r(r_), g(g_), b(b_), a(a_)
+        {
+
+        }
     };
 
     inline color_rgba operator+(color_rgba lhs, color_rgba rhs) {
