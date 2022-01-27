@@ -25,3 +25,10 @@ This demo doesn't use any third-party libraries for rendering and image processi
 
 ## Rendering in One Hour
 Coming soon.
+
+## Reference Links
+<ul>
+  <li><a href="https://github.com/ssloy/tinyrenderer">Tiny Renderer</a></li>
+  <li><a href="https://learnopengl.com/">Learn OpenGL</a></li>
+  <li><a href="https://foundationsofgameenginedev.com/">Foundations of Game Engine Development</a></li>
+</ul> 

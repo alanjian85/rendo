@@ -62,7 +62,7 @@ public:
     }
 
     virtual vector4 vert(int n) override {
-        auto pos = model_.get_vertex(n);
+        auto pos = model_.get_vertex(n + 6);
         v_pos[n % 3] = pos;
         return camera_.proj(aspect_) * camera_.view() * vector4(pos, 1);
     }
@@ -99,7 +99,7 @@ int main() {
         model cube("assets/models/cube.obj");
         skybox_shader ss(cam, r.aspect(), skybox.sampler, cube);
         //r.disable_depth_writing();
-        r.render(cube.num_vertices(), ss);
+        r.render(3, ss);
 
         model head("assets/models/african_head.obj");
         object_shader os(cam, r.aspect(), skybox.sampler);
