@@ -1,6 +1,7 @@
 #include "renderer.hpp"
 using namespace box;
 
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 #include <numeric>
@@ -17,6 +18,8 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
     t[0] *= iaw;
     t[1] *= ibw;
     t[2] *= icw;
+
+    std::cout << t[0].z << ' ' << t[1].z << ' ' << t[2].z << '\n';
 
     auto d = dot(-vector3(t[0].x, t[0].y, t[0].z), t.normal());
     switch (face_culling_) {
@@ -38,8 +41,8 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
     vector2i min = clamp;
     vector2i max = {0, 0};
     for (int i = 0; i < 3; ++i) {
-        t[i].x = (t[i].x + 1) / 2 * (fb_.width() - 1);
-        t[i].y = (1 - t[i].y) / 2 * (fb_.height() - 1);
+        t[i].x = static_cast<int>((t[i].x + 1) / 2 * (fb_.width() - 1));
+        t[i].y = static_cast<int>((1 - t[i].y) / 2 * (fb_.height() - 1));
 
         for (int j = 0; j < 2; ++j) {
             min[j] = std::max(0, std::min(min[j], static_cast<int>(t[i][j])));
@@ -57,10 +60,11 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
             assert(bc_clip.x + bc_clip.y + bc_clip.z != 0);
             bc_clip /= bc_clip.x + bc_clip.y + bc_clip.z;
 
-            auto z = bc_clip.x * t[0].z + bc_clip.y * t[1].z + bc_clip.z * t[2].z;
+            auto z = bc_screen.x * t[0].z + bc_screen.y * t[1].z + bc_screen.z * t[2].z;
 
             if (fb_.depth_test(x, y, z)) {
                 auto color = s.frag(bc_clip);
+                //color = color_rgba(z, z, z, 1);
                 if (color.has_value()) {
                     fb_(x, y).color = *color;
                     if (depth_writing_)

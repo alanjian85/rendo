@@ -20,9 +20,9 @@ public:
     }
 
     virtual vector4 vert(int n) override {
-        auto pos = world_ * vector4(model_->get_vertex(n), 1);
+        auto pos = vector4(model_->get_vertex(n), 1);
         v_pos[n % 3] = vector3(pos);
-        v_normal[n % 3] = matrix3(world_).transpose().inverse() * model_->get_normal(n);
+        v_normal[n % 3] = model_->get_normal(n);
         return camera_.proj(aspect_) * camera_.view() * pos;
     }
 
@@ -46,7 +46,6 @@ private:
 
     const sampler_cube& sampler_;
 
-    matrix4 world_;
     vector3 v_pos[3];
     vector3 v_normal[3];
 };
@@ -65,7 +64,7 @@ public:
     virtual vector4 vert(int n) override {
         auto pos = model_.get_vertex(n);
         v_pos[n % 3] = pos;
-        return /*camera_.proj(aspect_) * matrix4(matrix3(camera_.view())) */ vector4(pos, 1);
+        return camera_.proj(aspect_) * matrix4(matrix3(camera_.view())) * vector4(pos, 1);
     }
 
     virtual std::optional<color_rgba> frag(vector3 bar) override {
@@ -89,6 +88,8 @@ int main() {
 
         camera cam;
         cam.pos.z = 3;
+        cam.pos.y = 3;
+        cam.pitch = -45;
 
         cubemap skybox;
         skybox.load("assets/textures/skybox");
@@ -102,7 +103,7 @@ int main() {
         object_shader os(cam, r.aspect(), skybox.sampler);
         os.bind_model(head);
         r.enable_depth_writing();
-        r.render(head.num_vertices(), os);
+        //r.render(head.num_vertices(), os);
 
         r.write("image.pam");
     } catch (std::exception& e) {

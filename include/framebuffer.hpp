@@ -42,7 +42,7 @@ namespace box {
         void clear(color_rgba color) {
             for (auto& p : pixels_) {
                 p.color = color;
-                p.depth = std::numeric_limits<double>::max();
+                p.depth = 1;
             }
         }
 
@@ -57,7 +57,7 @@ namespace box {
         }
 
         bool depth_test(int x, int y, double z) const {
-            return z > 0 && z < (*this)(x, y).depth;
+            return z >= -1 && z <= (*this)(x, y).depth;
         }
 
         void write(const std::string& path) const;

@@ -28,10 +28,6 @@ matrix4 box::make_lookat(vector3 eye, vector3 center, vector3 up) {
 matrix4 box::make_persp(double fov, double aspect, double near, double far) {
     auto t = std::tan(fov / 2);
 
-	assert(t != 0);
-	assert(aspect != 0);
-	assert(far - near != 0);
-
 	matrix4 res;
     res[0][0] = 1 / (aspect * t);
     res[1][1] = 1 / t;
