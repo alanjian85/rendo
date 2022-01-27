@@ -84,12 +84,13 @@ int main() {
     try {
         renderer r;
         r.clear({0.90, 0.88, 0.84, 1.0});
-        r.set_face_culling(cull_type::back);
+        //r.set_face_culling(cull_type::back);
 
         camera cam;
+        cam.fov = 90;
         cam.pos.z = 3;
-        cam.pos.y = 3;
-        cam.pitch = -45;
+        cam.yaw = -110;
+        cam.pitch = 20;
 
         cubemap skybox;
         skybox.load("assets/textures/skybox");
