@@ -64,12 +64,13 @@ public:
     virtual vector4 vert(int n) override {
         auto pos = model_.get_vertex(n);
         v_pos[n % 3] = pos;
-        return camera_.proj(aspect_) * matrix4(matrix3(camera_.view())) * vector4(pos, 1);
+        return camera_.proj(aspect_) * camera_.view() * vector4(pos, 1);
     }
 
     virtual std::optional<color_rgba> frag(vector3 bar) override {
         auto pos = frag_lerp(v_pos, bar);
-        return sampler_(pos);
+        //return sampler_(pos);
+        return color_rgba(pos.x / 2 + 0.5, pos.y / 2 + 0.5, pos.z / 2 + 0.5, 1);
     }
 private:
     double aspect_;
@@ -88,7 +89,7 @@ int main() {
 
         camera cam;
         cam.fov = 90;
-        cam.pos.z = 3;
+        cam.pos.z = 1;
         cam.yaw = -110;
         cam.pitch = 20;
 
@@ -97,7 +98,7 @@ int main() {
 
         model cube("assets/models/cube.obj");
         skybox_shader ss(cam, r.aspect(), skybox.sampler, cube);
-        r.disable_depth_writing();
+        //r.disable_depth_writing();
         r.render(cube.num_vertices(), ss);
 
         model head("assets/models/african_head.obj");
