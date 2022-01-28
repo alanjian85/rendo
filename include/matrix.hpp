@@ -80,11 +80,11 @@ namespace box {
     template <typename T>
     class matrix<T, 4, 4> {
     public:    
-        matrix()
-            : matrix(1, 0, 0, 0,
-                     0, 1, 0, 0,
-                     0, 0, 1, 0,
-                     0, 0, 0, 1) 
+        matrix(double t = 0)
+            : matrix(t, 0, 0, 0,
+                     0, t, 0, 0,
+                     0, 0, t, 0,
+                     0, 0, 0, t) 
         {
 
         }
@@ -121,7 +121,6 @@ namespace box {
             matrix res;
             for (auto i = 0; i < 4; ++i) {
                 for (auto j = 0; j < 4; ++j) {
-                    res[j][i] = 0;
                     for (auto k = 0; k < 4; ++k) {
                         res[j][i] += lhs[k][i] * rhs[j][k];
                     }

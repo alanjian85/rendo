@@ -70,7 +70,7 @@ public:
 
     virtual std::optional<color_rgba> frag(vector3 bar) override {
         auto pos = frag_lerp(v_pos, bar);
-        //return sampler_(pos);
+        return sampler_(pos);
         return color_rgba(bar.x / 2 + 0.5, bar.y / 2 + 0.5, bar.z / 2 + 0.5, 1);
     }
 private:

@@ -9,7 +9,7 @@ matrix4 box::make_lookat(vector3 eye, vector3 center, vector3 up) {
     auto s = cross(f, up).normalize();
     auto u = cross(s, f);
 
-    matrix4 res;
+    matrix4 res(1);
     res[0][0] = s.x;
 	res[1][0] = s.y;
 	res[2][0] = s.z;
@@ -33,7 +33,6 @@ matrix4 box::make_persp(double fov, double aspect, double near, double far) {
     res[1][1] = 1 / t;
     res[2][2] = -(far + near) / (far - near);
     res[2][3] = -1;
-	res[3][3] = 0;
     res[3][2] = -(2 * far * near) / (far - near);
 	return res;
 }
@@ -44,7 +43,7 @@ matrix4 box::make_rotate(double angle, vector3 v) {
     auto c = std::cos(angle);
 	auto s = std::sin(angle);
 
-	matrix4 res;
+	matrix4 res(1);
 	res[0][0] = c + (1 - c) * v.x * v.x;
 	res[1][0] = (1 - c) * v.x * v.y - s * v.z;
 	res[2][0] = (1 - c) * v.x * v.z + s * v.y;
@@ -58,7 +57,7 @@ matrix4 box::make_rotate(double angle, vector3 v) {
 }
 
 matrix4 box::make_translate(vector3 offset) {
-	matrix4 res;
+	matrix4 res(1);
 	res[3][0] = offset.x;
 	res[3][1] = offset.y;
 	res[3][2] = offset.z;

@@ -169,10 +169,10 @@ color_rgba sampler_cube::operator()(vector3 uvw) const {
     } else if (az > ax && az > ay) {
         v = (y / az - 1) / 2;
         if (z > 0) {
-            sampler.bind_texture(*back_);
+            sampler.bind_texture(*front_);
             u = (x / az + 1) / 2;
         } else {
-            sampler.bind_texture(*front_);
+            sampler.bind_texture(*back_);
             u = (-x / az + 1) / 2;
         }
         sampler.set_wrap(wrap_r_);
