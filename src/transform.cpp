@@ -5,9 +5,9 @@ using namespace box;
 #include <cmath>
 
 matrix4 box::make_lookat(vector3 eye, vector3 center, vector3 up) {	
-	auto f = (center - eye).normalize();
-    auto s = cross(f, up).normalize();
-    auto u = cross(s, f);
+	auto f = (eye - center).normalize();
+    auto s = cross(up, f).normalize();
+    auto u = cross(f, s);
 
     matrix4 res(1);
     res[0][0] = s.x;
@@ -16,12 +16,12 @@ matrix4 box::make_lookat(vector3 eye, vector3 center, vector3 up) {
 	res[0][1] = u.x;
 	res[1][1] = u.y;
 	res[2][1] = u.z;
-	res[0][2] = -f.x;
-	res[1][2] = -f.y;
-	res[2][2] = -f.z;
+	res[0][2] = f.x;
+	res[1][2] = f.y;
+	res[2][2] = f.z;
 	res[3][0] = -dot(s, eye);
 	res[3][1] = -dot(u, eye);
-	res[3][2] =  dot(f, eye);
+	res[3][2] = -dot(f, eye);
 	return res;
 }
 
