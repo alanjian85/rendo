@@ -62,15 +62,16 @@ public:
     }
 
     virtual vector4 vert(int n) override {
-        auto pos = model_.get_vertex(n + 6);
+        auto pos = model_.get_vertex(n);
+        auto res = camera_.proj(aspect_) * matrix4(matrix3(camera_.view())) * vector4(pos, 1);
         v_pos[n % 3] = pos;
-        return camera_.proj(aspect_) * camera_.view() * vector4(pos, 1);
+        return vector4(res.x, res.y, res.w, res.w);
     }
 
     virtual std::optional<color_rgba> frag(vector3 bar) override {
         auto pos = frag_lerp(v_pos, bar);
         //return sampler_(pos);
-        return color_rgba(pos.x / 2 + 0.5, pos.y / 2 + 0.5, pos.z / 2 + 0.5, 1);
+        return color_rgba(bar.x / 2 + 0.5, bar.y / 2 + 0.5, bar.z / 2 + 0.5, 1);
     }
 private:
     double aspect_;
@@ -85,27 +86,23 @@ int main() {
     try {
         renderer r;
         r.clear({0.90, 0.88, 0.84, 1.0});
-        //r.set_face_culling(cull_type::back);
 
         camera cam;
-        cam.fov = 90;
-        cam.pos.z = 1;
-        cam.yaw = -110;
-        cam.pitch = 20;
+        cam.pos.y = 3;
+        cam.pos.z = 3;
+        cam.pitch = -30;
 
         cubemap skybox;
         skybox.load("assets/textures/skybox");
 
         model cube("assets/models/cube.obj");
         skybox_shader ss(cam, r.aspect(), skybox.sampler, cube);
-        //r.disable_depth_writing();
-        r.render(3, ss);
+        r.render(cube.num_vertices(), ss);
 
         model head("assets/models/african_head.obj");
         object_shader os(cam, r.aspect(), skybox.sampler);
         os.bind_model(head);
-        r.enable_depth_writing();
-        //r.render(head.num_vertices(), os);
+        r.render(head.num_vertices(), os);
 
         r.write("image.pam");
     } catch (std::exception& e) {

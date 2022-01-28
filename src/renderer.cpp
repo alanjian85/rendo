@@ -11,13 +11,17 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
     assert(t[1].w != 0);
     assert(t[2].w != 0);
 
-    auto iaw = 1 / t[0].w;
-    auto ibw = 1 / t[1].w;
-    auto icw = 1 / t[2].w;
+    t[0].x /= t[0].w;
+    t[1].x /= t[1].w;
+    t[2].x /= t[2].w;
 
-    t[0] *= iaw;
-    t[1] *= ibw;
-    t[2] *= icw;
+    t[0].y /= t[0].w;
+    t[1].y /= t[1].w;
+    t[2].y /= t[2].w;
+
+    t[0].z /= t[0].w;
+    t[1].z /= t[1].w;
+    t[2].z /= t[2].w;
 
     auto d = dot(-vector3(t[0].x, t[0].y, t[0].z), t.normal());
     switch (face_culling_) {
@@ -54,18 +58,17 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
             if (bc_screen.x < 0 || bc_screen.y < 0 || bc_screen.z < 0)
                 continue;
 
-            auto bc_clip = vector3(bc_screen.x * iaw, bc_screen.y * ibw, bc_screen.z * icw);
+            auto bc_clip = vector3(bc_screen.x / t[0].w, bc_screen.y / t[1].w, bc_screen.z / t[2].w);
             assert(bc_clip.x + bc_clip.y + bc_clip.z != 0);
             bc_clip /= bc_clip.x + bc_clip.y + bc_clip.z;
 
-            auto z = bc_screen.x * t[0].z + bc_screen.y * t[1].z + bc_screen.z * t[2].z;
+            auto z = bc_clip.x * t[0].z + bc_clip.y * t[1].z + bc_clip.z * t[2].z;
 
             if (fb_.depth_test(x, y, z)) {
                 auto color = s.frag(bc_clip);
                 if (color.has_value()) {
                     fb_(x, y).color = *color;
-                    if (depth_writing_)
-                        fb_(x, y).depth = z;
+                    fb_(x, y).depth = z;
                 }
             }
         }
@@ -75,7 +78,7 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
 void renderer::render(int n, basic_shader& s) {    
     for (int i = 0; i < n; i += 3) {
         triangle t;
-        t.a = s.vert(i + 0);
+        t.a = s.vert(i);
         t.b = s.vert(i + 1);
         t.c = s.vert(i + 2);
 
