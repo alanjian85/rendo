@@ -16,7 +16,7 @@ public:
           aspect_(aspect),
           sampler_(sampler_cube)
     {
-        transform_ = make_translate({0, 0, 4});
+        transform_ = make_translate({0, 0, 3});
     }
 
     virtual vector4 vert(int n) override {

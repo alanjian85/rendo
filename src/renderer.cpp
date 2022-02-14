@@ -51,7 +51,7 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
 
                 auto z = bar_clip.x * t[0].z + bar_clip.y * t[1].z + bar_clip.z * t[2].z;
 
-                if (fb_(x, y).depth >= z) {
+                if (z > -11 && z < fb_(x, y).depth) {
                     auto color = s.frag(bar_clip);
                     if (color.has_value()) {
                         fb_(x, y).color = *color;
