@@ -62,7 +62,14 @@ int main() {
         cubemap skybox;
         skybox.load("assets/textures/skybox");
 
-        auto iproj = cam.proj(fb.aspect()).inverse();
+        for (int x = 0; x < fb.width(); ++x) {
+            for (int y = 0; y < fb.height(); ++y) {
+                auto u = static_cast<double>(x) / (fb.width() - 1) * 2 - 1;
+                auto v = static_cast<double>(y) / (fb.height() - 1) * 2 - 1;
+                auto w = -std::sqrt(1 - u * u - v * v);
+                fb(x, y).color = skybox.sampler({u, v, w});
+            }
+        }
 
         model head("assets/models/african_head.obj");
         object_shader os(cam, fb.aspect(), skybox.sampler);
