@@ -42,6 +42,10 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
         }
     }
 
+    std::cout << '(' << t[0].x << ' ' << t[0].y << ' ' << t[0].z << ") "
+              << '(' << t[1].x << ' ' << t[1].y << ' ' << t[1].z << ") "
+              << '(' << t[2].x << ' ' << t[2].y << ' ' << t[2].z << ")\n";
+
     for (auto x = min.x; x <= max.x; ++x) {
         for (auto y = min.y; y <= max.y; ++y) {
             auto bar = t.barycentric({x, y});

@@ -93,6 +93,8 @@ int main() {
         renderer r(fb);
 
         camera cam;
+        cam.yaw = -110;
+        cam.pitch = -30;
         cam.pos.z = 3;
 
         cubemap skybox;
@@ -104,7 +106,7 @@ int main() {
 
         head_shader hs(cam.proj(fb.aspect()), cam.view(), cam.pos, skybox.sampler);
         r.enable_depth_write();
-        hs.render(r);
+        //hs.render(r);
 
         fb.write("image.ppm");
     } catch (std::exception& e) {
