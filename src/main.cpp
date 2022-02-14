@@ -106,7 +106,7 @@ int main() {
         r.enable_depth_write();
         hs.render(r);
 
-        fb.write("image.pam");
+        fb.write("image.ppm");
     } catch (std::exception& e) {
         std::cerr << e.what() << '\n';
         return 1;
