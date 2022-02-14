@@ -22,7 +22,7 @@ namespace box {
         renderer(framebuffer& fb)
             : fb_(fb)
         {
-            
+
         }
 
         void set_face_culling(cull_type cull) {
@@ -30,12 +30,21 @@ namespace box {
         }
 
         void render(int n, basic_shader& s);
+
+        void enable_depth_write() {
+            depth_write_ = true;
+        }
+
+        void disable_depth_write() {
+            depth_write_ = false;
+        }
     private:
         void render_triangle(triangle t, basic_shader& s);
 
         framebuffer& fb_;
 
         cull_type face_culling_ = cull_type::none;
+        bool depth_write_ = true;;
     };
 }
 

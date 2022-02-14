@@ -55,7 +55,8 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
                     auto color = s.frag(bar_clip);
                     if (color.has_value()) {
                         fb_(x, y).color = *color;
-                        fb_(x, y).depth = z;
+                        if (depth_write_)
+                            fb_(x, y).depth = z;
                     }
                 }
             }
