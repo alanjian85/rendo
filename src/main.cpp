@@ -16,14 +16,14 @@ public:
           aspect_(aspect),
           sampler_(sampler_cube)
     {
-
+        transform_ = make_translate({0, 0, 4});
     }
 
     virtual vector4 vert(int n) override {
         auto pos = vector4(model_->get_vertex(n), 1);
         v_pos[n % 3] = vector3(pos);
         v_normal[n % 3] = model_->get_normal(n);
-        return camera_.proj(aspect_) * camera_.view() * pos;
+        return camera_.proj(aspect_) * camera_.view() * transform_ * pos;
     }
 
     virtual std::optional<color_rgba> frag(vector3 bar) override {
@@ -46,6 +46,8 @@ private:
 
     const sampler_cube& sampler_;
 
+    matrix4 transform_;
+
     vector3 v_pos[3];
     vector3 v_normal[3];
 };
@@ -61,15 +63,6 @@ int main() {
 
         cubemap skybox;
         skybox.load("assets/textures/skybox");
-
-        for (int x = 0; x < fb.width(); ++x) {
-            for (int y = 0; y < fb.height(); ++y) {
-                auto u = static_cast<double>(x) / (fb.width() - 1) * 2 - 1;
-                auto v = static_cast<double>(y) / (fb.height() - 1) * 2 - 1;
-                auto w = -std::sqrt(1 - u * u - v * v);
-                fb(x, y).color = skybox.sampler({u, v, w});
-            }
-        }
 
         model head("assets/models/african_head.obj");
         object_shader os(cam, fb.aspect(), skybox.sampler);
