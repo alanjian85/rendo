@@ -19,22 +19,10 @@ namespace box {
 
     class renderer {
     public:
-        renderer()
-            : fb_(1024, 1024)
+        renderer(framebuffer& fb)
+            : fb_(fb)
         {
             
-        }
-
-        void clear(color_rgba color) {
-            fb_.clear(color);
-        }
-
-        void write(const std::string& path) {
-            fb_.write(path);
-        }
-
-        double aspect() const {
-            return fb_.aspect();
         }
 
         void set_face_culling(cull_type cull) {
@@ -45,7 +33,7 @@ namespace box {
     private:
         void render_triangle(triangle t, basic_shader& s);
 
-        framebuffer fb_;
+        framebuffer& fb_;
 
         cull_type face_culling_ = cull_type::none;
     };

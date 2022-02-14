@@ -52,8 +52,9 @@ private:
 
 int main() {
     try {
-        renderer r;
-        r.clear({1, 0, 0, 1.0});
+        framebuffer fb(1024, 1024);
+        fb.clear({1, 0, 0, 1.0});
+        renderer r(fb);
 
         camera cam;
         cam.pos.z = 3;
@@ -61,12 +62,14 @@ int main() {
         cubemap skybox;
         skybox.load("assets/textures/skybox");
 
+        auto iproj = cam.proj(fb.aspect()).inverse();
+
         model head("assets/models/african_head.obj");
-        object_shader os(cam, r.aspect(), skybox.sampler);
+        object_shader os(cam, fb.aspect(), skybox.sampler);
         os.bind_model(head);
         r.render(head.num_vertices(), os);
 
-        r.write("image.pam");
+        fb.write("image.pam");
     } catch (std::exception& e) {
         std::cerr << e.what() << '\n';
         return 1;

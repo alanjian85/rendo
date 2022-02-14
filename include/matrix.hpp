@@ -125,6 +125,36 @@ namespace box {
             return entries_[j][i];
         }
 
+        matrix inverse() const {
+            vector<T, 3> a(entries_[0][0], entries_[0][1], entries_[0][2]);
+	        vector<T, 3> b(entries_[1][0], entries_[1][1], entries_[1][2]);
+	        vector<T, 3> c(entries_[2][0], entries_[2][1], entries_[2][2]);
+	        vector<T, 3> d(entries_[3][0], entries_[3][1], entries_[3][2]);        
+        
+	        auto s = cross(a, b);
+	        auto t = cross(c, d);
+	        auto u = a * entries_[1][3] - b * entries_[0][3];
+	        auto v = c * entries_[3][3] - d * entries_[2][3];
+        
+	        float id = 1 / (dot(s, v) + dot(t, u));
+	        s *= id;
+	        t *= id;
+	        u *= id;
+	        v *= id;
+        
+	        auto r0 = cross(b, v) + t * entries_[1][3];
+	        auto r1 = cross(v, a) - t * entries_[0][3];
+	        auto r2 = cross(d, u) + s * entries_[3][3];
+	        auto r3 = cross(u, c) - s * entries_[2][3];
+        
+	        return {
+                r0.x, r0.y, r0.z, -dot(b, t),
+	            r1.x, r1.y, r1.z,  dot(a, t),
+	            r2.x, r2.y, r2.z, -dot(d, s),
+	            r3.x, r3.y, r3.z,  dot(c, s)
+            };
+        }
+
         friend matrix operator*(matrix lhs, matrix rhs) {
             matrix res;
             for (auto i = 0; i < 4; ++i) {
