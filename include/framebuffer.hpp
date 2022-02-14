@@ -56,10 +56,6 @@ namespace box {
             return {pixels_[index]};
         }
 
-        bool depth_test(int x, int y, double z) const {
-            return z >= -1 && z <= (*this)(x, y).depth;
-        }
-
         void write(const std::string& path) const;
     private:
         int width_, height_;

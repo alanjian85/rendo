@@ -117,12 +117,20 @@ namespace box {
             return entries_[i];
         }
 
+        T& operator()(int i, int j) {
+            return entries_[j][i];
+        }
+
+        const T& operator()(int i, int j) const {
+            return entries_[j][i];
+        }
+
         friend matrix operator*(matrix lhs, matrix rhs) {
             matrix res;
             for (auto i = 0; i < 4; ++i) {
                 for (auto j = 0; j < 4; ++j) {
                     for (auto k = 0; k < 4; ++k) {
-                        res[j][i] += lhs[k][i] * rhs[j][k];
+                        res(i, j) += lhs(i, k) * rhs(k, j);
                     }
                 }
             }
@@ -130,12 +138,15 @@ namespace box {
         }
 
         friend vector<T, 4> operator*(matrix lhs, vector<T, 4> rhs) {
-            return {
-                lhs[0][0] * rhs[0] + lhs[1][0] * rhs[1] + lhs[2][0] * rhs[2] + lhs[3][0] * rhs[3],
-                lhs[0][1] * rhs[0] + lhs[1][1] * rhs[1] + lhs[2][1] * rhs[2] + lhs[3][1] * rhs[3],
-                lhs[0][2] * rhs[0] + lhs[1][2] * rhs[1] + lhs[2][2] * rhs[2] + lhs[3][2] * rhs[3],
-                lhs[0][3] * rhs[0] + lhs[1][3] * rhs[1] + lhs[2][3] * rhs[2] + lhs[3][3] * rhs[3]
-            };
+            vector<T, 4> res;
+            for (auto i = 0; i < 4; ++i) {
+                auto a = lhs(i, 0) * rhs[0];
+                auto b = lhs(i, 1) * rhs[1];
+                auto c = lhs(i, 2) * rhs[2];
+                auto d = lhs(i, 3) * rhs[3];
+                res[i] = a + b + c + d;
+            }
+            return res;
         }
     private:
         T entries_[4][4];

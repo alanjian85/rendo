@@ -50,54 +50,16 @@ private:
     vector3 v_normal[3];
 };
 
-class skybox_shader : public basic_shader {
-public:
-    skybox_shader(const camera& cam, double aspect, const sampler_cube& sampler_cube, const model& m) 
-        : camera_(cam),
-          aspect_(aspect),
-          sampler_(sampler_cube),
-          model_(m)
-    {
-
-    }
-
-    virtual vector4 vert(int n) override {
-        auto pos = model_.get_vertex(n);
-        auto res = camera_.proj(aspect_) * matrix4(matrix3(camera_.view())) * vector4(pos, 1);
-        v_pos[n % 3] = pos;
-        return vector4(res.x, res.y, res.w, res.w);
-    }
-
-    virtual std::optional<color_rgba> frag(vector3 bar) override {
-        auto pos = frag_lerp(v_pos, bar);
-        return sampler_(pos);
-        return color_rgba(bar.x / 2 + 0.5, bar.y / 2 + 0.5, bar.z / 2 + 0.5, 1);
-    }
-private:
-    double aspect_;
-    const camera& camera_;
-    const sampler_cube& sampler_;
-    const model& model_;
-
-    vector3 v_pos[3];
-};
-
 int main() {
     try {
         renderer r;
-        r.clear({0.90, 0.88, 0.84, 1.0});
+        r.clear({1, 0, 0, 1.0});
 
         camera cam;
-        cam.pos.y = 3;
         cam.pos.z = 3;
-        cam.pitch = -30;
 
         cubemap skybox;
         skybox.load("assets/textures/skybox");
-
-        model cube("assets/models/cube.obj");
-        skybox_shader ss(cam, r.aspect(), skybox.sampler, cube);
-        r.render(cube.num_vertices(), ss);
 
         model head("assets/models/african_head.obj");
         object_shader os(cam, r.aspect(), skybox.sampler);
