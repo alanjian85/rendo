@@ -173,6 +173,10 @@ namespace box {
             w *= rhs;
             return *this;
         }
+
+        friend vector operator+(vector lhs, vector rhs) {
+            return {lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z, lhs.w + rhs.w};
+        }
     };
 
     using vector4 = vector<double, 4>;

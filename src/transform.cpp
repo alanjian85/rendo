@@ -28,12 +28,12 @@ matrix4 box::make_lookat(vector3 eye, vector3 center, vector3 up) {
 	m[0][1] = u.x;
 	m[1][1] = u.y;
 	m[2][1] = u.z;
-	m[0][2] =-f.x;
-	m[1][2] =-f.y;
-	m[2][2] =-f.z;
-	m[3][0] =-dot(s, eye);
-	m[3][1] =-dot(u, eye);
-	m[3][2] = dot(f, eye);
+	m[0][2] = -f.x;
+	m[1][2] = -f.y;
+	m[2][2] = -f.z;
+	m[3][0] = -dot(s, eye);
+	m[3][1] = -dot(u, eye);
+	m[3][2] =  dot(f, eye);
 	return m;
 }
 
