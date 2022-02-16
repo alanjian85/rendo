@@ -6,6 +6,7 @@
 #include "texture.hpp"
 #include "transform.hpp"
 #include "model.hpp"
+#include "light.hpp"
 #include "utility.hpp"
 using namespace box;
 
@@ -16,24 +17,35 @@ public:
         proj_ = proj;
         view_ = view;
         cam_pos_ = cam_pos;
+        light_.pos = vector3(1.2, 1.0, 2.0);
+        light_.shininess = 16;
+        light_.constant = 1;
+        light_.linear = 0.09;
+        light_.quadratic = 0.032;
         head_.load("assets/models/african_head.obj");
     }
 
     virtual vector4 vert(int n) override {
         auto pos = vector4(head_.get_vertex(n), 1);
-        v_pos[n % 3] = vector3(pos);
-        v_normal[n % 3] = head_.get_normal(n);
-        v_uv[n % 3] = head_.get_uv(n);
-        sampler_.bind_texture(head_.get_mat(n)->diffuse_map);
+        mat_ = head_.get_mat(n);
+        v_pos_[n % 3] = vector3(pos);
+        v_normal_[n % 3] = head_.get_normal(n);
+        v_uv_[n % 3] = head_.get_uv(n);
+        sampler_.bind_texture(mat_->diffuse_map);
         return proj_ * view_ * pos;
     }
 
     virtual std::optional<color_rgba> frag(vector3 bar) override {
-        auto pos = frag_lerp(v_pos, bar);
-        auto normal = frag_lerp(v_normal, bar).normalize();
-        auto uv = frag_lerp(v_uv, bar);
+        auto pos = frag_lerp(v_pos_, bar);
+        auto normal = frag_lerp(v_normal_, bar).normalize();
+        auto uv = frag_lerp(v_uv_, bar);
+
         auto cam_dir = (pos - cam_pos_).normalize();
-        auto color = sampler_(uv);
+        auto light_dir = (light_.pos - pos).normalize();
+
+        auto diffuse = color_rgb(sampler_(uv)) * mat_->diffuse * color_rgb(std::max(dot(light_dir, normal), 0.0));
+
+        auto color = color_rgba(diffuse, 1);
         if (color.a < 0.1)
             return std::nullopt;
         return color;
@@ -47,11 +59,14 @@ private:
     matrix4 proj_;
     matrix4 view_;
 
+    point_light light_;
+
     sampler2 sampler_;
     model head_;
-    vector3 v_pos[3];
-    vector3 v_normal[3];
-    vector2 v_uv[3];
+    vector3 v_pos_[3];
+    vector3 v_normal_[3];
+    vector2 v_uv_[3];
+    const material* mat_;
 };
 
 int main() {

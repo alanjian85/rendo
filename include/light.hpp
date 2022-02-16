@@ -6,17 +6,17 @@
 
 namespace box {
     struct directional_light {
-        vector3 dir;
-        color_rgb ambient;
-        color_rgb diffuse;
-        color_rgb specular;
+        vector3 dir = vector3(0, 0, 0);
+        color_rgb ambient = color_rgb(1, 1, 1);
+        color_rgb diffuse = color_rgb(1, 1, 1);
+        color_rgb specular = color_rgb(1, 1, 1);
     };
 
     struct point_light {
-        vector3 pos;
-        color_rgb ambient;
-        color_rgb diffuse;
-        color_rgb specular;
+        vector3 pos = vector3(0, 0, 0);
+        color_rgb ambient = color_rgb(1, 1, 1);
+        color_rgb diffuse = color_rgb(1, 1, 1);
+        color_rgb specular = color_rgb(1, 1, 1);
         double shininess;
         double constant;
         double linear;
