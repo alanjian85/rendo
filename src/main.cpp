@@ -12,7 +12,6 @@ using namespace box;
 class head_shader : public basic_shader {
 public:
     head_shader(matrix4 proj, matrix4 view, vector3 cam_pos, const sampler_cube& sampler) 
-        : sampler_(sampler)
     {
         proj_ = proj;
         view_ = view;
@@ -24,14 +23,17 @@ public:
         auto pos = vector4(head_.get_vertex(n), 1);
         v_pos[n % 3] = vector3(pos);
         v_normal[n % 3] = head_.get_normal(n);
+        v_uv[n % 3] = head_.get_uv(n);
+        sampler_.bind_texture(head_.get_mat(n)->diffuse_map);
         return proj_ * view_ * pos;
     }
 
     virtual std::optional<color_rgba> frag(vector3 bar) override {
         auto pos = frag_lerp(v_pos, bar);
         auto normal = frag_lerp(v_normal, bar).normalize();
+        auto uv = frag_lerp(v_uv, bar);
         auto cam_dir = (pos - cam_pos_).normalize();
-        auto color = sampler_(reflect(cam_dir, normal));
+        auto color = sampler_(uv);
         if (color.a < 0.1)
             return std::nullopt;
         return color;
@@ -41,15 +43,15 @@ public:
         r.render(head_.num_vertices(), *this);
     }
 private:
+    vector3 cam_pos_;
     matrix4 proj_;
     matrix4 view_;
 
-    vector3 cam_pos_;
-    const sampler_cube& sampler_;
-
+    sampler2 sampler_;
     model head_;
     vector3 v_pos[3];
     vector3 v_normal[3];
+    vector2 v_uv[3];
 };
 
 int main() {

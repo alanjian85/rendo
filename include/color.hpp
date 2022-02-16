@@ -2,6 +2,17 @@
 #define BOX_COLOR_HPP
 
 namespace box {
+    struct color_rgb {
+        double r, g, b;
+
+        color_rgb() = default;
+        color_rgb(double r_, double g_, double b_)
+            : r(r_), g(g_), b(b_)
+        {
+
+        }
+    };
+
     struct color_rgba {
         double r, g, b, a;
 

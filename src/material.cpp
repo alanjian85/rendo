@@ -27,16 +27,12 @@ void material_library::load(const std::filesystem::path& path) {
             stream >> mat->shininess;
         } else if (attrib == "Ka") {
             stream >> mat->ambient.r >> mat->ambient.g >> mat->ambient.b;
-            mat->ambient.a = 1;
         } else if (attrib == "Kd") {
             stream >> mat->diffuse.r >> mat->diffuse.g >> mat->diffuse.b;
-            mat->diffuse.a = 1;
         } else if (attrib == "Ks") {
             stream >> mat->specular.r >> mat->specular.g >> mat->specular.b;
-            mat->specular.a = 1;
         } else if (attrib == "Ke") {
             stream >> mat->emission.r >> mat->emission.g >> mat->emission.b;
-            mat->emission.a = 1;
         } else if (attrib == "Ni") {
             stream >> mat->refraction;
         } else if (attrib == "d") {
