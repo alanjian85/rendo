@@ -10,10 +10,10 @@
 
 namespace box {
     struct material {
-        color_rgb ambient;
-        color_rgb diffuse;
-        color_rgb specular;
-        color_rgb emission;
+        color_rgba ambient;
+        color_rgba diffuse;
+        color_rgba specular;
+        color_rgba emission;
         double shininess;
         double refraction;
         double opacity;
