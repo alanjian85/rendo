@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "color.hpp"
+#include "texture.hpp"
 
 namespace box {
     struct pixel {
@@ -57,6 +58,8 @@ namespace box {
         }
 
         void write(const std::string& path) const;
+
+        texture zbuffer() const;
     private:
         int width_, height_;
         std::vector<pixel> pixels_;

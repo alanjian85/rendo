@@ -12,6 +12,12 @@ namespace box {
     class texture {
     public:
         texture() : width_(), height_() {}
+        texture(int width, int height)
+            : pixels_(width * height),
+              width_(width), height_(height)
+        {
+
+        }
 
         void load(const std::string& path);
 

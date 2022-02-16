@@ -9,7 +9,7 @@ void framebuffer::write(const std::string& path) const {
     std::ofstream file(path, std::ios::binary);
     if (!file.is_open())
         throw std::runtime_error("Failed to write framebuffer to path " + path);
-/*
+
     file << "P7\n"
          << "WIDTH " << width_ << '\n'
          << "HEIGHT " << height_ << '\n'
@@ -34,23 +34,15 @@ void framebuffer::write(const std::string& path) const {
             file.put(r); file.put(g); file.put(b); file.put(a);
         }
     }
-*/
-    file << "P3\n"
-         << width_ << ' ' << height_ << '\n'
-         << "255\n";
+}
 
-    auto y = height();
-    for (int y = 0; y < height(); ++y) {
-        for (int x = 0; x < width(); ++x) {
-            auto r = static_cast<int>((*this)(x, y).color.r * 255);
-            auto g = static_cast<int>((*this)(x, y).color.g * 255);
-            auto b = static_cast<int>((*this)(x, y).color.b * 255);
-
-            r = std::clamp(r, 0, 255);
-            g = std::clamp(g, 0, 255);
-            b = std::clamp(b, 0, 255);
-
-            file << r << ' ' << g << ' ' << b << ' ';
+texture framebuffer::zbuffer() const {
+    texture t(width_, height_);
+    for (int y = 0; y < height_; ++y) {
+        for (int x = 0; x < width_; ++x) {
+            auto d = (*this)(x, y).depth;
+            t(x, y) = color_rgba(d, d, d, 1);
         }
     }
+    return t;
 }
