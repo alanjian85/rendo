@@ -42,10 +42,12 @@ public:
 
         auto cam_dir = (pos - cam_pos_).normalize();
         auto light_dir = (light_.pos - pos).normalize();
+        auto halfway_dir = (cam_dir + light_dir).normalize();
 
-        auto diffuse = color_rgb(sampler_(uv)) * mat_->diffuse * color_rgb(std::max(dot(light_dir, normal), 0.0));
+        auto diffuse = light_.diffuse * color_rgb(sampler_(uv)) * mat_->diffuse * color_rgb(std::max(dot(light_dir, normal), 0.0));
+        auto specular = light_.specular * mat_->specular * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), light_.shininess));
 
-        auto color = color_rgba(diffuse, 1);
+        auto color = color_rgba(diffuse + specular, 1);
         if (color.a < 0.1)
             return std::nullopt;
         return color;
@@ -76,7 +78,11 @@ int main() {
         renderer r(fb);
 
         camera cam;
+        cam.pos.x = 3;
         cam.pos.z = 3;
+        cam.pos.y = 3;
+        cam.yaw = -135;
+        cam.pitch = -35;
 
         cubemap skybox;
         skybox.load("assets/textures/skybox");
