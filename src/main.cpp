@@ -18,7 +18,9 @@ public:
         view_ = view;
         cam_pos_ = cam_pos;
         light_.pos = vector3(1.2, 1.0, 2.0);
-        light_.shininess = 16;
+        light_.ambient = color_rgb(0.2);
+        light_.diffuse = color_rgb(0.5);
+        light_.specular = color_rgb(1.0);
         light_.constant = 1;
         light_.linear = 0.09;
         light_.quadratic = 0.032;
@@ -43,11 +45,18 @@ public:
         auto cam_dir = (pos - cam_pos_).normalize();
         auto light_dir = (light_.pos - pos).normalize();
         auto halfway_dir = (cam_dir + light_dir).normalize();
+        
+        auto distance = (cam_pos_ - pos).length();
+        auto attenuation = light_.constant + distance * light_.linear + distance * distance * light_.quadratic;
 
+        auto ambient = light_.ambient * color_rgb(sampler_(uv));
         auto diffuse = light_.diffuse * color_rgb(sampler_(uv)) * mat_->diffuse * color_rgb(std::max(dot(light_dir, normal), 0.0));
-        auto specular = light_.specular * mat_->specular * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), light_.shininess));
+        auto specular = light_.specular * mat_->specular * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), mat_->shininess));
 
-        auto color = color_rgba(diffuse + specular, 1);
+        diffuse *= attenuation;
+        specular *= attenuation;
+
+        auto color = color_rgba(ambient + diffuse + specular, 1);
         if (color.a < 0.1)
             return std::nullopt;
         return color;
@@ -80,9 +89,9 @@ int main() {
         camera cam;
         cam.pos.x = 3;
         cam.pos.z = 3;
-        cam.pos.y = 3;
+        cam.pos.y = -1;
         cam.yaw = -135;
-        cam.pitch = -35;
+        cam.pitch = 15;
 
         cubemap skybox;
         skybox.load("assets/textures/skybox");

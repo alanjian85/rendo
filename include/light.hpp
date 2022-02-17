@@ -17,7 +17,6 @@ namespace box {
         color_rgb ambient = color_rgb(1, 1, 1);
         color_rgb diffuse = color_rgb(1, 1, 1);
         color_rgb specular = color_rgb(1, 1, 1);
-        double shininess;
         double constant;
         double linear;
         double quadratic;

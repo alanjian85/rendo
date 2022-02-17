@@ -19,6 +19,13 @@ namespace box {
 
         }
         color_rgb(color_rgba);
+
+        color_rgb& operator*=(color_rgb rhs) {
+            r *= rhs.r;
+            g *= rhs.g;
+            b *= rhs.b;
+            return *this;
+        }
     };
 
     inline color_rgb operator+(color_rgb lhs, color_rgb rhs) {
