@@ -7,6 +7,8 @@ using namespace box;
 #include <numeric>
 
 void renderer::render_triangle(triangle t, basic_shader& s) {
+    s.geometry();
+    
     for (int i = 0; i < 3; ++i) {
         t[i].x /= t[i].w;
         t[i].y /= t[i].w;
@@ -70,6 +72,6 @@ void renderer::render(int n, basic_shader& s) {
         t.b = s.vert(i + 1);
         t.c = s.vert(i + 2);
 
-        render_triangle(t, s);        
+        render_triangle(t, s);
     }
 }

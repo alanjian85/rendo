@@ -11,6 +11,7 @@ namespace box {
         virtual ~basic_shader() noexcept = default;
 
         virtual vector4 vert(int n) = 0;
+        virtual void geometry() {}
         virtual std::optional<color_rgba> frag(vector3 bar) = 0;
     protected:
         template <typename T>
