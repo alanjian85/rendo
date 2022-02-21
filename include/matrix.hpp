@@ -13,6 +13,14 @@ namespace box {
     template <typename T>
     class matrix<T, 3, 3> {
     public:
+        explicit matrix(double t = 0) 
+            : matrix(t, 0, 0,
+                     0, t, 0,
+                     0, 0, t)
+        {
+
+        }
+
         explicit matrix(matrix<T, 4, 4> m)
             : matrix(m[0][0], m[1][0], m[2][0],
                      m[0][1], m[1][1], m[2][1],
@@ -36,6 +44,14 @@ namespace box {
 
         const T* operator[](int i) const {
             return entries_[i];
+        }
+
+        T& operator()(int i, int j) {
+            return entries_[j][i];
+        }
+
+        const T& operator()(int i, int j) const {
+            return entries_[j][i];
         }
 
         matrix transpose() const {
@@ -64,11 +80,27 @@ namespace box {
             };
         }
 
+        friend matrix operator+(matrix lhs, matrix rhs) {
+            return {
+                lhs[0][0] + rhs[0][0], lhs[1][0] + rhs[1][0], lhs[2][0] + rhs[2][0],
+                lhs[0][1] + rhs[0][1], lhs[1][1] + rhs[1][1], lhs[2][1] + rhs[2][1],
+                lhs[0][2] + rhs[0][2], lhs[1][2] + rhs[1][2], lhs[2][2] + rhs[2][2]
+            };
+        }
+
         friend vector<T, 3> operator*(matrix lhs, vector<T, 3> rhs) {
             return {
                 lhs[0][0] * rhs[0] + lhs[1][0] * rhs[1] + lhs[2][0] * rhs[2],
                 lhs[0][1] * rhs[0] + lhs[1][1] * rhs[1] + lhs[2][1] * rhs[2],
                 lhs[0][2] * rhs[0] + lhs[1][2] * rhs[1] + lhs[2][2] * rhs[2]
+            };
+        }
+
+        friend matrix operator*(matrix lhs, T rhs) {
+            return {
+                lhs[0][0] * rhs, lhs[1][0] * rhs, lhs[2][0] * rhs,
+                lhs[0][1] * rhs, lhs[1][1] * rhs, lhs[2][1] * rhs,
+                lhs[0][2] * rhs, lhs[1][2] * rhs, lhs[2][2] * rhs
             };
         }
     private:
@@ -80,7 +112,7 @@ namespace box {
     template <typename T>
     class matrix<T, 4, 4> {
     public:    
-        matrix(double t = 0)
+        explicit matrix(double t = 0)
             : matrix(t, 0, 0, 0,
                      0, t, 0, 0,
                      0, 0, t, 0,

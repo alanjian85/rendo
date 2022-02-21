@@ -39,6 +39,10 @@ namespace box {
         friend vector operator+(vector lhs, vector rhs) {
             return {lhs.x + rhs.x, lhs.y + rhs.y};
         }
+        
+        friend vector operator-(vector lhs, vector rhs) {
+            return {lhs.x - rhs.x, lhs.y - rhs.y};
+        }
 
         friend vector operator*(vector lhs, double rhs) {
             return {lhs.x * rhs, lhs.y * rhs};
