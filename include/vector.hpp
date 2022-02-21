@@ -5,6 +5,8 @@
 #include <cmath>
 #include <limits>
 
+#include "color.hpp"
+
 namespace box {
     template <typename T, std::size_t N>
     struct vector;
@@ -55,13 +57,21 @@ namespace box {
         T x, y, z;
 
         vector() = default;
+        
         vector(T x_, T y_, T z_)
             : x(x_), y(y_), z(z_)
         {
 
         }
+        
         explicit vector(vector<T, 4> v)
             : x(v.x), y(v.y), z(v.z)
+        {
+
+        }
+
+        explicit vector(color_rgba c)
+            : x(c.r), y(c.g), z(c.b)
         {
 
         }

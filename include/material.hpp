@@ -19,6 +19,7 @@ namespace box {
         double opacity;
         int illum;
         texture diffuse_map;
+        texture normal_map;
     };
 
     class material_library {

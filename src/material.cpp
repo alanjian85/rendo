@@ -17,11 +17,11 @@ void material_library::load(const std::filesystem::path& path) {
         std::istringstream stream(line);
         
         std::string attrib;
+        std::string relative_path;
         stream >> attrib;        
         if (attrib == "newmtl") {
             std::string name;
             stream >> name;
-
             mat = &materials_[name];
         } else if (attrib == "Ns") {
             stream >> mat->shininess;
@@ -40,10 +40,11 @@ void material_library::load(const std::filesystem::path& path) {
         } else if (attrib == "illum") {
             stream >> mat->illum;
         } else if (attrib == "map_Kd") {
-            std::string relative_path;
             stream >> relative_path;
-
             mat->diffuse_map.load(dir / relative_path);
+        } else if (attrib == "norm") {
+            stream >> relative_path;
+            mat->normal_map.load(dir / relative_path);
         }
     }
 }

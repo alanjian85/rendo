@@ -24,7 +24,7 @@ public:
         light_.constant = 1;
         light_.linear = 0.09;
         light_.quadratic = 0.032;
-        head_.load("assets/models/african_head.obj");
+        head_.load("assets/models/DamagedHelmet.obj");
     }
 
     virtual vector4 vert(int n) override {
@@ -33,13 +33,14 @@ public:
         v_pos_[n % 3] = vector3(pos);
         v_normal_[n % 3] = head_.get_normal(n);
         v_uv_[n % 3] = head_.get_uv(n);
-        sampler_.bind_texture(mat_->diffuse_map);
+        diffuse_sampler_.bind_texture(mat_->diffuse_map);
+        normal_sampler_.bind_texture(mat_->normal_map);
         return proj_ * view_ * pos;
     }
 
     virtual std::optional<color_rgba> frag(vector3 bar) override {
         auto pos = frag_lerp(v_pos_, bar);
-        auto normal = frag_lerp(v_normal_, bar).normalize();
+        auto f_normal = frag_lerp(v_normal_, bar).normalize();
         auto uv = frag_lerp(v_uv_, bar);
 
         auto cam_dir = (pos - cam_pos_).normalize();
@@ -49,8 +50,10 @@ public:
         auto distance = (cam_pos_ - pos).length();
         auto attenuation = light_.constant + distance * light_.linear + distance * distance * light_.quadratic;
 
-        auto ambient = light_.ambient * color_rgb(sampler_(uv));
-        auto diffuse = light_.diffuse * color_rgb(sampler_(uv)) * mat_->diffuse * color_rgb(std::max(dot(light_dir, normal), 0.0));
+        auto normal = vector3(normal_sampler_(uv));
+
+        auto ambient = light_.ambient * color_rgb(diffuse_sampler_(uv));
+        auto diffuse = light_.diffuse * color_rgb(diffuse_sampler_(uv)) * mat_->diffuse * color_rgb(std::max(dot(light_dir, normal), 0.0));
         auto specular = light_.specular * mat_->specular * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), mat_->shininess));
 
         diffuse *= attenuation;
@@ -72,7 +75,8 @@ private:
 
     point_light light_;
 
-    sampler2 sampler_;
+    sampler2 diffuse_sampler_;
+    sampler2 normal_sampler_;
     model head_;
     vector3 v_pos_[3];
     vector3 v_normal_[3];
@@ -87,8 +91,8 @@ int main() {
         renderer r(fb);
 
         camera cam;
-        cam.pos.x = 3;
-        cam.pos.z = 3;
+        cam.pos.x = 2;
+        cam.pos.z = 2;
         cam.pos.y = -1;
         cam.yaw = -135;
         cam.pitch = 15;
