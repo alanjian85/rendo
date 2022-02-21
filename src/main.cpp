@@ -33,6 +33,7 @@ public:
         v_pos_[n % 3] = vector3(pos);
         v_normal_[n % 3] = head_.get_normal(n);
         v_uv_[n % 3] = head_.get_uv(n);
+        ambient_sampler_.bind_texture(mat_->ambient_map);
         diffuse_sampler_.bind_texture(mat_->diffuse_map);
         normal_sampler_.bind_texture(mat_->normal_map);
         return proj_ * view_ * pos;
@@ -52,7 +53,7 @@ public:
 
         auto normal = vector3(normal_sampler_(uv));
 
-        auto ambient = light_.ambient * color_rgb(diffuse_sampler_(uv));
+        auto ambient = light_.ambient * color_rgb(ambient_sampler_(uv));
         auto diffuse = light_.diffuse * color_rgb(diffuse_sampler_(uv)) * mat_->diffuse * color_rgb(std::max(dot(light_dir, normal), 0.0));
         auto specular = light_.specular * mat_->specular * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), mat_->shininess));
 
@@ -75,6 +76,7 @@ private:
 
     point_light light_;
 
+    sampler2 ambient_sampler_;
     sampler2 diffuse_sampler_;
     sampler2 normal_sampler_;
     model head_;

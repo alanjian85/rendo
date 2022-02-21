@@ -18,6 +18,7 @@ namespace box {
         double refraction;
         double opacity;
         int illum;
+        texture ambient_map;
         texture diffuse_map;
         texture normal_map;
     };

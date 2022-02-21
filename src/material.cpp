@@ -39,6 +39,9 @@ void material_library::load(const std::filesystem::path& path) {
             stream >> mat->opacity;
         } else if (attrib == "illum") {
             stream >> mat->illum;
+        } else if (attrib == "map_Ka") {
+            stream >> relative_path;
+            mat->ambient_map.load(dir / relative_path);
         } else if (attrib == "map_Kd") {
             stream >> relative_path;
             mat->diffuse_map.load(dir / relative_path);
