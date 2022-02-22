@@ -92,7 +92,15 @@ public:
         diffuse *= attenuation;
         specular *= attenuation;
 
-        auto color = color_rgba(ambient + diffuse + specular, 1);
+        auto intensity = std::max(dot(light_dir, normal), 0.0);
+        if (intensity > 0.85) intensity = 1;
+        else if (intensity > 0.60) intensity = 0.80;
+        else if (intensity > 0.45) intensity = 0.60;
+        else if (intensity > 0.30) intensity = 0.45;
+        else if (intensity > 0.15) intensity = 0.30;
+        else intensity = 0;
+
+        auto color = color_rgba((ambient + diffuse + specular) * intensity, 1);
         if (color.a < 0.1)
             return std::nullopt;
         return color;
@@ -119,10 +127,6 @@ private:
     const material* mat_;
 };
 
-color_rgba toon_shader(vector2 fc, pixel p) {
-
-}
-
 int main() {
     try {
         framebuffer fb(1024, 1024);
@@ -141,8 +145,7 @@ int main() {
 
         head_shader hs(cam.proj(fb.aspect()), cam.view(), cam.pos, skybox.sampler);
         hs.render(r);
-        
-        r.post_process(toon_shader);
+
         fb.write("image.pam");
     } catch (std::exception& e) {
         std::cerr << e.what() << '\n';

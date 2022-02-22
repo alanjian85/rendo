@@ -36,6 +36,10 @@ namespace box {
         return {lhs.r * rhs.r, lhs.g * rhs.g, lhs.b * rhs.b};
     }
 
+    inline color_rgb operator*(color_rgb lhs, double rhs) {
+        return {lhs.r * rhs, lhs.g * rhs, lhs.b * rhs};
+    }
+
     struct color_rgba {
         double r, g, b, a;
 
