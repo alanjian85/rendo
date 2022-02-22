@@ -70,7 +70,7 @@ public:
         v_tbn_[2](2, 0) = v_normal_[2].x; v_tbn_[2](0, 1) = v_normal_[2].y; v_tbn_[2](0, 2) = v_normal_[2].z;
     }
 
-    virtual std::optional<color_rgba> frag(vector3 bar) override {
+    virtual std::optional<color_rgba> frag(vector3 bar, vector2 fc) override {
         auto pos = frag_lerp(v_pos_, bar);
         auto f_normal = frag_lerp(v_normal_, bar).normalize();
         auto uv = frag_lerp(v_uv_, bar);

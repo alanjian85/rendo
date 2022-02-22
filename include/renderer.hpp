@@ -30,6 +30,8 @@ namespace box {
         }
 
         void render(int n, basic_shader& s);
+
+        void post_process(basic_shader& s);
     private:
         void render_triangle(triangle t, basic_shader& s);
 

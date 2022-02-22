@@ -12,7 +12,7 @@ namespace box {
 
         virtual vector4 vert(int n) = 0;
         virtual void geometry() {}
-        virtual std::optional<color_rgba> frag(vector3 bar) = 0;
+        virtual std::optional<color_rgba> frag(vector3 bar, vector2 fc) = 0;
     protected:
         template <typename T>
         static T frag_lerp(T t[3], vector3 bar) {
