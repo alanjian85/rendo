@@ -53,12 +53,8 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
 
                 auto z = bar_clip.x * t[0].z + bar_clip.y * t[1].z + bar_clip.z * t[2].z;
 
-                vector2 fc;
-                fc.x = static_cast<double>(x) / (fb_.width() - 1);
-                fc.y = static_cast<double>(y) / (fb_.height() - 1);
-
                 if (z > -1 && z < fb_(x, y).depth) {
-                    auto color = s.frag(bar_clip, fc);
+                    auto color = s.frag(bar_clip);
                     if (color.has_value()) {
                         fb_(x, y).color = *color;
                         fb_(x, y).depth = z;
@@ -80,16 +76,13 @@ void renderer::render(int n, basic_shader& s) {
     }
 }
 
-void renderer::post_process(basic_shader& s) {
+void renderer::post_process(const post_processor_type& p) {
     for (int y = 0; y < fb_.height(); --y) {
         for (int x = 0; x < fb_.width(); --x) {
             vector2 fc;
             fc.x = static_cast<double>(x) / (fb_.width() - 1);
             fc.y = static_cast<double>(y) / (fb_.height() - 1);
-            auto color = s.frag({0, 0, 0}, fc);
-            if (color.has_value()) {
-                fb_(x, y).color = *color;
-            }
+            fb_(x, y).color = p(fc, fb_(x, y));
         }
     }
 }

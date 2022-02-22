@@ -2,6 +2,7 @@
 #define BOX_RENDERER_HPP
 
 #include <fstream>
+#include <functional>
 #include <memory>
 #include <string>
 
@@ -19,6 +20,8 @@ namespace box {
 
     class renderer {
     public:
+        using post_processor_type = std::function<color_rgba(vector2, pixel)>;
+
         renderer(framebuffer& fb)
             : fb_(fb)
         {
@@ -31,7 +34,7 @@ namespace box {
 
         void render(int n, basic_shader& s);
 
-        void post_process(basic_shader& s);
+        void post_process(const post_processor_type& p);
     private:
         void render_triangle(triangle t, basic_shader& s);
 

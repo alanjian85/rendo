@@ -70,7 +70,7 @@ public:
         v_tbn_[2](2, 0) = v_normal_[2].x; v_tbn_[2](0, 1) = v_normal_[2].y; v_tbn_[2](0, 2) = v_normal_[2].z;
     }
 
-    virtual std::optional<color_rgba> frag(vector3 bar, vector2 fc) override {
+    virtual std::optional<color_rgba> frag(vector3 bar) override {
         auto pos = frag_lerp(v_pos_, bar);
         auto f_normal = frag_lerp(v_normal_, bar).normalize();
         auto uv = frag_lerp(v_uv_, bar);
@@ -119,6 +119,10 @@ private:
     const material* mat_;
 };
 
+color_rgba toon_shader(vector2 fc, pixel p) {
+
+}
+
 int main() {
     try {
         framebuffer fb(1024, 1024);
@@ -137,7 +141,8 @@ int main() {
 
         head_shader hs(cam.proj(fb.aspect()), cam.view(), cam.pos, skybox.sampler);
         hs.render(r);
-
+        
+        r.post_process(toon_shader);
         fb.write("image.pam");
     } catch (std::exception& e) {
         std::cerr << e.what() << '\n';
