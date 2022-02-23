@@ -8,6 +8,7 @@
 
 #include "color.hpp"
 #include "texture.hpp"
+#include "vector.hpp"
 
 namespace box {
     struct pixel {
@@ -55,6 +56,14 @@ namespace box {
         const pixel& operator()(int x, int y) const {
             auto index = y * width_ + x;
             return {pixels_[index]};
+        }
+
+        pixel& operator()(vector2 p) {
+            return (*this)(p.x, p.y);
+        }
+
+        const pixel& operator()(vector2 p) const {
+            return (*this)(p.x, p.y);
         }
 
         void write(const std::string& path) const;

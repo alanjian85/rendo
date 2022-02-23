@@ -10,6 +10,21 @@
 #include "utility.hpp"
 using namespace box;
 
+double max_elevation_angle(const framebuffer& fb, vector2 pos, vector2 dir) {
+    auto max_angle = 0.0;
+    for (int t = 0; t < 1000; ++t) {
+        auto curr = pos + dir * t;
+        if (curr.x < 0 || curr.x >= fb.width() || curr.y < 0 || curr.y >= fb.height())
+            return max_angle;
+
+        auto distance = (curr - pos).length();
+        if (distance < 1) continue;
+        auto elevation = fb(curr).depth - fb(pos).depth;
+        max_angle = std::max(max_angle, std::atan(elevation / distance));
+    }
+    return max_angle;
+}
+
 class depth_shader : public basic_shader {
 public:
     depth_shader(matrix4 proj, matrix4 view, const model& mesh) {
@@ -162,8 +177,8 @@ int main() {
         model helmet;
         helmet.load("assets/models/DamagedHelmet.obj");
 
-        model_shader ms(cam.proj(fb.aspect()), cam.view(), helmet, cam.pos);
-        r.render(helmet.num_vertices(), ms);
+        depth_shader ds(cam.proj(fb.aspect()), cam.view(), helmet);
+        r.render(helmet.num_vertices(), ds);
 
         fb.write("image.pam");
     } catch (std::exception& e) {

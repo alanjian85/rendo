@@ -35,6 +35,14 @@ namespace box {
             y *= rhs;
             return *this;
         }
+
+        T length_squared() const {
+            return x * x + y * y;
+        }
+
+        T length() const {
+            return std::sqrt(length_squared());
+        }
     
         friend vector operator+(vector lhs, vector rhs) {
             return {lhs.x + rhs.x, lhs.y + rhs.y};
