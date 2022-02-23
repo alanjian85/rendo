@@ -23,13 +23,16 @@ namespace box {
         using post_processor_type = std::function<color_rgba(vector2, pixel)>;
 
         renderer(framebuffer& fb)
-            : fb_(fb)
         {
-
+            fb_ = &fb;
         }
 
         void set_face_culling(cull_type cull) {
             face_culling_ = cull;
+        }
+
+        void bind_framebuffer(framebuffer& fb) {
+            fb_ = &fb;
         }
 
         void render(int n, basic_shader& s);
@@ -38,7 +41,7 @@ namespace box {
     private:
         void render_triangle(triangle t, basic_shader& s);
 
-        framebuffer& fb_;
+        framebuffer* fb_;
 
         cull_type face_culling_ = cull_type::none;
     };
