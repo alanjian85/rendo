@@ -10,9 +10,31 @@
 #include "utility.hpp"
 using namespace box;
 
-class head_shader : public basic_shader {
+class depth_shader : public basic_shader {
 public:
-    head_shader(matrix4 proj, matrix4 view, vector3 cam_pos, const sampler_cube& sampler) 
+    depth_shader(matrix4 proj, matrix4 view, const model& mesh) {
+        proj_ = proj;
+        view_ = view;
+        mesh_ = &mesh;
+    }
+
+    virtual vector4 vert(int n) override {
+        auto pos = mesh_->get_vertex(n);
+        return proj_ * view_ * vector4(pos, 1);
+    }
+
+    virtual std::optional<color_rgba> frag(vector3 bar) override {
+        return color_rgba(0, 0, 0, 1);
+    }
+private:
+    matrix4 proj_;
+    matrix4 view_;
+    const model* mesh_;
+};
+
+class model_shader : public basic_shader {
+public:
+    model_shader(matrix4 proj, matrix4 view, const model& mesh, vector3 cam_pos) 
     {
         proj_ = proj;
         view_ = view;
@@ -24,19 +46,19 @@ public:
         light_.constant = 1;
         light_.linear = 0.09;
         light_.quadratic = 0.032;
-        head_.load("assets/models/DamagedHelmet.obj");
+        mesh_ = &mesh;
     }
 
     virtual vector4 vert(int n) override {
-        auto pos = vector4(head_.get_vertex(n), 1);
-        mat_ = head_.get_mat(n);
+        auto pos = mesh_->get_vertex(n);
+        mat_ = mesh_->get_mat(n);
         v_pos_[n % 3] = vector3(pos);
-        v_normal_[n % 3] = head_.get_normal(n);
-        v_uv_[n % 3] = head_.get_uv(n);
+        v_normal_[n % 3] = mesh_->get_normal(n);
+        v_uv_[n % 3] = mesh_->get_uv(n);
         ambient_sampler_.bind_texture(mat_->ambient_map);
         diffuse_sampler_.bind_texture(mat_->diffuse_map);
         normal_sampler_.bind_texture(mat_->normal_map);
-        return proj_ * view_ * pos;
+        return proj_ * view_ * vector4(pos, 1);
     }
 
     virtual void geometry() {
@@ -105,14 +127,11 @@ public:
             return std::nullopt;
         return color;
     }
-
-    void render(renderer& r) {
-        r.render(head_.num_vertices(), *this);
-    }
 private:
     vector3 cam_pos_;
     matrix4 proj_;
     matrix4 view_;
+    const model* mesh_;
 
     point_light light_;
 
@@ -140,11 +159,11 @@ int main() {
         cam.yaw = -135;
         cam.pitch = 15;
 
-        cubemap skybox;
-        skybox.load("assets/textures/skybox");
+        model helmet;
+        helmet.load("assets/models/DamagedHelmet.obj");
 
-        head_shader hs(cam.proj(fb.aspect()), cam.view(), cam.pos, skybox.sampler);
-        hs.render(r);
+        model_shader ms(cam.proj(fb.aspect()), cam.view(), helmet, cam.pos);
+        r.render(helmet.num_vertices(), ms);
 
         fb.write("image.pam");
     } catch (std::exception& e) {
