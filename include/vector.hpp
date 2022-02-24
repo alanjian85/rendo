@@ -133,6 +133,10 @@ namespace box {
             return {lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z};
         }
 
+        friend vector operator+(vector lhs, double rhs) {
+            return {lhs.x + rhs, lhs.y + rhs, lhs.z + rhs};
+        }
+
         friend vector operator-(vector lhs, vector rhs) {
             return {lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z};
         }
@@ -143,6 +147,10 @@ namespace box {
 
         friend vector operator*(double lhs, vector rhs) {
             return rhs * lhs;
+        }
+
+        friend vector operator/(vector lhs, double rhs) {
+            return {lhs.x / rhs, lhs.y / rhs, lhs.z / rhs};
         }
 
         friend double dot(vector lhs, vector rhs) {

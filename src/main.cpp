@@ -12,8 +12,8 @@ using namespace box;
 
 class depth_shader : public basic_shader {
 public:
-    depth_shader(matrix4 proj, matrix4 view, const model& mesh) {
-        mvp_ = proj * view * matrix4(1);
+    depth_shader(matrix4 mvp, const model& mesh) {
+        mvp_ = mvp;
         mesh_ = &mesh;
     }
 
@@ -32,14 +32,15 @@ private:
 
 class model_shader : public basic_shader {
 public:
-    model_shader(matrix4 proj, matrix4 view, const model& mesh, vector3 cam_pos, texture shadowmap, directional_light light) 
+    model_shader(matrix4 mvp, vector3 cam_pos, const model& mesh, texture shadowmap, directional_light light, matrix4 light_mvp) 
     {
-        mvp_ = proj * view * matrix4(1);
+        mvp_ = mvp;
         cam_pos_ = cam_pos;
         mesh_ = &mesh;
         shadowmap_ = std::move(shadowmap);
         shadowmap_sampler_.bind_texture(shadowmap_);
         light_ = light;
+        light_mvp_ = light_mvp;
     }
 
     virtual vector4 vert(int n) override {
@@ -94,23 +95,32 @@ public:
         auto cam_dir = (pos - cam_pos_).normalize();
         auto light_dir = light_.dir.normalize();
         auto halfway_dir = (cam_dir + light_dir).normalize();
-    
+
+        auto pos_light_space = light_mvp_ * vector4(pos, 1);
+        auto pos_proj_coord = vector3(pos_light_space) / pos_light_space.w;
+        pos_proj_coord = pos_proj_coord * 0.5 + 0.5;
+        auto closest_depth = shadowmap_sampler_(pos_proj_coord.x, pos_proj_coord.y).r;
+        auto current_depth = pos_proj_coord.z;
+        auto shadow = current_depth > closest_depth ? 1.0 : 0.0;
+
         auto normal = (tbn * vector3(normal_sampler_(uv))).normalize();
 
         auto ambient = light_.ambient * color_rgb(diffuse_sampler_(uv));
         auto diffuse = light_.diffuse * color_rgb(diffuse_sampler_(uv)) * mat_->diffuse * color_rgb(std::max(dot(light_dir, normal), 0.0));
         auto specular = light_.specular * color_rgb(specular_sampler_(uv)) * mat_->specular * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), mat_->shininess));
 
-        auto color = color_rgba(ambient + diffuse + specular, 1);
+        auto color = color_rgba(ambient + (1 - shadow) * (diffuse + specular), 1);
         if (color.a < 0.1)
             return std::nullopt;
         return color;
     }
 private:
-    vector3 cam_pos_;
     matrix4 mvp_;
+    vector3 cam_pos_;
     const model* mesh_;
+
     directional_light light_;
+    matrix4 light_mvp_;
 
     texture shadowmap_;
     sampler2 shadowmap_sampler_;
@@ -146,18 +156,21 @@ int main() {
         light.specular = color_rgb(0.5);
 
         framebuffer shadowmap(1024, 1024);
+        framebuffer fb(1024, 1024);
+
+        auto light_mvp = light.proj(0) * light.view();
         shadowmap.clear({0, 0, 0, 0});
-        depth_shader ds(cam.proj(shadowmap.aspect()), make_lookat(light.dir, vector3(0, 0, 0), vector3(0, 1, 0)), diablo);
+        depth_shader ds(light_mvp, diablo);
         r.bind_framebuffer(shadowmap);
         r.render(diablo.num_vertices(), ds);
 
-        framebuffer fb(1024, 1024);
+        auto mvp = cam.proj(fb.aspect()) * cam.view();
         fb.clear({0, 0, 0, 0});
-        model_shader ms(cam.proj(fb.aspect()), cam.view(), diablo, cam.pos, shadowmap.zbuffer(), light);
+        model_shader ms(mvp, cam.pos, diablo, shadowmap.zbuffer(), light, light_mvp);
         r.bind_framebuffer(fb);
         r.render(diablo.num_vertices(), ms);
 
-        fb.write("image.pam");
+        shadowmap.write("image.pam");
     } catch (std::exception& e) {
         std::cerr << e.what() << '\n';
         return 1;
