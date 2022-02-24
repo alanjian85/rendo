@@ -32,18 +32,14 @@ private:
 
 class model_shader : public basic_shader {
 public:
-    model_shader(matrix4 proj, matrix4 view, const model& mesh, vector3 cam_pos) 
+    model_shader(matrix4 proj, matrix4 view, const model& mesh, vector3 cam_pos, texture shadowmap, directional_light light) 
     {
         mvp_ = proj * view * matrix4(1);
         cam_pos_ = cam_pos;
-        light_.pos = vector3(1.2, 1.0, 2.0);
-        light_.ambient = color_rgb(0.1);
-        light_.diffuse = color_rgb(1.0);
-        light_.specular = color_rgb(0.5);
-        light_.constant = 1;
-        light_.linear = 0.09;
-        light_.quadratic = 0.032;
         mesh_ = &mesh;
+        shadowmap_ = std::move(shadowmap);
+        shadowmap_sampler_.bind_texture(shadowmap_);
+        light_ = light;
     }
 
     virtual vector4 vert(int n) override {
@@ -96,20 +92,14 @@ public:
         auto tbn = frag_lerp(v_tbn_, bar);
 
         auto cam_dir = (pos - cam_pos_).normalize();
-        auto light_dir = (light_.pos - pos).normalize();
+        auto light_dir = light_.dir.normalize();
         auto halfway_dir = (cam_dir + light_dir).normalize();
-        
-        auto distance = (cam_pos_ - pos).length();
-        auto attenuation = light_.constant + distance * light_.linear + distance * distance * light_.quadratic;
-
+    
         auto normal = (tbn * vector3(normal_sampler_(uv))).normalize();
 
         auto ambient = light_.ambient * color_rgb(diffuse_sampler_(uv));
         auto diffuse = light_.diffuse * color_rgb(diffuse_sampler_(uv)) * mat_->diffuse * color_rgb(std::max(dot(light_dir, normal), 0.0));
         auto specular = light_.specular * color_rgb(specular_sampler_(uv)) * mat_->specular * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), mat_->shininess));
-
-        diffuse *= attenuation;
-        specular *= attenuation;
 
         auto color = color_rgba(ambient + diffuse + specular, 1);
         if (color.a < 0.1)
@@ -120,9 +110,10 @@ private:
     vector3 cam_pos_;
     matrix4 mvp_;
     const model* mesh_;
+    directional_light light_;
 
-    point_light light_;
-
+    texture shadowmap_;
+    sampler2 shadowmap_sampler_;
     sampler2 diffuse_sampler_;
     sampler2 specular_sampler_;
     sampler2 normal_sampler_;
@@ -136,21 +127,34 @@ private:
 
 int main() {
     try {
-        framebuffer fb(1024, 1024);
-        fb.clear({1, 0, 0, 1.0});
-        renderer r(fb);
+        renderer r;
 
         camera cam;
         cam.pos.x = 0;
-        cam.pos.z = 2;
         cam.pos.y = 0.65;
+        cam.pos.z = 2;
         cam.yaw = -90;
         cam.pitch = -15;
 
         model diablo;
         diablo.load("assets/models/diablo3_pose.obj");
 
-        model_shader ms(cam.proj(fb.aspect()), cam.view(), diablo, cam.pos);
+        directional_light light;
+        light.dir = vector3(0, 0.65, 2);
+        light.ambient = color_rgb(0.1);
+        light.diffuse = color_rgb(1.0);
+        light.specular = color_rgb(0.5);
+
+        framebuffer shadowmap(1024, 1024);
+        shadowmap.clear({0, 0, 0, 0});
+        depth_shader ds(cam.proj(shadowmap.aspect()), make_lookat(light.dir, vector3(0, 0, 0), vector3(0, 1, 0)), diablo);
+        r.bind_framebuffer(shadowmap);
+        r.render(diablo.num_vertices(), ds);
+
+        framebuffer fb(1024, 1024);
+        fb.clear({0, 0, 0, 0});
+        model_shader ms(cam.proj(fb.aspect()), cam.view(), diablo, cam.pos, shadowmap.zbuffer(), light);
+        r.bind_framebuffer(fb);
         r.render(diablo.num_vertices(), ms);
 
         fb.write("image.pam");

@@ -16,6 +16,17 @@ matrix4 box::make_persp(double fov, double aspect, double near, double far) {
 	return m;
 }
 
+matrix4 box::make_ortho(double left, double right, double bottom, double top, double near, double far) {
+	matrix4 m(1);
+	m[0][0] = 2 / (right - left);
+	m[1][1] = 2 / (top - bottom);
+	m[2][2] = -2 / (far - near);
+	m[3][0] = -(right + left) / (right - left);
+	m[3][1] = -(top + bottom) / (top - bottom);
+	m[3][2] = -(far + near) / (far - near);
+	return m;
+}
+
 matrix4 box::make_lookat(vector3 eye, vector3 center, vector3 up) {
     auto f = (center - eye).normalize();
     auto s = cross(f, up).normalize();
