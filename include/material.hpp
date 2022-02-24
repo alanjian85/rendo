@@ -20,6 +20,7 @@ namespace box {
         int illum;
         texture ambient_map;
         texture diffuse_map;
+        texture specular_map;
         texture normal_map;
     };
 

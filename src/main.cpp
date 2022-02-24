@@ -18,9 +18,9 @@ public:
         view_ = view;
         cam_pos_ = cam_pos;
         light_.pos = vector3(1.2, 1.0, 2.0);
-        light_.ambient = color_rgb(0.2);
-        light_.diffuse = color_rgb(0.5);
-        light_.specular = color_rgb(1.0);
+        light_.ambient = color_rgb(0.0);
+        light_.diffuse = color_rgb(1.0);
+        light_.specular = color_rgb(0.0);
         light_.constant = 1;
         light_.linear = 0.09;
         light_.quadratic = 0.032;
@@ -33,8 +33,8 @@ public:
         v_pos_[n % 3] = vector3(pos);
         v_normal_[n % 3] = mesh_->get_normal(n);
         v_uv_[n % 3] = mesh_->get_uv(n);
-        ambient_sampler_.bind_texture(mat_->ambient_map);
         diffuse_sampler_.bind_texture(mat_->diffuse_map);
+        specular_sampler_.bind_texture(mat_->specular_map);
         normal_sampler_.bind_texture(mat_->normal_map);
         return proj_ * view_ * vector4(pos, 1);
     }
@@ -57,17 +57,17 @@ public:
         bitangent.z = f * (-duv2.x * edge1.z + duv1.x * edge2.z);
         bitangent = bitangent.normalize();
 
-        v_tbn_[0](0, 0) = tangent.x;      v_tbn_[0](0, 1) = tangent.y;      v_tbn_[0](0, 2) = tangent.z;
-        v_tbn_[0](1, 0) = bitangent.x;    v_tbn_[0](0, 1) = bitangent.y;    v_tbn_[0](0, 2) = bitangent.z;
-        v_tbn_[0](2, 0) = v_normal_[0].x; v_tbn_[0](0, 1) = v_normal_[0].y; v_tbn_[0](0, 2) = v_normal_[0].z;
+        v_tbn_[0](0, 0) = tangent.x; v_tbn_[0](0, 1) = bitangent.x; v_tbn_[0](0, 2) = v_normal_[0].x;
+        v_tbn_[0](1, 0) = tangent.y; v_tbn_[0](1, 1) = bitangent.y; v_tbn_[0](1, 2) = v_normal_[0].y;
+        v_tbn_[0](2, 0) = tangent.z; v_tbn_[0](2, 1) = bitangent.z; v_tbn_[0](2, 2) = v_normal_[0].z;
     
-        v_tbn_[1](0, 0) = tangent.x;      v_tbn_[1](0, 1) = tangent.y;      v_tbn_[1](0, 2) = tangent.z;
-        v_tbn_[1](1, 0) = bitangent.x;    v_tbn_[1](0, 1) = bitangent.y;    v_tbn_[1](0, 2) = bitangent.z;
-        v_tbn_[1](2, 0) = v_normal_[1].x; v_tbn_[1](0, 1) = v_normal_[1].y; v_tbn_[1](0, 2) = v_normal_[1].z;
+        v_tbn_[1](0, 0) = tangent.x; v_tbn_[1](0, 1) = bitangent.x; v_tbn_[1](0, 2) = v_normal_[1].x;
+        v_tbn_[1](1, 0) = tangent.y; v_tbn_[1](1, 1) = bitangent.y; v_tbn_[1](1, 2) = v_normal_[1].y;
+        v_tbn_[1](2, 0) = tangent.z; v_tbn_[1](2, 1) = bitangent.z; v_tbn_[1](2, 2) = v_normal_[1].z;
 
-        v_tbn_[2](0, 0) = tangent.x;      v_tbn_[2](0, 1) = tangent.y;      v_tbn_[2](0, 2) = tangent.z;
-        v_tbn_[2](1, 0) = bitangent.x;    v_tbn_[2](0, 1) = bitangent.y;    v_tbn_[2](0, 2) = bitangent.z;
-        v_tbn_[2](2, 0) = v_normal_[2].x; v_tbn_[2](0, 1) = v_normal_[2].y; v_tbn_[2](0, 2) = v_normal_[2].z;
+        v_tbn_[2](0, 0) = tangent.x; v_tbn_[2](0, 1) = bitangent.x; v_tbn_[2](0, 2) = v_normal_[2].x;
+        v_tbn_[2](1, 0) = tangent.y; v_tbn_[2](1, 1) = bitangent.y; v_tbn_[2](1, 2) = v_normal_[2].y;
+        v_tbn_[2](2, 0) = tangent.z; v_tbn_[2](2, 1) = bitangent.z; v_tbn_[2](2, 2) = v_normal_[2].z;
     }
 
     virtual std::optional<color_rgba> frag(vector3 bar) override {
@@ -83,24 +83,17 @@ public:
         auto distance = (cam_pos_ - pos).length();
         auto attenuation = light_.constant + distance * light_.linear + distance * distance * light_.quadratic;
 
-        auto normal = tbn * vector3(normal_sampler_(uv));
+        auto normal = (tbn * vector3(normal_sampler_(uv))).normalize();
 
-        auto ambient = light_.ambient * color_rgb(ambient_sampler_(uv));
+        auto ambient = light_.ambient;
         auto diffuse = light_.diffuse * color_rgb(diffuse_sampler_(uv)) * mat_->diffuse * color_rgb(std::max(dot(light_dir, normal), 0.0));
-        auto specular = light_.specular * mat_->specular * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), mat_->shininess));
+        auto specular = light_.specular * color_rgb(specular_sampler_(uv)) * mat_->specular * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), mat_->shininess));
 
         diffuse *= attenuation;
         specular *= attenuation;
 
-        auto intensity = std::max(dot(light_dir, normal), 0.0);
-        if (intensity > 0.85) intensity = 1;
-        else if (intensity > 0.60) intensity = 0.80;
-        else if (intensity > 0.45) intensity = 0.60;
-        else if (intensity > 0.30) intensity = 0.45;
-        else if (intensity > 0.15) intensity = 0.30;
-        else intensity = 0;
-
-        auto color = color_rgba((ambient + diffuse + specular) * intensity, 1);
+        auto color = color_rgba(normal.x / 2 + 0.5, normal.y / 2 + 0.5, normal.z / 2 + 0.5, 1);
+        color = color_rgba(diffuse, 1);
         if (color.a < 0.1)
             return std::nullopt;
         return color;
@@ -113,8 +106,8 @@ private:
 
     point_light light_;
 
-    sampler2 ambient_sampler_;
     sampler2 diffuse_sampler_;
+    sampler2 specular_sampler_;
     sampler2 normal_sampler_;
     model head_;
     vector3 v_pos_[3];
@@ -131,17 +124,17 @@ int main() {
         renderer r(fb);
 
         camera cam;
-        cam.pos.x = 2;
+        cam.pos.x = 0;
         cam.pos.z = 2;
-        cam.pos.y = -1;
-        cam.yaw = -135;
-        cam.pitch = 15;
+        cam.pos.y = 1;
+        cam.yaw = -90;
+        cam.pitch = -15;
 
-        model helmet;
-        helmet.load("assets/models/DamagedHelmet.obj");
+        model diablo;
+        diablo.load("assets/models/diablo3_pose.obj");
 
-        model_shader ds(cam.proj(fb.aspect()), cam.view(), helmet, cam.pos);
-        r.render(helmet.num_vertices(), ds);
+        model_shader ms(cam.proj(fb.aspect()), cam.view(), diablo, cam.pos);
+        r.render(diablo.num_vertices(), ms);
 
         fb.write("image.pam");
     } catch (std::exception& e) {
