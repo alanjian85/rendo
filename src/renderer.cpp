@@ -82,7 +82,10 @@ void renderer::post_process(const post_processor_type& p) {
             vector2 fc;
             fc.x = static_cast<double>(x) / (fb_->width() - 1);
             fc.y = static_cast<double>(y) / (fb_->height() - 1);
-            (*fb_)(x, y).color = p(fc, (*fb_)(x, y));
+            auto color = p(fc, (*fb_)(x, y));
+            if (color.has_value()) {
+                (*fb_)(x, y).color = *color;
+            }
         }
     }
 }

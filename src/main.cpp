@@ -10,43 +10,6 @@
 #include "utility.hpp"
 using namespace box;
 
-double max_elevation_angle(const framebuffer& fb, vector2 pos, vector2 dir) {
-    auto max_angle = 0.0;
-    for (int t = 0; t < 1000; ++t) {
-        auto curr = pos + dir * t;
-        if (curr.x < 0 || curr.x >= fb.width() || curr.y < 0 || curr.y >= fb.height())
-            return max_angle;
-
-        auto distance = (curr - pos).length();
-        if (distance < 1) continue;
-        auto elevation = fb(curr).depth - fb(pos).depth;
-        max_angle = std::max(max_angle, std::atan(elevation / distance));
-    }
-    return max_angle;
-}
-
-class depth_shader : public basic_shader {
-public:
-    depth_shader(matrix4 proj, matrix4 view, const model& mesh) {
-        proj_ = proj;
-        view_ = view;
-        mesh_ = &mesh;
-    }
-
-    virtual vector4 vert(int n) override {
-        auto pos = mesh_->get_vertex(n);
-        return proj_ * view_ * vector4(pos, 1);
-    }
-
-    virtual std::optional<color_rgba> frag(vector3 bar) override {
-        return color_rgba(0, 0, 0, 1);
-    }
-private:
-    matrix4 proj_;
-    matrix4 view_;
-    const model* mesh_;
-};
-
 class model_shader : public basic_shader {
 public:
     model_shader(matrix4 proj, matrix4 view, const model& mesh, vector3 cam_pos) 
@@ -177,7 +140,7 @@ int main() {
         model helmet;
         helmet.load("assets/models/DamagedHelmet.obj");
 
-        depth_shader ds(cam.proj(fb.aspect()), cam.view(), helmet);
+        model_shader ds(cam.proj(fb.aspect()), cam.view(), helmet, cam.pos);
         r.render(helmet.num_vertices(), ds);
 
         fb.write("image.pam");

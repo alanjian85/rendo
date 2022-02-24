@@ -20,7 +20,7 @@ namespace box {
 
     class renderer {
     public:
-        using post_processor_type = std::function<color_rgba(vector2, pixel)>;
+        using post_processor_type = std::function<std::optional<color_rgba>(vector2, pixel)>;
 
         renderer(framebuffer& fb)
         {
