@@ -170,12 +170,14 @@ int main() {
         shadowmap.clear({0, 0, 0, 0});
         depth_shader ds(light_mvp, diablo);
         r.bind_framebuffer(shadowmap);
+        r.set_face_culling(cull_type::front);
         r.render(diablo.num_vertices(), ds);
 
         auto mvp = cam.proj(fb.aspect()) * cam.view();
         fb.clear({0, 0, 0, 0});
         model_shader ms(mvp, cam.pos, diablo, shadowmap.zbuffer(), light, light_mvp);
         r.bind_framebuffer(fb);
+        r.set_face_culling(cull_type::back);
         r.render(diablo.num_vertices(), ms);
 
         fb.write("image.pam");
