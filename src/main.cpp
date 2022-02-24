@@ -18,9 +18,9 @@ public:
         view_ = view;
         cam_pos_ = cam_pos;
         light_.pos = vector3(1.2, 1.0, 2.0);
-        light_.ambient = color_rgb(0.0);
+        light_.ambient = color_rgb(0.1);
         light_.diffuse = color_rgb(1.0);
-        light_.specular = color_rgb(0.0);
+        light_.specular = color_rgb(0.5);
         light_.constant = 1;
         light_.linear = 0.09;
         light_.quadratic = 0.032;
@@ -85,15 +85,14 @@ public:
 
         auto normal = (tbn * vector3(normal_sampler_(uv))).normalize();
 
-        auto ambient = light_.ambient;
+        auto ambient = light_.ambient * color_rgb(diffuse_sampler_(uv));
         auto diffuse = light_.diffuse * color_rgb(diffuse_sampler_(uv)) * mat_->diffuse * color_rgb(std::max(dot(light_dir, normal), 0.0));
         auto specular = light_.specular * color_rgb(specular_sampler_(uv)) * mat_->specular * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), mat_->shininess));
 
         diffuse *= attenuation;
         specular *= attenuation;
 
-        auto color = color_rgba(normal.x / 2 + 0.5, normal.y / 2 + 0.5, normal.z / 2 + 0.5, 1);
-        color = color_rgba(diffuse, 1);
+        auto color = color_rgba(ambient + diffuse + specular, 1);
         if (color.a < 0.1)
             return std::nullopt;
         return color;
