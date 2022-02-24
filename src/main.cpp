@@ -101,7 +101,7 @@ public:
         pos_proj_coord = pos_proj_coord * 0.5 + 0.5;
         auto closest_depth = shadowmap_sampler_(pos_proj_coord.x, pos_proj_coord.y).r;
         auto current_depth = pos_proj_coord.z;
-        auto shadow = current_depth > closest_depth ? 1.0 : 0.0;
+        auto shadow = current_depth - 0.005 > closest_depth ? 1.0 : 0.0;
 
         auto normal = (tbn * vector3(normal_sampler_(uv))).normalize();
 
@@ -170,7 +170,7 @@ int main() {
         r.bind_framebuffer(fb);
         r.render(diablo.num_vertices(), ms);
 
-        shadowmap.write("image.pam");
+        fb.write("image.pam");
     } catch (std::exception& e) {
         std::cerr << e.what() << '\n';
         return 1;
