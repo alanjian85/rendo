@@ -10,12 +10,31 @@
 #include "utility.hpp"
 using namespace box;
 
+class depth_shader : public basic_shader {
+public:
+    depth_shader(matrix4 proj, matrix4 view, const model& mesh) {
+        mvp_ = proj * view * matrix4(1);
+        mesh_ = &mesh;
+    }
+
+    virtual vector4 vert(int n) override {
+        auto pos = mesh_->get_vertex(n);
+        return mvp_ * vector4(pos, 1);
+    }
+
+    virtual std::optional<color_rgba> frag(vector3 bar) override {
+        return color_rgba(0, 0, 0, 1);
+    }
+private:
+    matrix4 mvp_;
+    const model* mesh_;
+};
+
 class model_shader : public basic_shader {
 public:
     model_shader(matrix4 proj, matrix4 view, const model& mesh, vector3 cam_pos) 
     {
-        proj_ = proj;
-        view_ = view;
+        mvp_ = proj * view * matrix4(1);
         cam_pos_ = cam_pos;
         light_.pos = vector3(1.2, 1.0, 2.0);
         light_.ambient = color_rgb(0.1);
@@ -36,7 +55,7 @@ public:
         diffuse_sampler_.bind_texture(mat_->diffuse_map);
         specular_sampler_.bind_texture(mat_->specular_map);
         normal_sampler_.bind_texture(mat_->normal_map);
-        return proj_ * view_ * vector4(pos, 1);
+        return mvp_ * vector4(pos, 1);
     }
 
     virtual void geometry() {
@@ -99,8 +118,7 @@ public:
     }
 private:
     vector3 cam_pos_;
-    matrix4 proj_;
-    matrix4 view_;
+    matrix4 mvp_;
     const model* mesh_;
 
     point_light light_;
@@ -125,7 +143,7 @@ int main() {
         camera cam;
         cam.pos.x = 0;
         cam.pos.z = 2;
-        cam.pos.y = 1;
+        cam.pos.y = 0.65;
         cam.yaw = -90;
         cam.pitch = -15;
 
