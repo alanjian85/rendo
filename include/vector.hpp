@@ -16,8 +16,15 @@ namespace box {
         T x, y;
 
         vector() = default;
+        
         vector(T x_, T y_)
             : x(x_), y(y_)
+        {
+
+        }
+
+        vector(vector<T, 3> v) 
+            : x(v.x), y(v.y)
         {
 
         }
@@ -58,6 +65,10 @@ namespace box {
 
         friend vector operator*(double lhs, vector rhs) {
             return rhs * lhs;
+        }
+
+        friend vector operator*(vector lhs, vector rhs) {
+            return {lhs.x * rhs.x, lhs.y * rhs.y};
         }
     };
 

@@ -99,9 +99,17 @@ public:
         auto pos_light_space = light_mvp_ * vector4(pos, 1);
         auto pos_proj_coord = vector3(pos_light_space) / pos_light_space.w;
         pos_proj_coord = pos_proj_coord * 0.5 + 0.5;
-        auto closest_depth = shadowmap_sampler_(pos_proj_coord.x, pos_proj_coord.y).r;
         auto current_depth = pos_proj_coord.z;
-        auto shadow = current_depth - 0.005 > closest_depth ? 1.0 : 0.0;
+        auto bias = 0.005;
+        auto shadow = 0.0;
+        auto texel_size = vector2(1.0 / shadowmap_.width(), 1.0 / shadowmap_.height());
+        for (int x = -1; x <= 1; ++x) {
+            for (int y = -1; y <= 1; ++y) {
+                auto depth = shadowmap_sampler_(vector2(pos_proj_coord) + vector2(x, y) * texel_size).r;
+                shadow += current_depth - bias > depth ? 1.0 : 0.0;
+            }
+        }
+        shadow /= 9;
 
         auto normal = (tbn * vector3(normal_sampler_(uv))).normalize();
 
