@@ -215,6 +215,14 @@ namespace box {
             return *this;
         }
 
+        vector& operator/=(T rhs) {
+            x /= rhs;
+            y /= rhs;
+            z /= rhs;
+            w /= rhs;
+            return *this;
+        }
+
         friend vector operator+(vector lhs, vector rhs) {
             return {lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z, lhs.w + rhs.w};
         }

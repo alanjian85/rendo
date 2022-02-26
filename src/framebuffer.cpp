@@ -40,7 +40,7 @@ texture framebuffer::zbuffer() const {
     texture t(width_, height_);
     for (int y = 0; y < height_; ++y) {
         for (int x = 0; x < width_; ++x) {
-            auto d = (*this)(x, y).depth * 0.5 + 0.5;
+            auto d = (*this)(x, y).depth;
             t(x, y) = color_rgba(d, d, d, 1);
         }
     }
