@@ -93,6 +93,12 @@ namespace box {
 
         }
 
+        explicit vector(color_rgb c)
+            : x(c.r), y(c.g), z(c.b)
+        {
+
+        }
+
         explicit vector(color_rgba c)
             : x(c.r), y(c.g), z(c.b)
         {

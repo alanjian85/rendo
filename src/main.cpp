@@ -117,7 +117,7 @@ public:
         auto ambient = light_.ambient * color_rgb(diffuse_sampler_(uv));
         auto diffuse = light_.diffuse * color_rgb(diffuse_sampler_(uv)) * color_rgb(std::max(dot(light_dir, normal), 0.0));
         auto specular = light_.specular * color_rgb(specular_sampler_(uv)) * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), mat_->shininess));
-        auto emission = color_rgb(emission_sampler_(uv));
+        auto emission = color_rgb(emission_sampler_(uv)) * 5;
 
         auto color = color_rgba(ambient + (1 - shadow) * (diffuse + specular) + emission, 1);
         if (color.a < 0.1)
@@ -165,8 +165,11 @@ public:
         auto uv = frag_lerp(v_uv_, bar);
 
         auto color = color_buffer_sampler_(uv);
-        color_rgb mapped = color / (color + color_rgb(1));
-        return color_rgba(mapped, color.a);
+        auto brightness = dot(vector3(color), vector3(0.2126, 0.7152, 0.0722));
+        if (brightness > 1)
+            return color_rgba(color, 1);
+        else
+            return color_rgba(0, 0, 0, 1);
     }
 private:
     const model* mesh_;
@@ -199,6 +202,7 @@ int main() {
 
         framebuffer shadowmap(1024, 1024);
         framebuffer fb(1024, 1024);
+        fb.clear(color_rgba(0.0, 0.0, 0.0, 1.0));
 
         auto light_mvp = light.proj(0) * light.view();
         shadowmap.clear({0, 0, 0, 0});
