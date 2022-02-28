@@ -68,6 +68,8 @@ namespace box {
 
         void write(const std::string& path) const;
 
+        texture color_buffer() const;
+
         texture zbuffer() const;
     private:
         int width_, height_;

@@ -78,17 +78,3 @@ void renderer::render(int n, basic_shader& s) {
         render_triangle(t, s);
     }
 }
-
-void renderer::post_process(const post_processor_type& p) {
-    for (int y = 0; y < fb_->height(); ++y) {
-        for (int x = 0; x < fb_->width(); ++x) {
-            vector2 fc;
-            fc.x = static_cast<double>(x) / (fb_->width() - 1);
-            fc.y = static_cast<double>(y) / (fb_->height() - 1);
-            auto color = p(fc, (*fb_)(x, y));
-            if (color.has_value()) {
-                (*fb_)(x, y).color = *color;
-            }
-        }
-    }
-}

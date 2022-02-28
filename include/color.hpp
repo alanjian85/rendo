@@ -1,6 +1,8 @@
 #ifndef BOX_COLOR_HPP
 #define BOX_COLOR_HPP
 
+#include <cmath>
+
 namespace box {
     struct color_rgba;
 
@@ -38,6 +40,18 @@ namespace box {
 
     inline color_rgb operator*(color_rgb lhs, double rhs) {
         return {lhs.r * rhs, lhs.g * rhs, lhs.b * rhs};
+    }
+    
+    inline color_rgb operator/(color_rgb lhs, color_rgb rhs) {
+        return {lhs.r / rhs.r, lhs.g / rhs.g, lhs.b / rhs.b};
+    }
+
+    inline color_rgb pow(color_rgb x, color_rgb y) {
+        return {
+            std::pow(x.r, y.r),
+            std::pow(x.g, y.g),
+            std::pow(x.b, y.b)
+        };
     }
 
     struct color_rgba {

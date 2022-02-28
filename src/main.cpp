@@ -119,15 +119,7 @@ public:
         auto specular = light_.specular * color_rgb(specular_sampler_(uv)) * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), mat_->shininess));
         auto emission = color_rgb(emission_sampler_(uv));
 
-        auto intensity = std::max(dot(light_dir, normal), 0.0);
-        if (intensity > 0.85) intensity = 1;
-        else if (intensity > 0.60) intensity = 0.80;
-        else if (intensity > 0.45) intensity = 0.60;
-        else if (intensity > 0.30) intensity = 0.45;
-        else if (intensity > 0.15) intensity = 0.30;
-        else intensity = 0;
-
-        auto color = color_rgba((ambient + (1 - shadow) * (diffuse + specular) + emission) * intensity, 1);
+        auto color = color_rgba(ambient + (1 - shadow) * (diffuse + specular) + emission, 1);
         if (color.a < 0.1)
             return std::nullopt;
         return color;
@@ -154,6 +146,35 @@ private:
     const material* mat_;
 };
 
+class hdr_shader : public basic_shader {
+public:
+    hdr_shader(const model& mesh, texture color_buffer) 
+        : mesh_(&mesh)
+    {
+        color_buffer_ = std::move(color_buffer);
+        color_buffer_sampler_.bind_texture(color_buffer_);
+    }
+
+    virtual vector4 vert(int n) override {
+        auto pos = mesh_->get_vertex(n);
+        v_uv_[n % 3] = mesh_->get_uv(n);
+        return vector4(pos, 1);
+    }
+
+    virtual std::optional<color_rgba> frag(vector3 bar) override {
+        auto uv = frag_lerp(v_uv_, bar);
+
+        auto color = color_buffer_sampler_(uv);
+        color_rgb mapped = color / (color + color_rgb(1));
+        return color_rgba(mapped, color.a);
+    }
+private:
+    const model* mesh_;
+    texture color_buffer_;
+    sampler2 color_buffer_sampler_;
+    vector2 v_uv_[3];
+};
+
 int main() {
     try {
         renderer r;
@@ -166,7 +187,9 @@ int main() {
         cam.pitch = -15;
 
         model diablo;
+        model quad;
         diablo.load("assets/models/diablo3_pose.obj");
+        quad.load("assets/models/quad.obj");
 
         directional_light light;
         light.dir = vector3(0, 0.65, 2);
@@ -190,6 +213,10 @@ int main() {
         r.bind_framebuffer(fb);
         r.set_face_culling(cull_type::back);
         r.render(diablo.num_vertices(), ms);
+
+        hdr_shader hs(quad, fb.color_buffer());
+        r.set_face_culling(cull_type::none);
+        r.render(quad.num_vertices(), hs);
 
         fb.write("image.pam");
     } catch (std::exception& e) {

@@ -36,6 +36,16 @@ void framebuffer::write(const std::string& path) const {
     }
 }
 
+texture framebuffer::color_buffer() const {
+    texture t(width_, height_);
+    for (int y = 0; y < height_; ++y) {
+        for (int x = 0; x < width_; ++x) {
+            t(x, y) = (*this)(x, y).color;
+        }
+    }
+    return t;
+}
+
 texture framebuffer::zbuffer() const {
     texture t(width_, height_);
     for (int y = 0; y < height_; ++y) {

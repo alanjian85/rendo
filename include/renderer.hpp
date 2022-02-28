@@ -20,8 +20,6 @@ namespace box {
 
     class renderer {
     public:
-        using post_processor_type = std::function<std::optional<color_rgba>(vector2, pixel)>;
-
         void set_face_culling(cull_type cull) {
             face_culling_ = cull;
         }
@@ -31,8 +29,6 @@ namespace box {
         }
 
         void render(int n, basic_shader& s);
-
-        void post_process(const post_processor_type& p);
     private:
         void render_triangle(triangle t, basic_shader& s);
 
