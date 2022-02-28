@@ -119,7 +119,15 @@ public:
         auto specular = light_.specular * color_rgb(specular_sampler_(uv)) * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), mat_->shininess));
         auto emission = color_rgb(emission_sampler_(uv));
 
-        auto color = color_rgba(ambient + (1 - shadow) * (diffuse + specular) + emission, 1);
+        auto intensity = std::max(dot(light_dir, normal), 0.0);
+        if (intensity > 0.85) intensity = 1;
+        else if (intensity > 0.60) intensity = 0.80;
+        else if (intensity > 0.45) intensity = 0.60;
+        else if (intensity > 0.30) intensity = 0.45;
+        else if (intensity > 0.15) intensity = 0.30;
+        else intensity = 0;
+
+        auto color = color_rgba((ambient + (1 - shadow) * (diffuse + specular) + emission) * intensity, 1);
         if (color.a < 0.1)
             return std::nullopt;
         return color;
