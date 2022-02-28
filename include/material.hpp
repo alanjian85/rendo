@@ -21,6 +21,7 @@ namespace box {
         texture ambient_map;
         texture diffuse_map;
         texture specular_map;
+        texture emission_map;
         texture normal_map;
     };
 

@@ -51,6 +51,7 @@ public:
         v_uv_[n % 3] = mesh_->get_uv(n);
         diffuse_sampler_.bind_texture(mat_->diffuse_map);
         specular_sampler_.bind_texture(mat_->specular_map);
+        emission_sampler_.bind_texture(mat_->emission_map);
         normal_sampler_.bind_texture(mat_->normal_map);
         return mvp_ * vector4(pos, 1);
     }
@@ -114,10 +115,11 @@ public:
         auto normal = (tbn * vector3(normal_sampler_(uv))).normalize();
 
         auto ambient = light_.ambient * color_rgb(diffuse_sampler_(uv));
-        auto diffuse = light_.diffuse * color_rgb(diffuse_sampler_(uv)) * mat_->diffuse * color_rgb(std::max(dot(light_dir, normal), 0.0));
-        auto specular = light_.specular * color_rgb(specular_sampler_(uv)) * mat_->specular * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), mat_->shininess));
+        auto diffuse = light_.diffuse * color_rgb(diffuse_sampler_(uv)) * color_rgb(std::max(dot(light_dir, normal), 0.0));
+        auto specular = light_.specular * color_rgb(specular_sampler_(uv)) * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), mat_->shininess));
+        auto emission = color_rgb(emission_sampler_(uv));
 
-        auto color = color_rgba(ambient + (1 - shadow) * (diffuse + specular), 1);
+        auto color = color_rgba(ambient + (1 - shadow) * (diffuse + specular) + emission, 1);
         if (color.a < 0.1)
             return std::nullopt;
         return color;
@@ -134,6 +136,7 @@ private:
     sampler2 shadowmap_sampler_;
     sampler2 diffuse_sampler_;
     sampler2 specular_sampler_;
+    sampler2 emission_sampler_;
     sampler2 normal_sampler_;
     model head_;
     vector3 v_pos_[3];

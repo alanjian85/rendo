@@ -48,6 +48,9 @@ void material_library::load(const std::filesystem::path& path) {
         } else if (attrib == "map_Ks") {
             stream >> relative_path;
             mat->specular_map.load(dir / relative_path);
+        } else if (attrib == "map_Ke") {
+            stream >> relative_path;
+            mat->emission_map.load(dir / relative_path);
         } else if (attrib == "norm") {
             stream >> relative_path;
             mat->normal_map.load(dir / relative_path);
