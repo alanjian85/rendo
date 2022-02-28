@@ -70,6 +70,10 @@ namespace box {
         friend vector operator*(vector lhs, vector rhs) {
             return {lhs.x * rhs.x, lhs.y * rhs.y};
         }
+
+        friend vector operator/(double lhs, vector rhs) {
+            return {lhs / rhs.x, lhs / rhs.y};
+        }
     };
 
     using vector2 = vector<double, 2>;

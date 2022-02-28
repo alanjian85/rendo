@@ -117,7 +117,7 @@ public:
         auto ambient = light_.ambient * color_rgb(diffuse_sampler_(uv));
         auto diffuse = light_.diffuse * color_rgb(diffuse_sampler_(uv)) * color_rgb(std::max(dot(light_dir, normal), 0.0));
         auto specular = light_.specular * color_rgb(specular_sampler_(uv)) * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), mat_->shininess));
-        auto emission = color_rgb(emission_sampler_(uv)) * 5;
+        auto emission = color_rgb(emission_sampler_(uv)) * 4;
 
         auto color = color_rgba(ambient + (1 - shadow) * (diffuse + specular) + emission, 1);
         if (color.a < 0.1)
@@ -146,9 +146,9 @@ private:
     const material* mat_;
 };
 
-class hdr_shader : public basic_shader {
+class bright_shader : public basic_shader {
 public:
-    hdr_shader(const model& mesh, texture color_buffer) 
+    bright_shader(const model& mesh, texture color_buffer) 
         : mesh_(&mesh)
     {
         color_buffer_ = std::move(color_buffer);
@@ -175,6 +175,83 @@ private:
     const model* mesh_;
     texture color_buffer_;
     sampler2 color_buffer_sampler_;
+    vector2 v_uv_[3];
+};
+
+class blur_shader : public basic_shader {
+public:
+    blur_shader(const model& mesh, texture color_buffer, bool horizontal) 
+        : mesh_(&mesh)
+    {
+        color_buffer_ = std::move(color_buffer);
+        color_buffer_sampler_.bind_texture(color_buffer_);
+        horizontal_ = horizontal;
+    }
+
+    virtual vector4 vert(int n) override {
+        auto pos = mesh_->get_vertex(n);
+        v_uv_[n % 3] = mesh_->get_uv(n);
+        return vector4(pos, 1);
+    }
+
+    virtual std::optional<color_rgba> frag(vector3 bar) override {        
+        double weight[5] = {0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216};
+
+        auto uv = frag_lerp(v_uv_, bar);
+        auto tex_offset = 1.0 / vector2(color_buffer_.width(), color_buffer_.height());
+        auto result = color_rgb(color_buffer_sampler_(uv)) * weight[0];
+        if (horizontal_) {
+            for (int i = 1; i < 5; ++i) {
+                result += color_rgb(color_buffer_sampler_(uv + vector2(tex_offset.x * i, 0))) * weight[i];
+                result += color_rgb(color_buffer_sampler_(uv - vector2(tex_offset.x * i, 0))) * weight[i];
+            }
+        } else {
+            for (int i = 1; i < 5; ++i) {
+                result += color_rgb(color_buffer_sampler_(uv + vector2(0, tex_offset.y * i))) * weight[i];
+                result += color_rgb(color_buffer_sampler_(uv - vector2(0, tex_offset.y * i))) * weight[i];
+            }
+        }
+        return color_rgba(result, 1);
+    }
+private:
+    const model* mesh_;
+    texture color_buffer_;
+    sampler2 color_buffer_sampler_;
+    vector2 v_uv_[3];
+    bool horizontal_;
+};
+
+class bloom_shader : public basic_shader {
+public:
+    bloom_shader(const model& mesh, texture scene_tex, texture blur_tex) 
+        : mesh_(&mesh)
+    {
+        scene_tex_ = std::move(scene_tex);
+        blur_tex_ = std::move(blur_tex);
+        scene_sampler_.bind_texture(scene_tex_);
+        blur_sampler_.bind_texture(blur_tex_);
+    }
+
+    virtual vector4 vert(int n) override {
+        auto pos = mesh_->get_vertex(n);
+        v_uv_[n % 3] = mesh_->get_uv(n);
+        return vector4(pos, 1);
+    }
+
+    virtual std::optional<color_rgba> frag(vector3 bar) override {
+        auto uv = frag_lerp(v_uv_, bar);
+
+        auto scene_color = scene_sampler_(uv);
+        auto blur_color = blur_sampler_(uv);
+
+        return color_rgba(scene_color + blur_color, 1);
+    }
+private:
+    const model* mesh_;
+    texture scene_tex_;
+    texture blur_tex_;
+    sampler2 scene_sampler_;
+    sampler2 blur_sampler_;
     vector2 v_uv_[3];
 };
 
@@ -218,9 +295,21 @@ int main() {
         r.set_face_culling(cull_type::back);
         r.render(diablo.num_vertices(), ms);
 
-        hdr_shader hs(quad, fb.color_buffer());
+        auto scene_tex = fb.color_buffer();
+
         r.set_face_culling(cull_type::none);
-        r.render(quad.num_vertices(), hs);
+        bright_shader bright_s(quad, fb.color_buffer());
+        r.render(quad.num_vertices(), bright_s);
+
+        bool horizontal = true;
+        for (int i = 0; i < 10; ++i) {
+            blur_shader blur_s(quad, fb.color_buffer(), horizontal);
+            r.render(quad.num_vertices(), blur_s);
+            horizontal = !horizontal;
+        }
+
+        bloom_shader bloom_s(quad, scene_tex, fb.color_buffer());
+        r.render(quad.num_vertices(), bloom_s);
 
         fb.write("image.pam");
     } catch (std::exception& e) {

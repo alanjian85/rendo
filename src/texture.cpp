@@ -102,14 +102,22 @@ color_rgba sampler2::operator()(vector2 uv) const {
     case wrapping::repeat:
         double temp;
         uv.x = std::modf(uv.x, &temp);
+        if (uv.x < 0)
+            uv.x = 1 + uv.x;
         uv.y = std::modf(uv.y, &temp);
+        if (uv.y < 0)
+            uv.y = 1 + uv.x;
         break;
     case wrapping::repeat_mirrored:
         double intx, inty;
         uv.x = std::modf(uv.x, &intx);
-        uv.y = std::modf(uv.y, &inty);
+        if (uv.x < 0)
+            uv.x = 1 + uv.x;
         if (static_cast<int>(intx) % 2 == 1)
             uv.x = 1 - uv.x;
+        uv.y = std::modf(uv.y, &inty);
+        if (uv.y < 0)
+            uv.y = 1 + uv.x;
         if (static_cast<int>(inty) % 2 == 1)
             uv.y = 1 - uv.y;
     case wrapping::clamp_to_edge:
@@ -122,8 +130,8 @@ color_rgba sampler2::operator()(vector2 uv) const {
         }
     }
 
-    auto x = static_cast<int>(uv.x * (tex_->width() - 1));
-    auto y = static_cast<int>((1 - uv.y) * (tex_->height() - 1));
+    auto x = std::clamp(static_cast<int>(uv.x * (tex_->width() - 1)), 0, tex_->width() - 1);
+    auto y = std::clamp(static_cast<int>((1 - uv.y) * (tex_->height() - 1)), 0, tex_->height() - 1);
     return (*tex_)(x, y);
 }
 
