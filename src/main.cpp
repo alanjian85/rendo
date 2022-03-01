@@ -30,29 +30,42 @@ private:
     const model* mesh_;
 };
 
-class model_shader : public basic_shader {
+class position_shader : public basic_shader {
 public:
-    model_shader(matrix4 mvp, vector3 cam_pos, const model& mesh, texture shadowmap, directional_light light, matrix4 light_mvp) 
-    {
+    position_shader(matrix4 mvp, const model& mesh) {
         mvp_ = mvp;
-        cam_pos_ = cam_pos;
         mesh_ = &mesh;
-        shadowmap_ = std::move(shadowmap);
-        shadowmap_sampler_.bind_texture(shadowmap_);
-        light_ = light;
-        light_mvp_ = light_mvp;
     }
 
     virtual vector4 vert(int n) override {
         auto pos = mesh_->get_vertex(n);
-        mat_ = mesh_->get_mat(n);
-        v_pos_[n % 3] = vector3(pos);
-        v_normal_[n % 3] = mesh_->get_normal(n);
+        v_pos_[n % 3] = pos;
+        return mvp_ * vector4(pos, 1);
+    }
+
+    virtual std::optional<color_rgba> frag(vector3 bar) override {
+        auto pos = frag_lerp(v_pos_, bar);
+        return color_rgba(pos.x, pos.y, pos.z, 1);
+    }
+private:
+    matrix4 mvp_;
+    const model* mesh_;
+    vector3 v_pos_[3];
+};
+
+class normal_shader : public basic_shader {
+public:
+    normal_shader(matrix4 mvp, const model& mesh) {
+        mvp_ = mvp;
+        mesh_ = &mesh;
+    }
+
+    virtual vector4 vert(int n) override {
+        auto pos = mesh_->get_vertex(n);
+        v_pos_[n % 3] = pos;
         v_uv_[n % 3] = mesh_->get_uv(n);
-        diffuse_sampler_.bind_texture(mat_->diffuse_map);
-        specular_sampler_.bind_texture(mat_->specular_map);
-        emission_sampler_.bind_texture(mat_->emission_map);
-        normal_sampler_.bind_texture(mat_->normal_map);
+        v_normal_[n % 3] = mesh_->get_normal(n);
+        normal_sampler_.bind_texture(mesh_->get_mat(n)->normal_map);
         return mvp_ * vector4(pos, 1);
     }
 
@@ -88,62 +101,94 @@ public:
     }
 
     virtual std::optional<color_rgba> frag(vector3 bar) override {
-        auto pos = frag_lerp(v_pos_, bar);
-        auto f_normal = frag_lerp(v_normal_, bar).normalize();
-        auto uv = frag_lerp(v_uv_, bar);
         auto tbn = frag_lerp(v_tbn_, bar);
-
-        auto cam_dir = (pos - cam_pos_).normalize();
-        auto light_dir = light_.dir.normalize();
-        auto halfway_dir = (cam_dir + light_dir).normalize();
-
-        auto pos_light_space = light_mvp_ * vector4(pos, 1);
-        auto pos_proj_coord = vector3(pos_light_space) / pos_light_space.w;
-        pos_proj_coord = pos_proj_coord * 0.5 + 0.5;
-        auto current_depth = pos_proj_coord.z;
-        auto bias = 0.005;
-        auto shadow = 0.0;
-        auto texel_size = vector2(1.0 / shadowmap_.width(), 1.0 / shadowmap_.height());
-        for (int x = -1; x <= 1; ++x) {
-            for (int y = -1; y <= 1; ++y) {
-                auto depth = shadowmap_sampler_(vector2(pos_proj_coord) + vector2(x, y) * texel_size).r;
-                shadow += current_depth - bias > depth ? 1.0 : 0.0;
-            }
-        }
-        shadow /= 9;
-
+        auto uv = frag_lerp(v_uv_, bar);
         auto normal = (tbn * vector3(normal_sampler_(uv))).normalize();
-
-        auto ambient = light_.ambient * color_rgb(diffuse_sampler_(uv));
-        auto diffuse = light_.diffuse * color_rgb(diffuse_sampler_(uv)) * color_rgb(std::max(dot(light_dir, normal), 0.0));
-        auto specular = light_.specular * color_rgb(specular_sampler_(uv)) * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), mat_->shininess));
-        auto emission = color_rgb(emission_sampler_(uv)) * 5;
-
-        auto color = color_rgba(ambient + (1 - shadow) * (diffuse + specular) + emission, 1);
-        if (color.a < 0.1)
-            return std::nullopt;
-        return color;
+        return color_rgba(normal.x, normal.y, normal.z, 1);
     }
 private:
     matrix4 mvp_;
-    vector3 cam_pos_;
     const model* mesh_;
-
-    directional_light light_;
-    matrix4 light_mvp_;
-
-    texture shadowmap_;
-    sampler2 shadowmap_sampler_;
-    sampler2 diffuse_sampler_;
-    sampler2 specular_sampler_;
-    sampler2 emission_sampler_;
-    sampler2 normal_sampler_;
-    model head_;
     vector3 v_pos_[3];
-    vector3 v_normal_[3];
     vector2 v_uv_[3];
+    vector3 v_normal_[3];
     matrix3 v_tbn_[3];
-    const material* mat_;
+    sampler2 normal_sampler_;
+};
+
+class diffuse_shader : public basic_shader {
+public:
+    diffuse_shader(matrix4 mvp, const model& mesh) {
+        mvp_ = mvp;
+        mesh_ = &mesh;
+    }
+
+    virtual vector4 vert(int n) override {
+        auto pos = mesh_->get_vertex(n);
+        v_uv_[n % 3] = mesh_->get_uv(n);
+        diffuse_sampler_.bind_texture(mesh_->get_mat(n)->diffuse_map);
+        return mvp_ * vector4(pos, 1);
+    }
+
+    virtual std::optional<color_rgba> frag(vector3 bar) override {
+        auto uv = frag_lerp(v_uv_, bar);
+        return diffuse_sampler_(uv);
+    }
+private:
+    matrix4 mvp_;
+    const model* mesh_;
+    vector2 v_uv_[3];
+    sampler2 diffuse_sampler_;
+};
+
+class specular_shader : public basic_shader {
+public:
+    specular_shader(matrix4 mvp, const model& mesh) {
+        mvp_ = mvp;
+        mesh_ = &mesh;
+    }
+
+    virtual vector4 vert(int n) override {
+        auto pos = mesh_->get_vertex(n);
+        v_uv_[n % 3] = mesh_->get_uv(n);
+        specular_sampler_.bind_texture(mesh_->get_mat(n)->specular_map);
+        return mvp_ * vector4(pos, 1);
+    }
+
+    virtual std::optional<color_rgba> frag(vector3 bar) override {
+        auto uv = frag_lerp(v_uv_, bar);
+        return specular_sampler_(uv);
+    }
+private:
+    matrix4 mvp_;
+    const model* mesh_;
+    vector2 v_uv_[3];
+    sampler2 specular_sampler_;
+};
+
+class emission_shader : public basic_shader {
+public:
+    emission_shader(matrix4 mvp, const model& mesh) {
+        mvp_ = mvp;
+        mesh_ = &mesh;
+    }
+
+    virtual vector4 vert(int n) override {
+        auto pos = mesh_->get_vertex(n);
+        v_uv_[n % 3] = mesh_->get_uv(n);
+        emission_sampler_.bind_texture(mesh_->get_mat(n)->emission_map);
+        return mvp_ * vector4(pos, 1);
+    }
+
+    virtual std::optional<color_rgba> frag(vector3 bar) override {
+        auto uv = frag_lerp(v_uv_, bar);
+        return emission_sampler_(uv);
+    }
+private:
+    matrix4 mvp_;
+    const model* mesh_;
+    vector2 v_uv_[3];
+    sampler2 emission_sampler_;
 };
 
 class bright_shader : public basic_shader {
@@ -278,33 +323,27 @@ int main() {
         framebuffer fb(1024, 1024);
         renderer r(fb);
 
-        fb.clear(color_rgba(0.0, 0.0, 0.0, 1.0));
-        auto light_mvp = light.proj(0) * light.view();
-        depth_shader ds(light_mvp, diablo);
-        r.set_face_culling(cull_type::front);
+        auto mvp = cam.proj(fb.aspect()) * cam.view();
+
+        fb.clear({0, 0, 0, 1});
+        position_shader ps(mvp, diablo);
+        r.render(diablo.num_vertices(), ps);
+
+        fb.clear({0, 0, 0, 1});
+        normal_shader ns(mvp, diablo);
+        r.render(diablo.num_vertices(), ns);
+
+        fb.clear({0, 0, 0, 1});
+        diffuse_shader ds(mvp, diablo);
         r.render(diablo.num_vertices(), ds);
 
-        fb.clear(color_rgba(0.0, 0.0, 0.0, 1.0));
-        auto mvp = cam.proj(fb.aspect()) * cam.view();
-        model_shader ms(mvp, cam.pos, diablo, fb.zbuffer(), light, light_mvp);
-        r.set_face_culling(cull_type::back);
-        r.render(diablo.num_vertices(), ms);
+        fb.clear({0, 0, 0, 1});
+        specular_shader ss(mvp, diablo);
+        r.render(diablo.num_vertices(), ss);
 
-        auto scene = fb.color_buffer();
-
-        r.set_face_culling(cull_type::none);
-        bright_shader brights(quad, fb.color_buffer());
-        r.render(quad.num_vertices(), brights);
-
-        bool horizontal = true;
-        for (int i = 0; i < 10; ++i) {
-            blur_shader blurs(quad, fb.color_buffer(), horizontal);
-            r.render(quad.num_vertices(), blurs);
-            horizontal = !horizontal;
-        }
-
-        bloom_shader blooms(quad, scene, fb.color_buffer());
-        r.render(quad.num_vertices(), blooms);
+        fb.clear({0, 0, 0, 1});
+        emission_shader es(mvp, diablo);
+        r.render(diablo.num_vertices(), es);
 
         fb.write("image.pam");
     } catch (std::exception& e) {
