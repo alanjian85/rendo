@@ -38,7 +38,7 @@ int main() {
 
         directional_light light;
         light.dir = vector3(0, 0.65, 2);
-        light.ambient = color_rgb(0.1);
+        light.ambient = color_rgb(0.3);
         light.diffuse = color_rgb(1.0);
         light.specular = color_rgb(0.5);
 
