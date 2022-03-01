@@ -6,11 +6,10 @@
 namespace box {
     class blur_shader : public basic_shader {
     public:
-        blur_shader(const model& mesh, texture color_buffer, bool horizontal) 
+        blur_shader(const model& mesh, const texture& bright, bool horizontal) 
             : mesh_(&mesh)
         {
-            color_buffer_ = std::move(color_buffer);
-            color_buffer_sampler_.bind_texture(color_buffer_);
+            bright_sampler_.bind_texture(bright);
             horizontal_ = horizontal;
         }
 
@@ -24,25 +23,25 @@ namespace box {
             double weight[5] = {0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216};
 
             auto uv = frag_lerp(v_uv_, bar);
-            auto tex_offset = 1.0 / vector2(color_buffer_.width(), color_buffer_.height());
-            auto result = color_rgb(color_buffer_sampler_(uv)) * weight[0];
+            auto& bright = bright_sampler_.get_texture();
+            auto tex_offset = vector2(1.0 / bright.width(), 1.0 / bright.height());
+            auto result = color_rgb(bright_sampler_(uv)) * weight[0];
             if (horizontal_) {
                 for (int i = 1; i < 5; ++i) {
-                    result += color_rgb(color_buffer_sampler_(uv + vector2(tex_offset.x * i, 0))) * weight[i];
-                    result += color_rgb(color_buffer_sampler_(uv - vector2(tex_offset.x * i, 0))) * weight[i];
+                    result += color_rgb(bright_sampler_(uv + vector2(tex_offset.x * i, 0))) * weight[i];
+                    result += color_rgb(bright_sampler_(uv - vector2(tex_offset.x * i, 0))) * weight[i];
                 }
             } else {
                 for (int i = 1; i < 5; ++i) {
-                    result += color_rgb(color_buffer_sampler_(uv + vector2(0, tex_offset.y * i))) * weight[i];
-                    result += color_rgb(color_buffer_sampler_(uv - vector2(0, tex_offset.y * i))) * weight[i];
+                    result += color_rgb(bright_sampler_(uv + vector2(0, tex_offset.y * i))) * weight[i];
+                    result += color_rgb(bright_sampler_(uv - vector2(0, tex_offset.y * i))) * weight[i];
                 }
             }
             return color_rgba(result, 1);
         }
     private:
         const model* mesh_;
-        texture color_buffer_;
-        sampler2 color_buffer_sampler_;
+        sampler2 bright_sampler_;
         vector2 v_uv_[3];
         bool horizontal_;
     };

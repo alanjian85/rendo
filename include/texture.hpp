@@ -64,6 +64,10 @@ namespace box {
             tex_ = &tex;
         }
 
+        const texture& get_texture() const {
+            return *tex_;
+        }
+
         wrapping wrap() const {
             return wrap_;
         }
