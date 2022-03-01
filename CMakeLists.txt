@@ -15,4 +15,7 @@ set(BOX_SOURCES
         src/model.cpp
         src/material.cpp)
 add_executable(box ${BOX_SOURCES})
-target_include_directories(box PRIVATE include)
+target_include_directories(box PRIVATE 
+        include
+        shaders
+)
