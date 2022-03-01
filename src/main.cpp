@@ -19,6 +19,7 @@
 #include "normal_shader.hpp"
 #include "position_shader.hpp"
 #include "specular_shader.hpp"
+#include "ssao_shader.hpp"
 using namespace box;
 
 int main() {
@@ -44,7 +45,9 @@ int main() {
         framebuffer fb(1024, 1024);
         renderer r(fb);
 
-        auto mvp = cam.proj(fb.aspect()) * cam.view();
+        auto proj = cam.proj(fb.aspect());
+        auto view = cam.view();
+        auto mvp = proj * view;
 
         position_shader ps(mvp, diablo);
         normal_shader ns(mvp, diablo);
@@ -63,14 +66,19 @@ int main() {
         fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), as); auto g_albedo = fb.color_buffer();
         fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), ss); auto g_specular = fb.color_buffer();
         fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), es); auto g_emission = fb.color_buffer();
-
+        
         r.set_face_culling(cull_type::none);
+        ssao_shader ssaos(proj, quad, g_position, g_normal, fb.width(), fb.height());
+        fb.clear({0, 0, 0, 1}); r.render(quad.num_vertices(), ssaos); auto g_ambient = fb.color_buffer();
+
         deferred_shader ds(quad, light, cam.pos, light_mvp, shadowmap);
         ds.set_position_buffer(g_position);
         ds.set_normal_buffer(g_normal);
+        ds.set_ambient_buffer(g_ambient);
         ds.set_albedo_buffer(g_albedo);
         ds.set_specular_buffer(g_specular);
         ds.set_emission_buffer(g_emission);
+        fb.clear({0, 0, 0, 1});
         r.render(quad.num_vertices(), ds);
 
         auto scene = fb.color_buffer();

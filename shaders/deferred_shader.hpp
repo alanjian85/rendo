@@ -25,6 +25,10 @@ namespace box {
             normal_sampler_.bind_texture(g_normal);
         }
 
+        void set_ambient_buffer(const texture& g_ambient) {
+            ambient_sampler_.bind_texture(g_ambient);
+        }
+
         void set_albedo_buffer(const texture& g_albedo) {
             albedo_sampler_.bind_texture(g_albedo);
         }
@@ -68,7 +72,7 @@ namespace box {
             }
             shadow /= 9;
 
-            auto ambient = light_.ambient * color_rgb(albedo_sampler_(uv));
+            auto ambient = light_.ambient * color_rgb(ambient_sampler_(uv));
             auto diffuse = light_.diffuse * color_rgb(albedo_sampler_(uv)) * color_rgb(std::max(dot(light_dir, normal), 0.0));
             auto specular = light_.specular * color_rgb(specular_sampler_(uv)) * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), 256));
             auto emission = color_rgb(emission_sampler_(uv)) * 5;
@@ -83,6 +87,7 @@ namespace box {
         vector2 v_uv_[3];
         sampler2 position_sampler_;
         sampler2 normal_sampler_;
+        sampler2 ambient_sampler_;
         sampler2 albedo_sampler_;
         sampler2 specular_sampler_;
         sampler2 emission_sampler_;

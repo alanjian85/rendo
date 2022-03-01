@@ -7,6 +7,10 @@ namespace box {
     constexpr auto rad(double deg) {
         return deg * pi / 180;
     }
+
+    constexpr auto lerp(double min, double max, double val) {
+        return min + val * (max - min);
+    }
 }
 
 #endif
