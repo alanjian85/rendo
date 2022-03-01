@@ -32,13 +32,13 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
     }
 
     vector2i clamp = {
-        fb_->width() - 1,
-        fb_->height() - 1
+        fb_.width() - 1,
+        fb_.height() - 1
     };
 
     vector2i min = clamp;
     vector2i max = {0, 0};
-    auto viewport = make_viewport(0, 0, fb_->width() - 1, fb_->height() - 1);
+    auto viewport = make_viewport(0, 0, fb_.width() - 1, fb_.height() - 1);
     for (int i = 0; i < 3; ++i) {
         t[i] = viewport * t[i];
         for (int j = 0; j < 2; ++j) {
@@ -56,11 +56,11 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
 
                 auto z = bar_clip.x * t[0].z + bar_clip.y * t[1].z + bar_clip.z * t[2].z;
 
-                if (z >= 0 && z <= (*fb_)(x, y).depth) {
+                if (z >= 0 && z <= fb_(x, y).depth) {
                     auto color = s.frag(bar_clip);
                     if (color.has_value()) {
-                        (*fb_)(x, y).color = *color;
-                        (*fb_)(x, y).depth = z;
+                        fb_(x, y).color = *color;
+                        fb_(x, y).depth = z;
                     }
                 }
             }

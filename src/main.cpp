@@ -117,7 +117,7 @@ public:
         auto ambient = light_.ambient * color_rgb(diffuse_sampler_(uv));
         auto diffuse = light_.diffuse * color_rgb(diffuse_sampler_(uv)) * color_rgb(std::max(dot(light_dir, normal), 0.0));
         auto specular = light_.specular * color_rgb(specular_sampler_(uv)) * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), mat_->shininess));
-        auto emission = color_rgb(emission_sampler_(uv)) * 4;
+        auto emission = color_rgb(emission_sampler_(uv)) * 5;
 
         auto color = color_rgba(ambient + (1 - shadow) * (diffuse + specular) + emission, 1);
         if (color.a < 0.1)
@@ -257,8 +257,6 @@ private:
 
 int main() {
     try {
-        renderer r;
-
         camera cam;
         cam.pos.x = 0;
         cam.pos.y = 0.65;
@@ -277,39 +275,36 @@ int main() {
         light.diffuse = color_rgb(1.0);
         light.specular = color_rgb(0.5);
 
-        framebuffer shadowmap(1024, 1024);
         framebuffer fb(1024, 1024);
-        fb.clear(color_rgba(0.0, 0.0, 0.0, 1.0));
+        renderer r(fb);
 
+        fb.clear(color_rgba(0.0, 0.0, 0.0, 1.0));
         auto light_mvp = light.proj(0) * light.view();
-        shadowmap.clear({0, 0, 0, 0});
         depth_shader ds(light_mvp, diablo);
-        r.bind_framebuffer(shadowmap);
         r.set_face_culling(cull_type::front);
         r.render(diablo.num_vertices(), ds);
 
+        fb.clear(color_rgba(0.0, 0.0, 0.0, 1.0));
         auto mvp = cam.proj(fb.aspect()) * cam.view();
-        fb.clear({0, 0, 0, 0});
-        model_shader ms(mvp, cam.pos, diablo, shadowmap.zbuffer(), light, light_mvp);
-        r.bind_framebuffer(fb);
+        model_shader ms(mvp, cam.pos, diablo, fb.zbuffer(), light, light_mvp);
         r.set_face_culling(cull_type::back);
         r.render(diablo.num_vertices(), ms);
 
-        auto scene_tex = fb.color_buffer();
+        auto scene = fb.color_buffer();
 
         r.set_face_culling(cull_type::none);
-        bright_shader bright_s(quad, fb.color_buffer());
-        r.render(quad.num_vertices(), bright_s);
+        bright_shader brights(quad, fb.color_buffer());
+        r.render(quad.num_vertices(), brights);
 
         bool horizontal = true;
         for (int i = 0; i < 10; ++i) {
-            blur_shader blur_s(quad, fb.color_buffer(), horizontal);
-            r.render(quad.num_vertices(), blur_s);
+            blur_shader blurs(quad, fb.color_buffer(), horizontal);
+            r.render(quad.num_vertices(), blurs);
             horizontal = !horizontal;
         }
 
-        bloom_shader bloom_s(quad, scene_tex, fb.color_buffer());
-        r.render(quad.num_vertices(), bloom_s);
+        bloom_shader blooms(quad, scene, fb.color_buffer());
+        r.render(quad.num_vertices(), blooms);
 
         fb.write("image.pam");
     } catch (std::exception& e) {

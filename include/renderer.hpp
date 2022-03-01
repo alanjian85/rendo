@@ -20,19 +20,21 @@ namespace box {
 
     class renderer {
     public:
-        void set_face_culling(cull_type cull) {
-            face_culling_ = cull;
+        explicit renderer(framebuffer& fb) 
+            : fb_(fb)
+        {
+
         }
 
-        void bind_framebuffer(framebuffer& fb) {
-            fb_ = &fb;
+        void set_face_culling(cull_type cull) {
+            face_culling_ = cull;
         }
 
         void render(int n, basic_shader& s);
     private:
         void render_triangle(triangle t, basic_shader& s);
 
-        framebuffer* fb_ = nullptr;
+        framebuffer& fb_;
 
         cull_type face_culling_ = cull_type::none;
     };
