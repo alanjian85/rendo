@@ -6,18 +6,19 @@
 namespace box {
     class normal_shader : public basic_shader {
     public:
-        normal_shader(matrix4 mvp, const model& mesh) {
-            mvp_ = mvp;
+        normal_shader(matrix4 proj, matrix4 view, const model& mesh) {
+            proj_ = proj;
+            view_ = view;
             mesh_ = &mesh;
         }
 
         virtual vector4 vert(int n) override {
             auto pos = mesh_->get_vertex(n);
-            v_pos_[n % 3] = pos;
+            v_pos_[n % 3] = vector3(view_ * vector4(pos, 1));
             v_uv_[n % 3] = mesh_->get_uv(n);
-            v_normal_[n % 3] = mesh_->get_normal(n);
+            v_normal_[n % 3] = matrix3(view_.inverse().transpose()) * mesh_->get_normal(n);
             normal_sampler_.bind_texture(mesh_->get_mat(n)->normal_map);
-            return mvp_ * vector4(pos, 1);
+            return proj_ * view_ * vector4(pos, 1);
         }
 
         virtual void geometry() {
@@ -58,7 +59,8 @@ namespace box {
             return color_rgba(normal.x, normal.y, normal.z, 1);
         }
     private:
-        matrix4 mvp_;
+        matrix4 proj_;
+        matrix4 view_;
         const model* mesh_;
         vector3 v_pos_[3];
         vector2 v_uv_[3];

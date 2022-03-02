@@ -14,16 +14,24 @@
 #include "blur_shader.hpp"
 #include "bright_shader.hpp"
 #include "deferred_shader.hpp"
-#include "depth_shader.hpp"
 #include "emission_shader.hpp"
 #include "normal_shader.hpp"
 #include "position_shader.hpp"
+#include "shadow_shader.hpp"
 #include "specular_shader.hpp"
 #include "ssao_shader.hpp"
 using namespace box;
 
 int main() {
     try {
+        framebuffer fb(1024, 1024);
+        renderer r(fb);
+
+        model diablo;
+        model quad;
+        diablo.load("assets/models/diablo3_pose.obj");
+        quad.load("assets/models/quad.obj");
+
         camera cam;
         cam.pos.x = 0;
         cam.pos.y = 0.65;
@@ -31,34 +39,27 @@ int main() {
         cam.yaw = -90;
         cam.pitch = -15;
 
-        model diablo;
-        model quad;
-        diablo.load("assets/models/diablo3_pose.obj");
-        quad.load("assets/models/quad.obj");
+        auto proj = cam.proj(fb.aspect());
+        auto view = cam.view();
 
         directional_light light;
-        light.dir = vector3(0, 0.65, 2);
+        light.dir = vector3(0, 0, -2);
         light.ambient = color_rgb(0.3);
         light.diffuse = color_rgb(1.0);
         light.specular = color_rgb(0.5);
 
-        framebuffer fb(1024, 1024);
-        renderer r(fb);
+        auto light_proj = make_ortho(-1, 1, -1, 1, 1, 7.5);
+        auto light_view = make_lookat(-vector3(view * vector4(light.dir, 1)), vector3(0, 0, 0), vector3(0, 1, 0));
 
-        auto proj = cam.proj(fb.aspect());
-        auto view = cam.view();
-        auto mvp = proj * view;
+        position_shader ps(proj, view, diablo);
+        normal_shader ns(proj, view, diablo);
+        albedo_shader as(proj, view, diablo);
+        specular_shader ss(proj, view, diablo);
+        emission_shader es(proj, view, diablo);
 
-        position_shader ps(mvp, diablo);
-        normal_shader ns(mvp, diablo);
-        albedo_shader as(mvp, diablo);
-        specular_shader ss(mvp, diablo);
-        emission_shader es(mvp, diablo);
-
-        auto light_mvp = light.proj(0) * light.view();
-        depth_shader shadow_ds(light_mvp, diablo);
+        shadow_shader sss(light_proj, light_view, view, diablo);
         r.set_face_culling(cull_type::front);
-        fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), shadow_ds); auto shadowmap = fb.zbuffer();
+        fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), sss); auto shadowmap = fb.zbuffer();
 
         r.set_face_culling(cull_type::back);
         fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), ps); auto g_position = fb.color_buffer();
@@ -66,15 +67,15 @@ int main() {
         fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), as); auto g_albedo = fb.color_buffer();
         fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), ss); auto g_specular = fb.color_buffer();
         fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), es); auto g_emission = fb.color_buffer();
-        
+
         r.set_face_culling(cull_type::none);
+/*
         ssao_shader ssaos(proj, quad, g_position, g_normal, fb.width(), fb.height());
         fb.clear({0, 0, 0, 1}); r.render(quad.num_vertices(), ssaos); auto g_ambient = fb.color_buffer();
-
-        deferred_shader ds(quad, light, cam.pos, light_mvp, shadowmap);
+*/
+        deferred_shader ds(view, quad, light, light_proj, light_view, shadowmap);
         ds.set_position_buffer(g_position);
         ds.set_normal_buffer(g_normal);
-        ds.set_ambient_buffer(g_ambient);
         ds.set_albedo_buffer(g_albedo);
         ds.set_specular_buffer(g_specular);
         ds.set_emission_buffer(g_emission);
@@ -98,6 +99,7 @@ int main() {
         r.render(quad.num_vertices(), blooms);
 
         fb.write("image.pam");
+
     } catch (std::exception& e) {
         std::cerr << e.what() << '\n';
         return 1;
