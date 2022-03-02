@@ -69,13 +69,14 @@ int main() {
         fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), es); auto g_emission = fb.color_buffer();
 
         r.set_face_culling(cull_type::none);
-/*
+
         ssao_shader ssaos(proj, quad, g_position, g_normal, fb.width(), fb.height());
         fb.clear({0, 0, 0, 1}); r.render(quad.num_vertices(), ssaos); auto g_ambient = fb.color_buffer();
-*/
+
         deferred_shader ds(view, quad, light, light_proj, light_view, shadowmap);
         ds.set_position_buffer(g_position);
         ds.set_normal_buffer(g_normal);
+        ds.set_ambient_buffer(g_ambient);
         ds.set_albedo_buffer(g_albedo);
         ds.set_specular_buffer(g_specular);
         ds.set_emission_buffer(g_emission);
