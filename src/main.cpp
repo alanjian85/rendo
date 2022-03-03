@@ -19,6 +19,7 @@
 #include "position_shader.hpp"
 #include "shadow_shader.hpp"
 #include "specular_shader.hpp"
+#include "ssao_blur_shader.hpp"
 #include "ssao_shader.hpp"
 using namespace box;
 
@@ -71,8 +72,11 @@ int main() {
         r.set_face_culling(cull_type::none);
 
         ssao_shader ssaos(proj, quad, g_position, g_normal, fb.width(), fb.height());
-        fb.clear({0, 0, 0, 1}); r.render(quad.num_vertices(), ssaos); auto g_ambient = fb.color_buffer();
-/*
+        fb.clear({0, 0, 0, 1}); r.render(quad.num_vertices(), ssaos); auto g_ssao = fb.color_buffer();
+
+        ssao_blur_shader ssaobs(quad, g_ssao);
+        fb.clear({0, 0, 0, 1}); r.render(quad.num_vertices(), ssaobs); auto g_ambient = fb.color_buffer();
+
         deferred_shader ds(view, quad, light, light_proj, light_view, shadowmap);
         ds.set_position_buffer(g_position);
         ds.set_normal_buffer(g_normal);
@@ -98,7 +102,7 @@ int main() {
         auto blur = fb.color_buffer();
         bloom_shader blooms(quad, scene, blur);
         r.render(quad.num_vertices(), blooms);
-*/
+
         fb.write("image.pam");
 
     } catch (std::exception& e) {

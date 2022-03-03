@@ -76,7 +76,7 @@ namespace box {
             auto ambient = color_rgb(albedo_sampler_(uv)) * color_rgb(ambient_sampler_(uv));
             auto diffuse = light_.diffuse * color_rgb(albedo_sampler_(uv)) * color_rgb(std::max(dot(light_dir, normal), 0.0));
             auto specular = light_.specular * color_rgb(specular_sampler_(uv)) * color_rgb(std::pow(std::max(dot(halfway_dir, normal), 0.0), 256));
-            auto emission = color_rgb(emission_sampler_(uv)) * 5;
+            auto emission = color_rgb(emission_sampler_(uv)) * 10;
 
             return color_rgba(ambient + (1 - shadow) * (diffuse + specular) + emission, 1.0);
         }
