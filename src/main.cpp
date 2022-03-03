@@ -72,7 +72,7 @@ int main() {
 
         ssao_shader ssaos(proj, quad, g_position, g_normal, fb.width(), fb.height());
         fb.clear({0, 0, 0, 1}); r.render(quad.num_vertices(), ssaos); auto g_ambient = fb.color_buffer();
-
+/*
         deferred_shader ds(view, quad, light, light_proj, light_view, shadowmap);
         ds.set_position_buffer(g_position);
         ds.set_normal_buffer(g_normal);
@@ -98,7 +98,7 @@ int main() {
         auto blur = fb.color_buffer();
         bloom_shader blooms(quad, scene, blur);
         r.render(quad.num_vertices(), blooms);
-
+*/
         fb.write("image.pam");
 
     } catch (std::exception& e) {

@@ -84,7 +84,8 @@ namespace box {
                 clip_offset = clip_offset * 0.5 + 0.5;
 
                 auto depth = position_sampler_(vector2(clip_offset)).b;
-                occulusion += (depth >= sample_pos.z + bias ? 1.0 : 0.0);
+                auto range_check = smoothstep(0.0, 1.0, radius / std::abs(position.z - depth));
+                occulusion += (depth >= sample_pos.z + bias ? 1.0 : 0.0) * range_check;
             }
 
             occulusion = 1.0 - (occulusion / samples_.size());
