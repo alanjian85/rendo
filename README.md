@@ -8,20 +8,25 @@ This demo doesn't use any third-party libraries for rendering and image processi
 1. Triangle Rasterization
 2. 2D & Cubemap texture mapping
 3. Varying variables fully controlled by user
-4. Wavefront OBJ model loading with material library
+4. Wavefront OBJ model loading with material support
 5. Programmable vertex/fragment shader pipeline stage
 6. Optional front/back face culling
-7. Built-in depth test
+7. Depth testing
+8. Directional Light Shadow mapping
+9. Bloom
+10. Screen Space Ambient Occulusion
+11. Normal Mapping
+12. Deferred Shading
 
 ## Prior Knowledge
 1. Familiar with modern C++
 2. Basic linear algebra, geometry and trigonometry
-3. Have dealt with multi-thread programs
 
 ## Images
 ![Image-1](images/image-1.png)
 ![Image-2](images/image-2.png)
 ![Image-3](images/image-3.png)
+![Image-4](images/image-4.png)
 
 ## Rendering in One Hour
 Coming soon.
