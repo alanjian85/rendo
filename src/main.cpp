@@ -50,7 +50,7 @@ int main() {
         light.specular = color_rgb(0.5);
 
         auto light_proj = make_ortho(-1, 1, -1, 1, 1, 7.5);
-        auto light_view = make_lookat(-vector3(view * vector4(light.dir, 1)), vector3(0, 0, 0), vector3(0, 1, 0));
+        auto light_view = make_lookat(-light.dir, vector3(0, 0, 0), vector3(0, 1, 0));
 
         position_shader ps(proj, view, diablo);
         normal_shader ns(proj, view, diablo);
@@ -58,7 +58,7 @@ int main() {
         specular_shader ss(proj, view, diablo);
         emission_shader es(proj, view, diablo);
 
-        shadow_shader sss(light_proj, light_view, view, diablo);
+        shadow_shader sss(light_proj, light_view, diablo);
         r.set_face_culling(cull_type::front);
         fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), sss); auto shadowmap = fb.zbuffer();
 

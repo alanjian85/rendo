@@ -57,7 +57,8 @@ namespace box {
             auto light_dir = -vector3(view_ * vector4(light_.dir, 1)).normalize();
             auto halfway_dir = (cam_dir + light_dir).normalize();
 
-            auto pos_light_space = light_proj_ * light_view_ * vector4(position, 1);
+            auto offset = vector3(view_(0, 3), view_(1, 3), view_(2, 3));
+            auto pos_light_space = light_proj_ * light_view_ * vector4(matrix3(view_).transpose() * (position - offset), 1);
             auto pos_proj_coord = vector3(pos_light_space) / pos_light_space.w;
             pos_proj_coord = pos_proj_coord * 0.5 + 0.5;
             auto current_depth = pos_proj_coord.z;

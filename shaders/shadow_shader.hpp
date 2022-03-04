@@ -6,16 +6,15 @@
 namespace box {
     class shadow_shader : public basic_shader {
     public:
-        shadow_shader(matrix4 light_proj, matrix4 light_view, matrix4 view, const model& mesh) {
+        shadow_shader(matrix4 light_proj, matrix4 light_view, const model& mesh) {
             light_proj_ = light_proj;
             light_view_ = light_view;
-            view_ = view;
             mesh_ = &mesh;
         }
     
         virtual vector4 vert(int n) override {
             auto pos = mesh_->get_vertex(n);
-            return light_proj_ * light_view_ * view_ * vector4(pos, 1);
+            return light_proj_ * light_view_ * vector4(pos, 1);
         }
     
         virtual std::optional<color_rgba> frag(vector3 bar) override {
@@ -24,7 +23,6 @@ namespace box {
     private:
         matrix4 light_proj_;
         matrix4 light_view_;
-        matrix4 view_;
         const model* mesh_;
     };
 }
