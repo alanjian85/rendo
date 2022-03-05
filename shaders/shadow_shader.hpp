@@ -18,7 +18,7 @@ namespace box {
         }
     
         virtual std::optional<color_rgba> frag(vector3 bar) override {
-            return color_rgba(0, 0, 0, 1);
+            return color_rgba(1, 0, 0, 1);
         }
     private:
         matrix4 light_proj_;

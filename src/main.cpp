@@ -44,13 +44,13 @@ int main() {
         auto view = cam.view();
 
         directional_light light;
-        light.dir = vector3(0, 0, -2);
+        light.dir = vector3(2, -4, 1);
         light.ambient = color_rgb(0.3);
         light.diffuse = color_rgb(1.0);
         light.specular = color_rgb(0.5);
 
-        auto light_proj = make_ortho(-1, 1, -1, 1, 1, 7.5);
-        auto light_view = make_lookat(-light.dir, vector3(0, 0, 0), vector3(0, 1, 0));
+        auto light_proj = make_ortho(-5, 5, -5, 5, 0.1, 100);
+        auto light_view = make_lookat(-light.dir.normalize(), vector3(0, 0, 0), vector3(0, 1, 0));
 
         position_shader ps(proj, view, diablo);
         normal_shader ns(proj, view, diablo);
@@ -59,7 +59,6 @@ int main() {
         emission_shader es(proj, view, diablo);
 
         shadow_shader sss(light_proj, light_view, diablo);
-        r.set_face_culling(cull_type::front);
         fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), sss); auto shadowmap = fb.zbuffer();
 
         r.set_face_culling(cull_type::back);
@@ -104,7 +103,6 @@ int main() {
         r.render(quad.num_vertices(), blooms);
 
         fb.write("image.pam");
-
     } catch (std::exception& e) {
         std::cerr << e.what() << '\n';
         return 1;
