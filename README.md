@@ -19,19 +19,13 @@ This demo doesn't use any third-party libraries for rendering and image processi
 12. Deferred Shading
 
 ## Prior Knowledge
-1. Familiar with Modern C++
+1. Knowledge of Object-Oriented abstraction
 2. Basic linear algebra, geometry and trigonometry
 
 ## Images
-![Image-1](images/image-1.png)
-![Image-2](images/image-2.png)
-![Image-3](images/image-3.png)
 ![Image-4](images/image-4.png)
 
-## Rendering in One Hour
-Coming soon.
-
-## Reference Links
+## References
 <ul>
   <li><a href="https://github.com/ssloy/tinyrenderer">Tiny Renderer</a></li>
   <li><a href="https://learnopengl.com/">Learn OpenGL</a></li>
