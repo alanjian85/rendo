@@ -1,5 +1,5 @@
 # Box
-Box is an software rendering demo which shows how programming language and mathematics are applied in a basic technique of CG(computer graphics), rasterization, it's written in KISS style and doesn't require any dependencies other than C++ STL standard library.
+Box is an software rendering demo which shows how programming language and mathematics are applied in a basic technique of CG(computer graphics), rasterization, it doesn't require any dependencies other than C++ STL standard library.
 
 ## C++ standard compliant
 This demo doesn't use any third-party libraries for rendering and image processing, and the only thing required is a C++17-compliant compiler, therefore it should be compiled well and runs without any undefined behaviour on mainstream platforms.
