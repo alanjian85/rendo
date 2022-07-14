@@ -201,12 +201,12 @@ namespace box {
         }
 
         void load(const std::filesystem::path& path) {
-            right.load(path / "right.pam");
-            left.load(path / "left.pam");
-            top.load(path / "top.pam");
-            bottom.load(path / "bottom.pam");
-            back.load(path / "back.pam");
-            front.load(path / "front.pam");
+            right.load((path / "right.pam").string());
+            left.load((path / "left.pam").string());
+            top.load((path / "top.pam").string());
+            bottom.load((path / "bottom.pam").string());
+            back.load((path / "back.pam").string());
+            front.load((path / "front.pam").string());
         }
     };
 }

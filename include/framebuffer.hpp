@@ -59,11 +59,11 @@ namespace box {
         }
 
         pixel& operator()(vector2 p) {
-            return (*this)(p.x, p.y);
+            return (*this)(static_cast<int>(p.x), static_cast<int>(p.y));
         }
 
         const pixel& operator()(vector2 p) const {
-            return (*this)(p.x, p.y);
+            return (*this)(static_cast<int>(p.x), static_cast<int>(p.y));
         }
 
         void write(const std::string& path) const;

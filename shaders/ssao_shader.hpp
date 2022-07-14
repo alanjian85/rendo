@@ -17,7 +17,7 @@ namespace box {
             normal_sampler_.bind_texture(normal);
 
             std::uniform_real_distribution<double> dist(0.0, 1.0);
-            std::default_random_engine engine(std::time(nullptr));
+            std::default_random_engine engine(static_cast<unsigned int>(std::time(nullptr)));
             for (int i = 0; i < 64; ++i) {
                 vector3 sample;
                 sample.x = dist(engine) * 2 - 1;

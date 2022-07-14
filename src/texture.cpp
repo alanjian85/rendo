@@ -4,6 +4,7 @@ using namespace box;
 #include <algorithm>
 #include <cmath>
 #include <fstream>
+#include <sstream>
 #include <stdexcept>
 
 void texture::load(const std::string& path) {

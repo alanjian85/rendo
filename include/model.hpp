@@ -19,8 +19,8 @@ namespace box {
 
         void load(const std::filesystem::path& path);
 
-        auto num_vertices() const {
-            return face_vertices_.size();
+        int num_vertices() const {
+            return static_cast<int>(face_vertices_.size());
         }
 
         vector3 get_vertex(int n) const {

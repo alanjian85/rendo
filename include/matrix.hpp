@@ -168,7 +168,7 @@ namespace box {
 	        auto u = a * entries_[1][3] - b * entries_[0][3];
 	        auto v = c * entries_[3][3] - d * entries_[2][3];
         
-	        float id = 1 / (dot(s, v) + dot(t, u));
+	        auto id = 1 / (dot(s, v) + dot(t, u));
 	        s *= id;
 	        t *= id;
 	        u *= id;

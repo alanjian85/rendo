@@ -41,19 +41,19 @@ void material_library::load(const std::filesystem::path& path) {
             stream >> mat->illum;
         } else if (attrib == "map_Ka") {
             stream >> relative_path;
-            mat->ambient_map.load(dir / relative_path);
+            mat->ambient_map.load((dir / relative_path).string());
         } else if (attrib == "map_Kd") {
             stream >> relative_path;
-            mat->diffuse_map.load(dir / relative_path);
+            mat->diffuse_map.load((dir / relative_path).string());
         } else if (attrib == "map_Ks") {
             stream >> relative_path;
-            mat->specular_map.load(dir / relative_path);
+            mat->specular_map.load((dir / relative_path).string());
         } else if (attrib == "map_Ke") {
             stream >> relative_path;
-            mat->emission_map.load(dir / relative_path);
+            mat->emission_map.load((dir / relative_path).string());
         } else if (attrib == "norm") {
             stream >> relative_path;
-            mat->normal_map.load(dir / relative_path);
+            mat->normal_map.load((dir / relative_path).string());
         }
     }
 }

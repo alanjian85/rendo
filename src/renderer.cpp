@@ -42,8 +42,8 @@ void renderer::render_triangle(triangle t, basic_shader& s) {
     for (int i = 0; i < 3; ++i) {
         t[i] = viewport * t[i];
         for (int j = 0; j < 2; ++j) {
-            min[j] = std::max(0, std::min<int>(min[j], t[i][j]));
-            max[j] = std::min(clamp[j], std::max<int>(max[j], t[i][j]));
+            min[j] = std::max(0, std::min<int>(min[j], static_cast<int>(t[i][j])));
+            max[j] = std::min(clamp[j], std::max<int>(max[j], static_cast<int>(t[i][j])));
         }
     }
 
