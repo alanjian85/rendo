@@ -107,7 +107,7 @@ color_rgba sampler2::operator()(vector2 uv) const {
             uv.x = 1 + uv.x;
         uv.y = std::modf(uv.y, &temp);
         if (uv.y < 0)
-            uv.y = 1 + uv.x;
+            uv.y = 1 + uv.y;
         break;
     case wrapping::repeat_mirrored:
         double intx, inty;

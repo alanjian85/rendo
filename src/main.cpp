@@ -28,9 +28,9 @@ int main() {
         framebuffer fb(1024, 1024);
         renderer r(fb);
 
-        model diablo;
+        model helmet;
         model quad;
-        diablo.load("assets/models/diablo3_pose.obj");
+        helmet.load("assets/models/helmet.obj");
         quad.load("assets/models/quad.obj");
 
         camera cam;
@@ -52,21 +52,21 @@ int main() {
         auto light_proj = make_ortho(-5, 5, -5, 5, 0.1, 100);
         auto light_view = make_lookat(-light.dir.normalize(), vector3(0, 0, 0), vector3(0, 1, 0));
 
-        position_shader ps(proj, view, diablo);
-        normal_shader ns(proj, view, diablo);
-        albedo_shader as(proj, view, diablo);
-        specular_shader ss(proj, view, diablo);
-        emission_shader es(proj, view, diablo);
+        position_shader ps(proj, view, helmet);
+        normal_shader ns(proj, view, helmet);
+        albedo_shader as(proj, view, helmet);
+        specular_shader ss(proj, view, helmet);
+        emission_shader es(proj, view, helmet);
 
-        shadow_shader sss(light_proj, light_view, diablo);
-        fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), sss); auto shadowmap = fb.zbuffer();
+        shadow_shader sds(light_proj, light_view, helmet);
+        fb.clear({0, 0, 0, 1}); r.render(helmet.num_vertices(), sds); auto shadowmap = fb.zbuffer();
 
         r.set_face_culling(cull_type::back);
-        fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), ps); auto g_position = fb.color_buffer();
-        fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), ns); auto g_normal = fb.color_buffer();
-        fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), as); auto g_albedo = fb.color_buffer();
-        fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), ss); auto g_specular = fb.color_buffer();
-        fb.clear({0, 0, 0, 1}); r.render(diablo.num_vertices(), es); auto g_emission = fb.color_buffer();
+        fb.clear({0, 0, 0, 1}); r.render(helmet.num_vertices(), ps); auto g_position = fb.color_buffer();
+        fb.clear({0, 0, 0, 1}); r.render(helmet.num_vertices(), ns); auto g_normal = fb.color_buffer();
+        fb.clear({0, 0, 0, 1}); r.render(helmet.num_vertices(), as); auto g_albedo = fb.color_buffer();
+        fb.clear({0, 0, 0, 1}); r.render(helmet.num_vertices(), ss); auto g_specular = fb.color_buffer();
+        fb.clear({0, 0, 0, 1}); r.render(helmet.num_vertices(), es); auto g_emission = fb.color_buffer();
 
         r.set_face_culling(cull_type::none);
 

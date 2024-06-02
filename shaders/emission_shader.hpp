@@ -20,8 +20,8 @@ namespace box {
         }
     
         virtual std::optional<color_rgba> frag(vector3 bar) override {
-            auto uv = frag_lerp(v_uv_, bar);
-            return emission_sampler_(uv);
+            //auto uv = frag_lerp(v_uv_, bar);
+            return color_rgba(0, 0, 0, 1); //emission_sampler_(uv);
         }
     private:
         matrix4 proj_;

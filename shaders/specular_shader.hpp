@@ -20,8 +20,8 @@ namespace box {
         }
     
         virtual std::optional<color_rgba> frag(vector3 bar) override {
-            auto uv = frag_lerp(v_uv_, bar);
-            return specular_sampler_(uv);
+            //auto uv = frag_lerp(v_uv_, bar);
+            return color_rgba(0.5, 0.5, 0.5, 1.0);//specular_sampler_(uv);
         }
     private:
         matrix4 proj_;
