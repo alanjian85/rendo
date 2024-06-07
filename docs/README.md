@@ -1,5 +1,5 @@
 # Reddere
-Reddere (/'rɛd.dɛ.rɛ/, the Latin root of the word "render") is a simple software renderer requiring no external libraries. It serves as an educational tool for beginners looking to delve into the mechanics of popular graphics APIs like OpenGL and Vulkan. Essentially, it unveils the inner workings of rasterization, the core algorithm behind most modern games, by implementing it using only the C++ Standard Library.
+Reddere ([ˈrɛd̪ːeːrɛ], the Latin root of the word "render") is a simple software renderer requiring no external libraries. It serves as an educational tool for beginners looking to delve into the mechanics of popular graphics APIs like OpenGL and Vulkan. Essentially, it unveils the inner workings of rasterization, the core algorithm behind most modern games, by implementing it using only the C++ Standard Library.
 
 The following image is the iconic [SciFi Helmet](https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/SciFiHelmet) 3D model, originally created by Michael Pavlovic and is available under the CC0 1.0 Universal license, rendered using Reddere.
 
