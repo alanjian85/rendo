@@ -1,7 +1,7 @@
-# Reddere
-Reddere ([ˈrɛd̪ːeːrɛ], the Latin root of the word "render") is a simple software renderer requiring no external libraries. It serves as an educational tool for beginners looking to delve into the mechanics of popular graphics APIs like OpenGL and Vulkan. Essentially, it unveils the inner workings of rasterization, the core algorithm behind most modern games, by implementing it using only the C++ Standard Library.
+# Rendo
+Rendo ([ˈrɛn.doː], the Latin root of the word "render") is a simple software renderer requiring no external libraries. It serves as an educational tool for beginners looking to delve into the mechanics of popular graphics APIs like OpenGL and Vulkan. Essentially, it unveils the inner workings of rasterization, the core algorithm behind most modern games, by implementing it using only the C++ Standard Library.
 
-The following image is the iconic [SciFi Helmet](https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/SciFiHelmet) 3D model, originally created by Michael Pavlovic and is available under the CC0 1.0 Universal license, rendered using Reddere.
+The following image is the iconic [SciFi Helmet](https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/SciFiHelmet) 3D model, originally created by Michael Pavlovic and is available under the CC0 1.0 Universal license, rendered using Rendo.
 
 <img src="demo.png" width=450 height=450>
 
@@ -11,7 +11,7 @@ This renderer is also the main part of my presentation titled "High Performance 
 ![Presentation Video](https://img.youtube.com/vi/4aVeYhMZn5I/0.jpg)
 
 ## Build Instructions
-Run the following instructions to build Reddere:
+Run the following instructions to build Rendo:
 ```sh
 mkdir build & cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
